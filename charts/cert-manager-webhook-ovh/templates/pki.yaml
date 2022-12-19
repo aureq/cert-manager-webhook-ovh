@@ -23,7 +23,7 @@ metadata:
     {{- include "cert-manager-webhook-ovh.labels" $ | nindent 4 }}
 spec:
   secretName: {{ include "cert-manager-webhook-ovh.rootCACertificate" . }}
-  duration: 43800h0m0s # 5y
+  duration: 43800h # 5y
   issuerRef:
     name: {{ include "cert-manager-webhook-ovh.selfSignedIssuer" . }}
   commonName: "ca.cert-manager-webhook-ovh.cert-manager"
@@ -55,7 +55,7 @@ metadata:
     {{- include "cert-manager-webhook-ovh.labels" $ | nindent 4 }}
 spec:
   secretName: {{ include "cert-manager-webhook-ovh.servingCertificate" . }}
-  duration: 8760h0m0s # 1y
+  duration: 8760h # 1y
   issuerRef:
     name: {{ include "cert-manager-webhook-ovh.rootCAIssuer" . }}
   dnsNames:
