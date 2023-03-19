@@ -8,6 +8,8 @@
 # here is recommended.
 groupName: acme.mycompany.example
 
+roleType: Role
+
 certManager:
   namespace: cert-manager
   serviceAccountName: cert-manager
