@@ -125,7 +125,7 @@ subjects:
   {{- end }}{{/* end range */}}
   {{- if len $secretsList }}
 apiVersion: rbac.authorization.k8s.io/v1
-kind: Role
+kind: {{ $.Values.roleType }}
 metadata:
   name: {{ include "cert-manager-webhook-ovh.fullname" $ }}:secret-reader
   namespace: {{ $.Release.Namespace | quote }}
