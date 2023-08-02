@@ -135,13 +135,14 @@ issuers:
     #     # The key name in the secret above that holds the actual OVH consumer key value
     #     key: consumerKey
 
-# If enabled (default) the webhook will run as the specifieduser and group.
-# Furthermore, the specified allowPrivilegeEscalation is applied to the pod.
+# If enabled (default) the webhook will run as the specified user and group.
+# Furthermore, the specified allowPrivilegeEscalation and readOnlyRootFilesystem is applied to the container.
 securityContext:
   enabled: true
   runAsUser: 1000
   runAsGroup: 1000
   allowPrivilegeEscalation: false
+  readOnlyRootFilesystem: true
 
 image:
   repository: ghcr.io/aureq/cert-manager-webhook-ovh
