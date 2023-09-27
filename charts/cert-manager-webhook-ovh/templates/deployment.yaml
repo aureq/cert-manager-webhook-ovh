@@ -69,6 +69,10 @@ spec:
           securityContext:
             allowPrivilegeEscalation: {{ .Values.securityContext.allowPrivilegeEscalation }}
             readOnlyRootFilesystem: {{ .Values.securityContext.readOnlyRootFilesystem }}
+            privileged: false
+            capabilities:
+              drop:
+                - ALL
 {{- end }}
       volumes:
         - name: certs
