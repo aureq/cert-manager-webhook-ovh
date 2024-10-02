@@ -1,4 +1,4 @@
-{{- $expectedVersion := "0.0.1" -}}
+{{- $expectedVersion := "0.0.2" -}}
 {{- if .Values.configVersion -}}
   {{- $configVersion := .Values.configVersion | trimAll " " -}}
   {{- if $configVersion -}}

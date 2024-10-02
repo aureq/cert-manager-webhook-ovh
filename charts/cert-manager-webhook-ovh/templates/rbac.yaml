@@ -116,9 +116,14 @@ subjects:
           {{- $secretsList = append $secretsList (printf "%s-ovh-credentials" .name) | uniq }}
         {{- end }}
         {{- if eq (include "cert-manager-webhook-ovh.isOvhAuthenticationRefAvail" .ovhAuthenticationRef) "true" }}
-          {{- $secretsList = append $secretsList .ovhAuthenticationRef.applicationKeyRef.name }}
-          {{- $secretsList = append $secretsList .ovhAuthenticationRef.applicationSecretRef.name }}
-          {{- $secretsList = append $secretsList .ovhAuthenticationRef.consumerKeyRef.name }}
+          {{- if eq "application" .ovhAuthenticationRef.authenticationMethod }}
+            {{- $secretsList = append $secretsList .ovhAuthenticationRef.applicationKeyRef.name }}
+            {{- $secretsList = append $secretsList .ovhAuthenticationRef.applicationSecretRef.name }}
+            {{- $secretsList = append $secretsList .ovhAuthenticationRef.applicationConsumerKeyRef.name }}
+          {{- else if eq "oauth2" .ovhAuthenticationRef.authenticationMethod }}
+            {{- $secretsList = append $secretsList .ovhAuthenticationRef.oauth2ClientIdRef.name }}
+            {{- $secretsList = append $secretsList .ovhAuthenticationRef.oauth2ClientSecretRef.name }}
+          {{- end }}
         {{- end }}
       {{- end }}{{/* end if eq .kind "ClusterIssuer" */}}
     {{- end }}{{/* end if .create */}}
@@ -183,9 +188,14 @@ subjects:
               {{- $secretsList = append $secretsList (printf "%s-ovh-credentials" .name) }}
             {{- end }}
             {{- if eq (include "cert-manager-webhook-ovh.isOvhAuthenticationRefAvail" .ovhAuthenticationRef) "true" }}
-              {{- $secretsList = append $secretsList .ovhAuthenticationRef.applicationKeyRef.name }}
-              {{- $secretsList = append $secretsList .ovhAuthenticationRef.applicationSecretRef.name }}
-              {{- $secretsList = append $secretsList .ovhAuthenticationRef.consumerKeyRef.name }}
+              {{- if eq "application" .ovhAuthenticationRef.authenticationMethod }}
+                {{- $secretsList = append $secretsList .ovhAuthenticationRef.applicationKeyRef.name }}
+                {{- $secretsList = append $secretsList .ovhAuthenticationRef.applicationSecretRef.name }}
+                {{- $secretsList = append $secretsList .ovhAuthenticationRef.applicationConsumerKeyRef.name }}
+              {{- else if eq "oauth2" .ovhAuthenticationRef.authenticationMethod }}
+                {{- $secretsList = append $secretsList .ovhAuthenticationRef.oauth2ClientIdRef.name }}
+                {{- $secretsList = append $secretsList .ovhAuthenticationRef.oauth2ClientSecretRef.name }}
+              {{- end }}
             {{- end }}
           {{- end }}
         {{- end }}{{/* end if eq .kind "Issuer" */}}

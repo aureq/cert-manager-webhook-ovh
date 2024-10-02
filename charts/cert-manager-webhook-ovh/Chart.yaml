@@ -1,5 +1,5 @@
 apiVersion: v2
-appVersion: "0.7.0"
+appVersion: "0.8.0-alpha.1"
 deprecated: false
 description: OVH DNS cert-manager ACME webhook
 home: https://github.com/aureq/cert-manager-webhook-ovh
@@ -19,4 +19,4 @@ maintainers:
 name: cert-manager-webhook-ovh
 sources:
   - https://github.com/aureq/cert-manager-webhook-ovh
-version: "0.7.0"
+version: "0.8.0-alpha.1"

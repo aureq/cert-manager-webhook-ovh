@@ -29,27 +29,48 @@ spec:
           config:
             endpoint: {{ .ovhEndpointName | quote }}
             {{- if eq (include "cert-manager-webhook-ovh.isOvhAuthenticationAvail" .ovhAuthentication) "true" }}
+            authenticationMethod: {{ .ovhAuthentication.authenticationMethod }}
+            {{- if eq "application" .ovhAuthentication.authenticationMethod }}
             applicationKeyRef:
               name: {{ printf "%s-ovh-credentials" .name }}
               key: "applicationKey"
             applicationSecretRef:
               name: {{ printf "%s-ovh-credentials" .name }}
               key: "applicationSecret"
-            consumerKeyRef:
+            applicationConsumerKeyRef:
               name: {{ printf "%s-ovh-credentials" .name }}
-              key: "consumerKey"
+              key: "applicationConsumerKey"
+            {{- else if eq "oauth2" .ovhAuthentication.authenticationMethod }}
+            oauth2ClientIdRef:
+              name: {{ printf "%s-ovh-credentials" .name }}
+              key: "oauth2ClientId"
+            oauth2ClientSecretRef:
+              name: {{ printf "%s-ovh-credentials" .name }}
+              key: "oauth2ClientSecret"
             {{- end }}
+            {{- end }}
+
             {{- if eq (include "cert-manager-webhook-ovh.isOvhAuthenticationRefAvail" .ovhAuthenticationRef) "true" }}
+            authenticationMethod: {{ .ovhAuthenticationRef.authenticationMethod }}
+            {{- if eq "application" .ovhAuthenticationRef.authenticationMethod }}
             applicationKeyRef:
               name: {{ .ovhAuthenticationRef.applicationKeyRef.name }}
               key: {{ .ovhAuthenticationRef.applicationKeyRef.key }}
             applicationSecretRef:
               name: {{ .ovhAuthenticationRef.applicationSecretRef.name }}
               key: {{ .ovhAuthenticationRef.applicationSecretRef.key }}
-            consumerKeyRef:
-              name: {{ .ovhAuthenticationRef.consumerKeyRef.name }}
-              key: {{ .ovhAuthenticationRef.consumerKeyRef.key }}
+            applicationConsumerKeyRef:
+              name: {{ .ovhAuthenticationRef.applicationConsumerKeyRef.name }}
+              key: {{ .ovhAuthenticationRef.applicationConsumerKeyRef.key }}
+            {{- else if eq "oauth2" .ovhAuthenticationRef.authenticationMethod }}
+            oauth2ClientIdRef:
+              name: {{ .ovhAuthenticationRef.oauth2ClientIdRef.name }}
+              key: {{ .ovhAuthenticationRef.oauth2ClientIdRef.key }}
+            oauth2ClientSecretRef:
+              name: {{ .ovhAuthenticationRef.oauth2ClientSecretRef.name }}
+              key: {{ .ovhAuthenticationRef.oauth2ClientSecretRef.key }}
             {{- end }}
+            {{- end }}            
 ---
   {{- end }}{{/* end if .create */}}
 {{- end }}{{/* end range */}}

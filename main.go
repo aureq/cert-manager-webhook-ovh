@@ -64,10 +64,13 @@ type ovhDNSProviderSolver struct {
 // be used by your provider here, you should reference a Kubernetes Secret
 // resource and fetch these credentials using a Kubernetes clientset.
 type ovhDNSProviderConfig struct {
-	Endpoint             string                   `json:"endpoint"`
-	ApplicationKeyRef    corev1.SecretKeySelector `json:"applicationKeyRef"`
-	ApplicationSecretRef corev1.SecretKeySelector `json:"applicationSecretRef"`
-	ConsumerKeyRef       corev1.SecretKeySelector `json:"consumerKeyRef"`
+	Endpoint                  string                   `json:"endpoint"`
+	AuthenticationMethod      string                   `json:"authenticationMethod"`
+	ApplicationKeyRef         corev1.SecretKeySelector `json:"applicationKeyRef"`
+	ApplicationSecretRef      corev1.SecretKeySelector `json:"applicationSecretRef"`
+	ApplicationConsumerKeyRef corev1.SecretKeySelector `json:"applicationConsumerKeyRef"`
+	OAuth2ClientIdRef         corev1.SecretKeySelector `json:"oauth2ClientIdRef"`
+	OAuth2ClientSecretRef     corev1.SecretKeySelector `json:"oauth2ClientSecretRef"`
 }
 
 type ovhZoneStatus struct {
@@ -103,14 +106,27 @@ func (s *ovhDNSProviderSolver) validate(cfg *ovhDNSProviderConfig, allowAmbientC
 	if cfg.Endpoint == "" {
 		return errors.New("no endpoint provided in OVH config")
 	}
-	if cfg.ApplicationKeyRef.Name == "" {
-		return errors.New("no application key provided in OVH config")
-	}
-	if cfg.ApplicationSecretRef.Name == "" {
-		return errors.New("no application secret provided in OVH config")
-	}
-	if cfg.ConsumerKeyRef.Name == "" {
-		return errors.New("no consumer key provided in OVH config")
+
+	switch cfg.AuthenticationMethod {
+	case "application":
+		if cfg.ApplicationKeyRef.Name == "" {
+			return errors.New("no application key provided in OVH config")
+		}
+		if cfg.ApplicationSecretRef.Name == "" {
+			return errors.New("no application secret provided in OVH config")
+		}
+		if cfg.ApplicationConsumerKeyRef.Name == "" {
+			return errors.New("no consumer key provided in OVH config")
+		}
+	case "oauth2":
+		if cfg.OAuth2ClientIdRef.Name == "" {
+			return errors.New("no client ID provided in OVH config")
+		}
+		if cfg.OAuth2ClientSecretRef.Name == "" {
+			return errors.New("no client secret provided in OVH config")
+		}
+	default:
+		return errors.New("invalid authentication method provided in OVH config")
 	}
 	logf.Log.Info("Provider config: passed.")
 	return nil
@@ -130,22 +146,37 @@ func (s *ovhDNSProviderSolver) ovhClient(ch *v1alpha1.ChallengeRequest) (*ovh.Cl
 		return nil, err
 	}
 
-	applicationKey, err := s.secret(cfg.ApplicationKeyRef, ch.ResourceNamespace)
-	if err != nil {
-		return nil, err
+	switch cfg.AuthenticationMethod {
+	case "application":
+		applicationKey, err := s.secret(cfg.ApplicationKeyRef, ch.ResourceNamespace)
+		if err != nil {
+			return nil, err
+		}
+
+		applicationSecret, err := s.secret(cfg.ApplicationSecretRef, ch.ResourceNamespace)
+		if err != nil {
+			return nil, err
+		}
+
+		applicationConsumerKey, err := s.secret(cfg.ApplicationConsumerKeyRef, ch.ResourceNamespace)
+		if err != nil {
+			return nil, err
+		}
+
+		return ovh.NewClient(cfg.Endpoint, applicationKey, applicationSecret, applicationConsumerKey)
+	case "oauth2":
+		clientId, err := s.secret(cfg.OAuth2ClientIdRef, ch.ResourceNamespace)
+		if err != nil {
+			return nil, err
+		}
+		clientSecret, err := s.secret(cfg.OAuth2ClientSecretRef, ch.ResourceNamespace)
+		if err != nil {
+			return nil, err
+		}
+		return ovh.NewOAuth2Client(cfg.Endpoint, clientId, clientSecret)
 	}
 
-	applicationSecret, err := s.secret(cfg.ApplicationSecretRef, ch.ResourceNamespace)
-	if err != nil {
-		return nil, err
-	}
-
-	consumerKey, err := s.secret(cfg.ConsumerKeyRef, ch.ResourceNamespace)
-	if err != nil {
-		return nil, err
-	}
-
-	return ovh.NewClient(cfg.Endpoint, applicationKey, applicationSecret, consumerKey)
+	return nil, fmt.Errorf("unknown authentication method %q", cfg.AuthenticationMethod)
 }
 
 func (s *ovhDNSProviderSolver) secret(ref corev1.SecretKeySelector, namespace string) (string, error) {

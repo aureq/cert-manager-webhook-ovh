@@ -52,9 +52,21 @@ Returns true if ovhAuthentication is correctly set.
 */}}
 {{- define "cert-manager-webhook-ovh.isOvhAuthenticationAvail" -}}
   {{- if . -}}
-    {{- if and (.consumerKey) (.applicationKey) (.applicationSecret) -}}
-      {{- eq "true" "true" -}}
-    {{- end -}}
+    {{- if eq "application" .authenticationMethod }}
+      {{- if and .applicationConsumerKey .applicationKey .applicationSecret }}
+        {{- true -}}
+      {{- else }}
+        {{- fail "Error: 'applicationConsumerKey', 'applicationKey', and 'applicationSecret' must all be provided for 'application' authentication method." }}
+      {{- end }}
+    {{- else if eq "oauth2" .authenticationMethod }}
+      {{- if and .oauth2ClientId .oauth2ClientSecret }}
+        {{- true -}}
+      {{- else }}
+        {{- fail "Error: 'oauth2ClientId' and 'oauth2ClientSecret' must both be provided for 'oauth2' authentication method." }}
+      {{- end }}
+    {{- else }}
+      {{- fail "Error: Invalid 'authenticationMethod'. It must be either 'application' or 'oauth2'." }}
+    {{- end }}
   {{- end -}}
 {{- end -}}
 
@@ -63,19 +75,37 @@ Returns true if ovhAuthenticationRef is correctly set.
 */}}
 {{- define "cert-manager-webhook-ovh.isOvhAuthenticationRefAvail" -}}
   {{- if . -}}
-    {{- if or (not .consumerKeyRef) (not .applicationKeyRef) (not .applicationSecretRef) }}
-      {{- fail "Error: When 'ovhAuthenticationRef' is used, 'consumerKeyRef', 'applicationKeyRef' and 'applicationSecretRef' need to be provided." }}
+    {{- if eq "application" .authenticationMethod }}
+      {{- if and (not .applicationConsumerKeyRef) (not .applicationKeyRef) (not .applicationSecretRef) }}
+        {{- fail "Error: When 'ovhAuthenticationRef' is used, 'applicationConsumerKeyRef', 'applicationKeyRef' and 'applicationSecretRef' need to be provided for 'application' authentication method." }}
+      {{- end }}
+
+      {{- if or (not .applicationConsumerKeyRef.name) (not .applicationConsumerKeyRef.key) }}
+        {{- fail "Error: When 'ovhAuthenticationRef' is used, you need to provide 'ovhAuthenticationRef.applicationConsumerKeyRef.name' and 'ovhAuthenticationRef.applicationConsumerKeyRef.key'" }}
+      {{- end }}
+      {{- if or (not .applicationKeyRef.name) (not .applicationKeyRef.key) }}
+        {{- fail "Error: When 'ovhAuthenticationRef' is used, you need to provide 'ovhAuthenticationRef.applicationKeyRef.name' and 'ovhAuthenticationRef.applicationKeyRef.key'" }}
+      {{- end }}
+      {{- if or (not .applicationSecretRef.name) (not .applicationSecretRef.key) }}
+        {{- fail "Error: When 'ovhAuthenticationRef' is used, you need to provide 'ovhAuthenticationRef.applicationSecretRef.name' and 'ovhAuthenticationRef.applicationSecretRef.key'" }}
+      {{- end }}
+
+    {{- else if eq "oauth2" .authenticationMethod }}
+      {{- if and (not .oauth2ClientIdRef) (not .oauth2ClientSecretRef) }}
+        {{- fail "Error: When 'ovhAuthenticationRef' is used, 'oauth2ClientIdRef' and 'oauth2ClientSecretRef' need to be provided for 'oauth2' authentication method." }}
+      {{- end }}
+
+      {{- if or (not .oauth2ClientIdRef.name) (not .oauth2ClientIdRef.key) }}
+        {{- fail "Error: When 'ovhAuthenticationRef' is used, you need to provide 'ovhAuthenticationRef.oauth2ClientIdRef.name' and 'ovhAuthenticationRef.oauth2ClientIdRef.key'" }}
+      {{- end }}
+      {{- if or (not .oauth2ClientSecretRef.name) (not .oauth2ClientSecretRef.key) }}
+        {{- fail "Error: When 'ovhAuthenticationRef' is used, you need to provide 'ovhAuthenticationRef.oauth2ClientSecretRef.name' and 'ovhAuthenticationRef.oauth2ClientSecretRef.key'" }}
+      {{- end }}
+
+    {{- else }}
+      {{- fail "Error: Invalid 'authenticationMethod'. It must be either 'application' or 'oauth2'." }}
     {{- end }}
-    {{- if or (not .consumerKeyRef.name) (not .consumerKeyRef.key) }}
-      {{ fail "Error: When 'ovhAuthenticationRef' is used, you need to provide 'ovhAuthenticationRef.consumerKeyRef.name' and 'ovhAuthenticationRef.consumerKeyRef.key'" }}
-    {{- end }}
-    {{- if or (not .applicationKeyRef.name) (not .applicationKeyRef.key) }}
-      {{ fail "Error: When 'ovhAuthenticationRef' is used, you need to provide 'ovhAuthenticationRef.applicationKeyRef.name' and 'ovhAuthenticationRef.applicationKeyRef.key'" }}
-    {{- end }}
-    {{- if or (not .applicationSecretRef.name) (not .applicationSecretRef.key) }}
-      {{ fail "Error: When 'ovhAuthenticationRef' is used, you need to provide 'ovhAuthenticationRef.applicationSecretRef.name' and 'ovhAuthenticationRef.applicationSecretRef.key'" }}
-    {{- end }}
-    {{- eq "true" "true" -}}
+    {{- true -}}
   {{- end -}}
 {{- end -}}
 
