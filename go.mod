@@ -3,7 +3,7 @@ module github.com/aureq/cert-manager-webhook-ovh
 go 1.23.0
 
 require (
-	github.com/cert-manager/cert-manager v1.15.3
+	github.com/cert-manager/cert-manager v1.15.4
 	github.com/ovh/go-ovh v1.6.0
 	k8s.io/api v0.30.1
 	k8s.io/apiextensions-apiserver v0.30.1
