@@ -1,5 +1,20 @@
 # Changelog
 
+## 0.7.1
+
+### Noteworthy changes
+
+- 🧹 maintenance release, only updated dependenies.
+
+### Dependencies
+
+- ⏩ update go 1.23.3
+- ⏩ update github.com/cert-manager/cert-manager v1.16.2
+- ⏩ update k8s.io/api v0.31.3
+- ⏩ update k8s.io/apiextensions-apiserver v0.31.3
+- ⏩ update k8s.io/apimachinery v0.31.3
+- ⏩ update k8s.io/client-go v0.31.3
+
 ## 0.7.0
 
 ### Noteworthy changes
