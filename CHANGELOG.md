@@ -1,5 +1,15 @@
 # Changelog
 
+## 0.7.2
+
+### Noteworthy changes
+
+- 🧹 maintenance release, only updated dependenies.
+
+### Dependencies
+
+- ⏩ update golang.org/x/crypto v0.31.0
+
 ## 0.7.1
 
 ### Noteworthy changes
