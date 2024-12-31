@@ -8,7 +8,7 @@
 
 ### Dependencies
 
-- ⏩ update golang.org/x/net v0.33.0 to address (CVE-2024-45338)[https://github.com/advisories/GHSA-w32m-9786-jp63]
+- ⏩ update golang.org/x/net v0.33.0 to address [CVE-2024-45338](https://github.com/advisories/GHSA-w32m-9786-jp63)
 
 ## 0.7.2
 
