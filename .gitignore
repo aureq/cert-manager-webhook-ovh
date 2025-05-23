@@ -25,3 +25,6 @@ tmp
 # IDE files
 .idea
 .vscode
+
+# aider
+.aider*
