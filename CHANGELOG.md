@@ -1,5 +1,24 @@
 # Changelog
 
+## 0.7.4
+
+### Noteworthy changes
+
+- 🧹 maintenance release, updated dependenies only.
+- 🐛 fix minor casing issue in `Dockerfile`
+- 🙈 ignore .aider* files
+
+### Dependencies
+
+- ⏩ upgrade github.com/cert-manager/cert-manager to v1.17.2
+- ⏩ upgrade github.com/ovh/go-ovh to v1.7.0
+- ⏩ upgrade k8s.io/api to v0.32.5
+- ⏩ upgrade k8s.io/apiextensions-apiserver to v0.32.5
+- ⏩ upgrade k8s.io/apimachinery to v0.32.5
+- ⏩ upgrade k8s.io/client-go to v0.32.5
+- ⏩ upgrade golang to 1.24
+- ⏩ upgrade alpine to 3.21
+
 ## 0.7.3
 
 ### Noteworthy changes
