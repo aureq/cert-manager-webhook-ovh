@@ -51,6 +51,17 @@ issuers:
     acmeServerUrl: https://acme-v02.api.letsencrypt.org/directory
     # email to use when registrering your account with Let's encrypt.
     email: acme@example.net
+    # define the eab (external account binding) key using secretRef.
+    # This is optional and only required if you want to use
+    # externalAccountBinding:
+    #   # eab key identifier.
+    #   keyID: keyID
+    #   # The secret reference to an existing eab key identifier.
+    #   keySecretRef:
+    #     # Name of the Kubernetes secret containing the eab hmac key
+    #     name: <secret-name>
+    #     # The key name in the secret above that holds the actual eab hmac key value
+    #     key: keySecret
     # The endpoint name of the OVH API. It must be one of the following:
     # ovh-eu, ovh-ca, kimsufi-eu, kimsufi-ca, soyoustart-eu, soyoustart-ca, runabove-ca
     # See https://docs.certifytheweb.com/docs/dns/providers/ovh/ for more information
@@ -112,6 +123,17 @@ issuers:
     acmeServerUrl: https://acme-staging-v02.api.letsencrypt.org/directory
     # email to use when registering your account with Let's encrypt.
     email: acme@example.net
+    # define the eab (external account binding) key using secretRef.
+    # This is optional and only required if you want to use
+    # externalAccountBinding:
+    #   # eab key identifier.
+    #   keyID: keyID
+    #   # The secret reference to an existing eab key identifier.
+    #   keySecretRef:
+    #     # Name of the Kubernetes secret containing the eab hmac key
+    #     name: <secret-name>
+    #     # The key name in the secret above that holds the actual eab hmac key value
+    #     key: keySecret
     # The endpoint name of the OVH API. It must be one of the following:
     # ovh-eu, ovh-ca, kimsufi-eu, kimsufi-ca, soyoustart-eu, soyoustart-ca, runabove-ca
     # See https://docs.certifytheweb.com/docs/dns/providers/ovh/ for more information

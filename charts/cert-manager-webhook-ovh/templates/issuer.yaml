@@ -18,6 +18,13 @@ spec:
     {{- if .email }}
     email: {{ .email | quote }}
     {{- end}}
+    {{- if .externalAccountBinding }}
+    externalAccountBinding:
+      keyID: {{ .externalAccountBinding.keyID | quote }}
+      keySecretRef:
+        name: {{ .externalAccountBinding.keySecretRef.name | quote }}
+        key: {{ .externalAccountBinding.keySecretRef.key | quote }}
+    {{- end}}
     privateKeySecretRef:
       name: {{ printf "%s-account-key" .name | quote }}
     solvers:
