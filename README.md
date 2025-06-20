@@ -8,11 +8,12 @@ Please star this repository to help others find it.
 
 ## Features
 
-- Solve DNS01 challenges using OVH DNS servers
-- Supports Cert Manager `ClusterIssuer` and `Issuer`
-- Helm chart repository for ease and simplicity
-- Store OVH credentials in a secret per issuer, or use secret references
-- Role based access control, across namespace
+- Solve DNS01 challenges using OVH DNS servers.
+- Support both multiple Cert Manager `ClusterIssuer` and `Issuer`.
+- Helm chart repository for ease and simplicity.
+- Store OVH credentials in a secret per issuer, or use secret references.
+- Role based access control, across namespace.
+- Support for optional External Account Binding (EAB).
 
 ## Documentation
 
