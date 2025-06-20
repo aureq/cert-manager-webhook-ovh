@@ -5,8 +5,8 @@ go 1.24.0
 toolchain go1.24.3
 
 require (
-	github.com/cert-manager/cert-manager v1.17.2
-	github.com/ovh/go-ovh v1.7.0
+	github.com/cert-manager/cert-manager v1.17.3
+	github.com/ovh/go-ovh v1.8.0
 	k8s.io/api v0.32.5
 	k8s.io/apiextensions-apiserver v0.32.5
 	k8s.io/apimachinery v0.32.5
