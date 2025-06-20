@@ -1,5 +1,19 @@
 # Changelog
 
+## 0.7.5
+
+### Noteworthy changes
+
+- 🎉 add support for External Account Binding (by [Sebastien MALOT](https://github.com/smalot))
+
+### Dependencies
+
+- ⏩ upgrade github.com/cert-manager/cert-manager to v1.17.3
+- ⏩ upgrade github.com/ovh/go-ovh to v1.8.0
+- ⏩ upgrade k8s.io/api to v0.33.2
+- ⏩ upgrade k8s.io/apimachinery to v0.33.2
+- ⏩ upgrade k8s.io/client-go to v0.33.2
+
 ## 0.7.4
 
 ### Noteworthy changes
