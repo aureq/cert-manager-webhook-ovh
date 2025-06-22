@@ -160,7 +160,7 @@ issuers:
     #     # Name of the Kubernetes secret containing the OVH Application Key
     #     name: ovh-credentials
     #     # The key name in the secret above that holds the actual OVH application key value
-    #     key: applicationSecret
+    #     key: applicationKey
     #   # The secret reference to an existing OVH application secret.
     #   applicationSecretRef:
     #     # Name of the Kubernetes secret containing the OVH Application Secret
