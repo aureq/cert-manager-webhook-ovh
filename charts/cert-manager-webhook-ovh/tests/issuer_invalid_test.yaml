@@ -1,0 +1,123 @@
+---
+suite: Testing issuers template with invalid values
+templates:
+- issuer.yaml
+tests:
+- it: Should trigger error when issuer doesn't have application consumerKey reference
+  values:
+  - values/invalid_issuers/application-ref-without-consumer.yaml
+  asserts:
+  - failedTemplate:
+      errorMessage: "Error: When 'ovhAuthenticationRef' is used, 'applicationConsumerKeyRef', 'applicationKeyRef' and 'applicationSecretRef' need to be provided."
+
+- it: Should trigger error when issuer doesn't have application consumerKey reference key
+  values:
+  - values/invalid_issuers/application-ref-without-consumer-key.yaml
+  asserts:
+  - failedTemplate:
+      errorMessage: "Error: When 'ovhAuthenticationRef' is used, you need to provide 'ovhAuthenticationRef.applicationConsumerKeyRef.name' and 'ovhAuthenticationRef.applicationConsumerKeyRef.key'"
+
+- it: Should trigger error when issuer doesn't have application consumerKey reference name
+  values:
+  - ./values/invalid_issuers/application-ref-without-consumer-name.yaml
+  asserts:
+  - failedTemplate:
+      errorMessage: "Error: When 'ovhAuthenticationRef' is used, you need to provide 'ovhAuthenticationRef.applicationConsumerKeyRef.name' and 'ovhAuthenticationRef.applicationConsumerKeyRef.key'"
+
+- it: Should trigger error when issuer doesn't have application key reference
+  values:
+  - ./values/invalid_issuers/application-ref-without-key.yaml
+  asserts:
+  - failedTemplate:
+      errorMessage: "Error: When 'ovhAuthenticationRef' is used, 'applicationConsumerKeyRef', 'applicationKeyRef' and 'applicationSecretRef' need to be provided."
+
+- it: Should trigger error when issuer doesn't have application key reference key
+  values:
+  - ./values/invalid_issuers/application-ref-without-key-key.yaml
+  asserts:
+  - failedTemplate:
+      errorMessage: "Error: When 'ovhAuthenticationRef' is used, you need to provide 'ovhAuthenticationRef.applicationKeyRef.name' and 'ovhAuthenticationRef.applicationKeyRef.key'"
+
+- it: Should trigger error when issuer doesn't have application key reference name
+  values:
+  - ./values/invalid_issuers/application-ref-without-key-name.yaml
+  asserts:
+  - failedTemplate:
+      errorMessage: "Error: When 'ovhAuthenticationRef' is used, you need to provide 'ovhAuthenticationRef.applicationKeyRef.name' and 'ovhAuthenticationRef.applicationKeyRef.key'"
+
+- it: Should trigger error when issuer doesn't have application secret reference
+  values:
+  - ./values/invalid_issuers/application-ref-without-secret.yaml
+  asserts:
+  - failedTemplate:
+      errorMessage: "Error: When 'ovhAuthenticationRef' is used, 'applicationConsumerKeyRef', 'applicationKeyRef' and 'applicationSecretRef' need to be provided."
+
+- it: Should trigger error when issuer doesn't have application secret reference key
+  values:
+  - ./values/invalid_issuers/application-ref-without-secret-key.yaml
+  asserts:
+  - failedTemplate:
+      errorMessage: "Error: When 'ovhAuthenticationRef' is used, you need to provide 'ovhAuthenticationRef.applicationSecretRef.name' and 'ovhAuthenticationRef.applicationSecretRef.key'"
+
+- it: Should trigger error when issuer doesn't have application secret reference name
+  values:
+  - ./values/invalid_issuers/application-ref-without-secret-name.yaml
+  asserts:
+  - failedTemplate:
+      errorMessage: "Error: When 'ovhAuthenticationRef' is used, you need to provide 'ovhAuthenticationRef.applicationSecretRef.name' and 'ovhAuthenticationRef.applicationSecretRef.key'"
+
+- it: Should trigger error when issuer use both ovhAuthenticationRef and ovhAuthentication
+  values:
+  - ./values/invalid_issuers/both-auth-values-and-ref.yaml
+  asserts:
+  - failedTemplate:
+      errorMessage: "Invalid issuer both-auth-values-and-ref: For each issuer you wish to create, you need to define either 'ovhAuthentication' or 'ovhAuthenticationRef'"
+
+- it: Should trigger error when issuer doesn't have oauth2 clientID reference
+  values:
+  - ./values/invalid_issuers/oauth2-ref-without-client-id.yaml
+  asserts:
+  - failedTemplate:
+      errorMessage: "Error: When 'ovhAuthenticationRef' is used, 'oauth2ClientIDRef' and 'oauth2ClientSecretRef' need to be provided."
+
+- it: Should trigger error when issuer doesn't have oauth2 clientID reference key
+  values:
+  - ./values/invalid_issuers/oauth2-ref-without-client-id-key.yaml
+  asserts:
+  - failedTemplate:
+      errorMessage: "Error: When 'ovhAuthenticationRef' is used, you need to provide 'ovhAuthenticationRef.oauth2ClientIDRef.name' and 'ovhAuthenticationRef.oauth2ClientIDRef.key'"
+
+- it: Should trigger error when issuer doesn't have oauth2 clientID reference name
+  values:
+  - ./values/invalid_issuers/oauth2-ref-without-client-id-name.yaml
+  asserts:
+  - failedTemplate:
+      errorMessage: "Error: When 'ovhAuthenticationRef' is used, you need to provide 'ovhAuthenticationRef.oauth2ClientIDRef.name' and 'ovhAuthenticationRef.oauth2ClientIDRef.key'"
+
+- it: Should trigger error when issuer doesn't have oauth2 clientSecret reference
+  values:
+  - ./values/invalid_issuers/oauth2-ref-without-client-secret.yaml
+  asserts:
+  - failedTemplate:
+      errorMessage: "Error: When 'ovhAuthenticationRef' is used, 'oauth2ClientIDRef' and 'oauth2ClientSecretRef' need to be provided."
+
+- it: Should trigger error when issuer doesn't have oauth2 clientSecret reference key
+  values:
+  - ./values/invalid_issuers/oauth2-ref-without-client-secret-key.yaml
+  asserts:
+  - failedTemplate:
+      errorMessage: "Error: When 'ovhAuthenticationRef' is used, you need to provide 'ovhAuthenticationRef.oauth2ClientSecretRef.name' and 'ovhAuthenticationRef.oauth2ClientSecretRef.key'"
+
+- it: Should trigger error when issuer doesn't have oauth2 clientSecret reference name
+  values:
+  - ./values/invalid_issuers/oauth2-ref-without-client-secret-name.yaml
+  asserts:
+  - failedTemplate:
+      errorMessage: "Error: When 'ovhAuthenticationRef' is used, you need to provide 'ovhAuthenticationRef.oauth2ClientSecretRef.name' and 'ovhAuthenticationRef.oauth2ClientSecretRef.key'"
+
+- it: Should trigger error when issuer use not available authentication method
+  values:
+  - ./values/invalid_issuers/wrong-authentication-method.yaml
+  asserts:
+  - failedTemplate:
+      errorMessage: "Invalid issuer wrong-authentication-method: 'ovhAuthenticationMethod' is invalid. Allowed values are: application, oauth2"

@@ -14,6 +14,7 @@
 # Ignore the built binary
 /cert-manager-webhook-ovh
 _out
+kubebuilder-tools.tar.gz
 
 # Test data
 testdata/ovh/config.json
@@ -28,3 +29,6 @@ tmp
 
 # aider
 .aider*
+
+# Helm test files
+charts/cert-manager-webhook-ovh/.debug

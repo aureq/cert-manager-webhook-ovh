@@ -2,17 +2,9 @@
 
 set -e
 
-k8s_version=1.22.0
-arch=amd64
-
-if [[ "$OSTYPE" == "linux-gnu" ]]; then
-  os="linux"
-elif [[ "$OSTYPE" == "darwin"* ]]; then
-  os="darwin"
-else
-  echo "OS '$OSTYPE' not supported." >&2
-  exit 1
-fi
+k8s_version=1.30.0
+arch=$(go env GOARCH)
+os=$(go env GOOS)
 
 root=$(cd "`dirname $0`"/..; pwd)
 output_dir="$root"/_out

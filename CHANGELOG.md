@@ -1,5 +1,16 @@
 # Changelog
 
+## 0.8.0
+
+### Noteworthy changes
+
+- 🎉 add support for OAuth2 OVH Authentication Method.
+
+## Breaking changes
+
+- ⚠️ Renamed `consumerKey` to `applicationConsumerKey` and `ConsumerKeyRef` to `ApplicationConsumerKeyRef` to prevent confusion with OAuth2 authentication. See #60.
+- ⚠️ New chart `configVersion` value: `0.0.2`
+
 ## 0.7.5
 
 ### Noteworthy changes

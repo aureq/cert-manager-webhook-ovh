@@ -30,6 +30,9 @@ build:
 		--output type=image,oci-mediatypes=true,compression=estargz,force-compression=true,push=false \
 		-t "$(IMAGE_NAME):$(IMAGE_TAG)" .
 
+helm-test:
+	@helm unittest charts/cert-manager-webhook-ovh/
+
 rendered-manifest.yaml:
 	@test -d "$(OUT)" || mkdir -p "$(OUT)"
 	@helm template \

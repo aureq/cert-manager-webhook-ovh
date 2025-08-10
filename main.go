@@ -64,10 +64,13 @@ type ovhDNSProviderSolver struct {
 // be used by your provider here, you should reference a Kubernetes Secret
 // resource and fetch these credentials using a Kubernetes clientset.
 type ovhDNSProviderConfig struct {
-	Endpoint             string                   `json:"endpoint"`
-	ApplicationKeyRef    corev1.SecretKeySelector `json:"applicationKeyRef"`
-	ApplicationSecretRef corev1.SecretKeySelector `json:"applicationSecretRef"`
-	ConsumerKeyRef       corev1.SecretKeySelector `json:"consumerKeyRef"`
+	Endpoint                  string                   `json:"endpoint"`
+	AuthenticationMethod      string                   `json:"authenticationMethod"`
+	ApplicationKeyRef         corev1.SecretKeySelector `json:"applicationKeyRef"`
+	ApplicationSecretRef      corev1.SecretKeySelector `json:"applicationSecretRef"`
+	ApplicationConsumerKeyRef corev1.SecretKeySelector `json:"applicationConsumerKeyRef"`
+	Oauth2ClientIDRef         corev1.SecretKeySelector `json:"oauth2ClientIDRef"`
+	Oauth2ClientSecretRef     corev1.SecretKeySelector `json:"oauth2ClientSecretRef"`
 }
 
 type ovhZoneStatus struct {
@@ -103,17 +106,62 @@ func (s *ovhDNSProviderSolver) validate(cfg *ovhDNSProviderConfig, allowAmbientC
 	if cfg.Endpoint == "" {
 		return errors.New("no endpoint provided in OVH config")
 	}
-	if cfg.ApplicationKeyRef.Name == "" {
-		return errors.New("no application key provided in OVH config")
-	}
-	if cfg.ApplicationSecretRef.Name == "" {
-		return errors.New("no application secret provided in OVH config")
-	}
-	if cfg.ConsumerKeyRef.Name == "" {
-		return errors.New("no consumer key provided in OVH config")
+	switch cfg.AuthenticationMethod {
+	case "application":
+		if cfg.ApplicationKeyRef.Name == "" {
+			return errors.New("no application key provided in OVH config")
+		}
+		if cfg.ApplicationSecretRef.Name == "" {
+			return errors.New("no application secret provided in OVH config")
+		}
+		if cfg.ApplicationConsumerKeyRef.Name == "" {
+			return errors.New("no application consumer key provided in OVH config")
+		}
+	case "oauth2":
+		if cfg.Oauth2ClientIDRef.Name == "" {
+			return errors.New("no oauth2 client ID provided in OVH config")
+		}
+		if cfg.Oauth2ClientSecretRef.Name == "" {
+			return errors.New("no oauth2 client secret provided in OVH config")
+		}
+	default:
+		return errors.New("invalid value for authentifaction method, allowed values: application, oauth2")
 	}
 	logf.Log.Info("Provider config: passed.")
 	return nil
+}
+
+func (s *ovhDNSProviderSolver) ovhClientApplication(ch *v1alpha1.ChallengeRequest, cfg *ovhDNSProviderConfig) (*ovh.Client, error) {
+	applicationKey, err := s.secret(cfg.ApplicationKeyRef, ch.ResourceNamespace)
+	if err != nil {
+		return nil, err
+	}
+
+	applicationSecret, err := s.secret(cfg.ApplicationSecretRef, ch.ResourceNamespace)
+	if err != nil {
+		return nil, err
+	}
+
+	applicationConsumerKey, err := s.secret(cfg.ApplicationConsumerKeyRef, ch.ResourceNamespace)
+	if err != nil {
+		return nil, err
+	}
+
+	return ovh.NewClient(cfg.Endpoint, applicationKey, applicationSecret, applicationConsumerKey)
+}
+
+func (s *ovhDNSProviderSolver) ovhClientOAuth2(ch *v1alpha1.ChallengeRequest, cfg *ovhDNSProviderConfig) (*ovh.Client, error) {
+	oauth2ClientID, err := s.secret(cfg.Oauth2ClientIDRef, ch.ResourceNamespace)
+	if err != nil {
+		return nil, err
+	}
+
+	oauth2ClientSecret, err := s.secret(cfg.Oauth2ClientSecretRef, ch.ResourceNamespace)
+	if err != nil {
+		return nil, err
+	}
+
+	return ovh.NewOAuth2Client(cfg.Endpoint, oauth2ClientID, oauth2ClientSecret)
 }
 
 func (s *ovhDNSProviderSolver) ovhClient(ch *v1alpha1.ChallengeRequest) (*ovh.Client, error) {
@@ -130,22 +178,14 @@ func (s *ovhDNSProviderSolver) ovhClient(ch *v1alpha1.ChallengeRequest) (*ovh.Cl
 		return nil, err
 	}
 
-	applicationKey, err := s.secret(cfg.ApplicationKeyRef, ch.ResourceNamespace)
-	if err != nil {
-		return nil, err
+	switch cfg.AuthenticationMethod {
+	case "application":
+		return s.ovhClientApplication(ch, &cfg)
+	case "oauth2":
+		return s.ovhClientOAuth2(ch, &cfg)
+	default:
+		return nil, fmt.Errorf("invalid value for authentifaction method, allowed values: application, oauth2'")
 	}
-
-	applicationSecret, err := s.secret(cfg.ApplicationSecretRef, ch.ResourceNamespace)
-	if err != nil {
-		return nil, err
-	}
-
-	consumerKey, err := s.secret(cfg.ConsumerKeyRef, ch.ResourceNamespace)
-	if err != nil {
-		return nil, err
-	}
-
-	return ovh.NewClient(cfg.Endpoint, applicationKey, applicationSecret, consumerKey)
 }
 
 func (s *ovhDNSProviderSolver) secret(ref corev1.SecretKeySelector, namespace string) (string, error) {

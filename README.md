@@ -68,3 +68,4 @@ We appreciate your understanding and cooperation in maintaining a positive and p
 - [Alissia01](https://github.com/Alissia01)
 - [Mathieu Sensei](https://github.com/hyu9a)
 - [Sebastien MALOT](https://github.com/smalot)
+- [Rémy Jacquin](https://github.com/remyj38)
