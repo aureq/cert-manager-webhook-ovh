@@ -262,3 +262,14 @@ podAnnotations: {}
 # see https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
 # add labels to the Pod
 podLabels: {}
+
+# Create dynamic manifests via values.
+#
+# For example:
+# extraObjects:
+#   - |
+#     apiVersion: v1
+#     kind: ConfigMap
+#     metadata:
+#       name: '{{ template "cert-manager.fullname" . }}-extra-configmap'
+extraObjects: []
