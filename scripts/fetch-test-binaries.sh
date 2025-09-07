@@ -2,7 +2,7 @@
 
 set -e
 
-k8s_version=1.32.0
+k8s_version=1.30.0
 arch=$(go env GOARCH)
 os=$(go env GOOS)
 
