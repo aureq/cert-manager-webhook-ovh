@@ -10,7 +10,7 @@ TEST_ASSET_KUBECTL := $(OUT)/kubebuilder/bin/kubectl
 
 test:
 	@test -d "$(OUT)" || mkdir -p "$(OUT)"
-	@sh ./scripts/fetch-test-binaries.sh
+	@bash ./scripts/fetch-test-binaries.sh
 	TEST_ASSET_ETCD="$(TEST_ASSET_ETCD)" \
 		TEST_ASSET_KUBE_APISERVER="$(TEST_ASSET_KUBE_APISERVER)" \
 		TEST_ASSET_KUBECTL="$(TEST_ASSET_KUBECTL)" \
