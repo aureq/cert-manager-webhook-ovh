@@ -3,7 +3,7 @@
 set -eu
 
 CHART_DIR="charts/cert-manager-webhook-ovh"
-CONFIG_VERSION="0.0.1"
+CONFIG_VERSION="0.0.2"
 
 COMMITS_TO_PUSH="$(git log --oneline -- "origin..HEAD"  | awk 'END { print NR }')"
 
