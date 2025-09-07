@@ -5,7 +5,8 @@
 ### Noteworthy changes
 
 - 🎉 add support for OAuth2 authentication when communicating with OVH (by [Rémy Jacquin](https://github.com/remyj38))
-- 🎉 add unit tests to validate Chart (by [Rémy Jacquin](https://github.com/remyj38))
+- 🎉 add unit tests to validate the Chart (by [Rémy Jacquin](https://github.com/remyj38))
+- 🎉 add unit tests to validate the webhook (by [Rémy Jacquin](https://github.com/remyj38))
 - 🌿 improve some error messages when `configVersion` is invalid
 
 ## Breaking changes
