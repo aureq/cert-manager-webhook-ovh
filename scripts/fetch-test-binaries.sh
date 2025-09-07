@@ -1,13 +1,13 @@
-#!/usr/bin/env bash
+#!/bin/bash
 
 set -e
 
-k8s_version=1.22.0
+k8s_version=1.32.0
 arch=amd64
 
-if [[ "$OSTYPE" == "linux-gnu" ]]; then
+if [ "$OSTYPE" = "linux-gnu" ]; then
   os="linux"
-elif [[ "$OSTYPE" == "darwin"* ]]; then
+elif [ "$OSTYPE" = "darwin"* ]; then
   os="darwin"
 else
   echo "OS '$OSTYPE' not supported." >&2
