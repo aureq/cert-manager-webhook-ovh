@@ -1,6 +1,6 @@
 # Changelog
 
-## 0.8.0-alpha.1
+## 0.7.6
 
 ### Noteworthy changes
 
@@ -8,14 +8,12 @@
 - 🎉 allow creation of extra manifests via `values.yaml` (by [Rémy Jacquin](https://github.com/remyj38))
 - 🐛 fix `app.kubernetes.io/version` label when using SHA in image tag (by [Rémy Jacquin](https://github.com/remyj38))
 
-
 ### Dependencies
 
 - ⏩ upgrade golang build image to 1.24-alpine3.22
 - ⏩ upgrade alpine base image to 3.22
 - ⏩ upgrade github.com/cert-manager/cert-manager to v1.18.2
 - ⏩ upgrade github.com/ovh/go-ovh to v1.9.0
-
 
 ## 0.7.5
 
