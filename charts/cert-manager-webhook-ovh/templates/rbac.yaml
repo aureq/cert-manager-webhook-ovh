@@ -112,14 +112,23 @@ subjects:
   {{- range $.Values.issuers }}
     {{- if .create }}
       {{- if eq .kind "ClusterIssuer" }}
-        {{- if eq (include "cert-manager-webhook-ovh.isOvhAuthenticationAvail" .ovhAuthentication) "true" }}
+        {{- if eq (include "cert-manager-webhook-ovh.isOvhAuthenticationAvail" .) "true" }}
           {{- $secretsList = append $secretsList (printf "%s-ovh-credentials" .name) | uniq }}
         {{- end }}
-        {{- if eq (include "cert-manager-webhook-ovh.isOvhAuthenticationRefAvail" .ovhAuthenticationRef) "true" }}
-          {{- $secretsList = append $secretsList .ovhAuthenticationRef.applicationKeyRef.name }}
-          {{- $secretsList = append $secretsList .ovhAuthenticationRef.applicationSecretRef.name }}
-          {{- $secretsList = append $secretsList .ovhAuthenticationRef.consumerKeyRef.name }}
-        {{- end }}
+        {{- if eq (include "cert-manager-webhook-ovh.isOvhAuthenticationRefAvail" .) "true" }}
+          {{- if eq .ovhAuthenticationMethod "application" }}
+            {{- with .ovhAuthenticationRef }}
+              {{- $secretsList = append $secretsList .applicationKeyRef.name }}
+              {{- $secretsList = append $secretsList .applicationSecretRef.name }}
+              {{- $secretsList = append $secretsList .applicationConsumerKeyRef.name }}
+            {{- end }}
+          {{- else if eq .ovhAuthenticationMethod "oauth2" }}
+            {{- with .ovhAuthenticationRef }}
+              {{- $secretsList = append $secretsList .oauth2ClientIDRef.name }}
+              {{- $secretsList = append $secretsList .oauth2ClientSecretRef.name }}
+            {{- end }}
+          {{- end }}
+        {{- end }}{{/* end if isOvhAuthenticationRefAvail */}}
       {{- end }}{{/* end if eq .kind "ClusterIssuer" */}}
     {{- end }}{{/* end if .create */}}
   {{- end }}{{/* end range */}}
@@ -179,13 +188,22 @@ subjects:
       {{- if .create }}
         {{- if eq .kind "Issuer" }}
           {{- if eq $namespace .namespace }}
-            {{- if eq (include "cert-manager-webhook-ovh.isOvhAuthenticationAvail" .ovhAuthentication) "true" }}
+            {{- if eq (include "cert-manager-webhook-ovh.isOvhAuthenticationAvail" .) "true" }}
               {{- $secretsList = append $secretsList (printf "%s-ovh-credentials" .name) }}
             {{- end }}
-            {{- if eq (include "cert-manager-webhook-ovh.isOvhAuthenticationRefAvail" .ovhAuthenticationRef) "true" }}
-              {{- $secretsList = append $secretsList .ovhAuthenticationRef.applicationKeyRef.name }}
-              {{- $secretsList = append $secretsList .ovhAuthenticationRef.applicationSecretRef.name }}
-              {{- $secretsList = append $secretsList .ovhAuthenticationRef.consumerKeyRef.name }}
+            {{- if eq (include "cert-manager-webhook-ovh.isOvhAuthenticationRefAvail" .) "true" }}
+              {{- if eq .ovhAuthenticationMethod "application" }}
+                {{- with .ovhAuthenticationRef }}
+                  {{- $secretsList = append $secretsList .applicationKeyRef.name }}
+                  {{- $secretsList = append $secretsList .applicationSecretRef.name }}
+                  {{- $secretsList = append $secretsList .applicationConsumerKeyRef.name }}
+                {{- end }}
+              {{- else if eq .ovhAuthenticationMethod "oauth2" }}
+                {{- with .ovhAuthenticationRef }}
+                  {{- $secretsList = append $secretsList .oauth2ClientIDRef.name }}
+                  {{- $secretsList = append $secretsList .oauth2ClientSecretRef.name }}
+                {{- end }}
+              {{- end }}
             {{- end }}
           {{- end }}
         {{- end }}{{/* end if eq .kind "Issuer" */}}

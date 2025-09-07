@@ -1,0 +1,31 @@
+---
+suite: Testing configVersion validation
+templates:
+- version.yaml
+tests:
+- it: Should fail if version is different than required version
+  set:
+    configVersion: 0.0.1
+  asserts:
+  - failedTemplate:
+      errorPattern: "Expected: '0.0.2', Provided: '0.0.1'"
+
+- it: Should fail when configVersion not provided
+  asserts:
+    - failedTemplate:
+        errorPattern: "The configVersion cannot be empty"
+
+- it: Should fail when configVersion is an empty string
+  set:
+    configVersion: " "
+  asserts:
+    - failedTemplate:
+        errorPattern: "The configVersion cannot be empty"
+
+- it: Should not trigger any error when configVersion is correct
+  set:
+    configVersion: "0.0.2"
+  asserts:
+    - notFailedTemplate: {}
+    - hasDocuments:
+        count: 0

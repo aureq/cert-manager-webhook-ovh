@@ -7,7 +7,7 @@
 # The latest `values.yaml` contains the correct `configVersion` but the line is
 # commented. The latest `values.yaml` can be retrieved with the command below:
 #    helm show values cert-manager-webhook-ovh-charts/cert-manager-webhook-ovh
-# configVersion: 0.0.1
+# configVersion: 0.0.2
 
 # The GroupName here is used to identify your company or business unit that
 # created this webhook.
@@ -67,21 +67,39 @@ issuers:
     # ovh-eu, ovh-ca, kimsufi-eu, kimsufi-ca, soyoustart-eu, soyoustart-ca, runabove-ca
     # See https://docs.certifytheweb.com/docs/dns/providers/ovh/ for more information
     ovhEndpointName: ovh-eu
+    # Authentication method (possible values: application or oauth2)
+    ovhAuthenticationMethod: application
     # define how the webhook should authenticate with the OVH API.
     # Either set your credentials and the chart will create the necessary secret for you.
     # Or provide the details of a secret already containing the OVH credentials.
     # ovhAuthentication:
+    #   # the OVH OAuth 2 client ID. Leave empty if you are using an existing secret.
+    #   oauth2ClientID: ''
+    #   # the OVH OAuth 2 client secret. Leave empty if you are using an existing secret.
+    #   oauth2ClientSecret: ''
     #   # the OVH application key. Leave emtpy if you are using an existing secret.
     #   applicationKey: ''
     #   # the OVH application secret. Leave emtpy if you are using an existing secret.
     #   applicationSecret: ''
-    #   # Your OVH consumer key. Leave emtpy if you are using an existing secret.
-    #   consumerKey: ''
+    #   # Your OVH consumer key. Leave empty if you are using an existing secret.
+    #   applicationConsumerKey: ''
 
     # If 'kind' is a ClusterIssuer, then the secret needs to be present
     # in the same namespace as this deployment. If 'kind' is an Issuer,
     # then the secret needs to be present in the same namespace as the Issuer.
     # ovhAuthenticationRef:
+    #   # The secret reference to an existing OVH OAuth 2 client ID.
+    #   oauth2ClientIDRef:
+    #     # Name of the Kubernetes secret containing the OVH OAuth 2 client ID
+    #     name: ovh-credentials
+    #     # The key name in the secret above that holds the actual OVH OAuth 2 client IDvalue
+    #     key: oauth2ClientID
+    #   # The secret reference to an existing OVH Auth 2 client secret.
+    #   oauth2ClientSecretRef:
+    #     # Name of the Kubernetes secret containing the OVH Auth 2 client secret
+    #     name: ovh-credentials
+    #     # The key name in the secret above that holds the actual OVH Auth 2 client secret value
+    #     key: oauth2ClientSecret
     #   # The secret reference to an existing OVH application key.
     #   applicationKeyRef:
     #     # Name of the Kubernetes secret containing the OVH Application Key
@@ -95,11 +113,11 @@ issuers:
     #     # The key name in the secret above that holds the actual OVH application secret value
     #     key: applicationSecret
     #   # The secret reference to an existing OVH consumer key
-    #   consumerKeyRef:
+    #   applicationConsumerKeyRef:
     #     # Name of the Kubernetes secret containing the OVH consumer Key
     #     name: ovh-credentials
     #     # The key name in the secret above that holds the actual OVH consumer key value
-    #     key: consumerKey
+    #     key: applicationConsumerKey
 
   # Name of this issuer
   - name: le-staging
@@ -140,21 +158,39 @@ issuers:
     # ovh-eu, ovh-ca, kimsufi-eu, kimsufi-ca, soyoustart-eu, soyoustart-ca, runabove-ca
     # See https://docs.certifytheweb.com/docs/dns/providers/ovh/ for more information
     ovhEndpointName: ovh-eu
+    # Authentication method (possible values: application or oauth2)
+    ovhAuthenticationMethod: application
     # define how the webhook should authenticate with the OVH API.
     # Either set your credentials and the chart will create the necessary secret for you.
     # Or provide the details of a secret already containing the OVH credentials.
     # ovhAuthentication:
+    #   # the OVH OAuth 2 client ID. Leave empty if you are using an existing secret.
+    #   oauth2ClientID: ''
+    #   # the OVH OAuth 2 client secret. Leave empty if you are using an existing secret.
+    #   oauth2ClientSecret: ''
     #   # the OVH application key. Leave emtpy if you are using an existing secret.
     #   applicationKey: ''
     #   # the OVH application secret. Leave emtpy if you are using an existing secret.
     #   applicationSecret: ''
-    #   # Your OVH consumer key. Leave emtpy if you are using an existing secret.
-    #   consumerKey: ''
+    #   # Your OVH consumer key. Leave empty if you are using an existing secret.
+    #   applicationConsumerKey: ''
 
     # If 'kind' is a ClusterIssuer, then the secret needs to be present
     # in the same namespace as this deployment. If 'kind' is an Issuer,
     # then the secret needs to be present in the same namespace as the Issuer.
     # ovhAuthenticationRef:
+    #   # The secret reference to an existing OVH OAuth 2 client ID.
+    #   oauth2ClientIDRef:
+    #     # Name of the Kubernetes secret containing the OVH OAuth 2 client ID
+    #     name: ovh-credentials
+    #     # The key name in the secret above that holds the actual OVH OAuth 2 client IDvalue
+    #     key: oauth2ClientID
+    #   # The secret reference to an existing OVH Auth 2 client secret.
+    #   oauth2ClientSecretRef:
+    #     # Name of the Kubernetes secret containing the OVH Auth 2 client secret
+    #     name: ovh-credentials
+    #     # The key name in the secret above that holds the actual OVH Auth 2 client secret value
+    #     key: oauth2ClientSecret
     #   # The secret reference to an existing OVH application key.
     #   applicationKeyRef:
     #     # Name of the Kubernetes secret containing the OVH Application Key
@@ -168,11 +204,11 @@ issuers:
     #     # The key name in the secret above that holds the actual OVH application secret value
     #     key: applicationSecret
     #   # The secret reference to an existing OVH consumer key
-    #   consumerKeyRef:
+    #   applicationConsumerKeyRef:
     #     # Name of the Kubernetes secret containing the OVH consumer Key
     #     name: ovh-credentials
     #     # The key name in the secret above that holds the actual OVH consumer key value
-    #     key: consumerKey
+    #     key: applicationConsumerKey
 
 rbac:
   # If the secret of the issuer is in a different namespace, change `Role` (default)
@@ -235,12 +271,12 @@ resources: {}
   # choice for the user. This also increases chances charts run on environments with little
   # resources, such as Minikube. If you do want to specify resources, uncomment the following
   # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
-  #requests:
-  #  cpu: 100m
-  #  memory: 64Mi
-  #limits:
-  #  cpu: 200m
-  #  memory: 96Mi
+  # requests:
+  #   cpu: 100m
+  #   memory: 64Mi
+  # limits:
+  #   cpu: 200m
+  #   memory: 96Mi
 
 # see https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
 nodeSelector: {}

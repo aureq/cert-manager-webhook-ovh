@@ -1,9 +1,9 @@
-{{- $expectedVersion := "0.0.1" -}}
+{{- $expectedVersion := "0.0.2" -}}
 {{- if .Values.configVersion -}}
   {{- $configVersion := .Values.configVersion | trimAll " " -}}
   {{- if $configVersion -}}
     {{- if (semverCompare (printf "!= %s" $expectedVersion) $configVersion) -}}
-      {{- fail (printf "Error: Incorrect configVersion.\nExpected: '%s'\nProvided: '%s'\nPlease upgrade your 'values.yaml' file accordingly." $expectedVersion $configVersion) -}}
+      {{- fail (printf "Error: Incorrect configVersion: Expected: '%s', Provided: '%s'\nPlease upgrade your 'values.yaml' file accordingly." $expectedVersion $configVersion) -}}
     {{- end -}}
   {{- else -}}
     {{ fail (printf "Error: The configVersion cannot be empty in your `values.yaml`. Please provide a valid configVersion.\nRetrieve the latest `values.yaml` using:\n\thelm show values cert-manager-webhook-ovh-charts/cert-manager-webhook-ovh") }}

@@ -1,0 +1,63 @@
+configVersion: 0.0.1
+
+issuers:
+  - name: application
+    create: true
+    kind: Issuer
+    namespace: default
+    cnameStrategy: Follow
+    acmeServerUrl: https://acme-v02.api.letsencrypt.org/directory
+    email: acme@example.net
+    ovhEndpointName: ovh-eu
+    ovhAuthenticationMethod: application
+    ovhAuthentication:
+      applicationKey: 'applicationKeyValue'
+      applicationSecret: 'applicationSecretValue'
+      applicationConsumerKey: 'applicationConsumerKeyValue'
+  - name: application-with-ref
+    create: true
+    kind: ClusterIssuer
+    namespace: default
+    cnameStrategy: None
+    acmeServerUrl: https://acme-v02.api.letsencrypt.org/directory
+    email: acme@example.net
+    ovhEndpointName: ovh-eu
+    ovhAuthenticationMethod: application
+    ovhAuthenticationRef:
+      applicationKeyRef:
+        name: application-ref-key
+        key: applicationKey
+      applicationSecretRef:
+        name: application-ref-secret
+        key: applicationSecret
+      applicationConsumerKeyRef:
+        name: application-ref-consumer-key
+        key: applicationConsumerKey
+  - name: oauth2
+    create: true
+    kind: ClusterIssuer
+    namespace: default
+    cnameStrategy: None
+    acmeServerUrl: https://acme-v02.api.letsencrypt.org/directory
+    email: acme@example.net
+    ovhEndpointName: ovh-eu
+    ovhAuthenticationMethod: oauth2
+    ovhAuthentication:
+      oauth2ClientID: 'oauth2ClientIDvalue'
+      oauth2ClientSecret: 'oauth2ClientSecretValue'
+  - name: oauth2-with-ref
+    create: true
+    kind: Issuer
+    namespace: default
+    cnameStrategy: None
+    acmeServerUrl: https://acme-v02.api.letsencrypt.org/directory
+    email: acme@example.net
+    ovhEndpointName: ovh-eu
+    ovhAuthenticationMethod: oauth2
+    ovhAuthenticationRef:
+      oauth2ClientIDRef:
+        name: oauth2-client-id
+        key: oauth2ClientID
+      oauth2ClientSecretRef:
+        name: oauth2-client-secret
+        key: oauth2ClientSecret

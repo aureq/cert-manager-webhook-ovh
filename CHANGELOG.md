@@ -1,5 +1,17 @@
 # Changelog
 
+## 0.8.0-alpha.1
+
+### Noteworthy changes
+
+- 🎉 add support for OAuth2 authentication when communicating with OVH (by [Rémy Jacquin](https://github.com/remyj38))
+
+## Breaking changes
+
+- ⚠️ renamed configuration key `consumerKey` to `applicationConsumerKey` to prevent confusion with OAuth2 authentication. See [documentation](https://aureq.github.io/cert-manager-webhook-ovh/#configuration).
+- ⚠️ renamed `ConsumerKeyRef` to `ApplicationConsumerKeyRef` to prevent confusion with OAuth2 authentication. See [documentation](https://aureq.github.io/cert-manager-webhook-ovh/#configuration).
+- ⚠️ due to the breaking changes described above, the new value for `configVersion` field is `0.0.2`.
+
 ## 0.7.6
 
 ### Noteworthy changes
