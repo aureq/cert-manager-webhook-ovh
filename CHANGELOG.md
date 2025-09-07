@@ -1,5 +1,20 @@
 # Changelog
 
+## 0.8.0
+
+### Noteworthy changes
+
+- 🎉 both the build image and base image are using Alpine Linux 3.22
+
+
+### Dependencies
+
+- ⏩ upgrade golang build image to 1.24-alpine3.22
+- ⏩ upgrade alpine base image to 3.22
+- ⏩ upgrade github.com/cert-manager/cert-manager to v1.18.2
+- ⏩ upgrade github.com/ovh/go-ovh to v1.9.0
+
+
 ## 0.7.5
 
 ### Noteworthy changes
