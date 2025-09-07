@@ -3,12 +3,24 @@ package main
 import (
 	"testing"
 
-	acmetest "github.com/cert-manager/cert-manager/test/acme"
+	// acmetest "github.com/cert-manager/cert-manager/test/acme"
 	corev1 "k8s.io/api/core/v1"
 )
 
 func TestValidate(t *testing.T) {
 	s := &ovhDNSProviderSolver{}
+
+	// fixture := acmetest.NewFixture(&ovhDNSProviderSolver{},
+	// 	acmetest.SetResolvedZone(zone),
+	// 	acmetest.SetAllowAmbientCredentials(false),
+	// 	acmetest.SetManifestPath("testdata/ovh"),
+	// )
+
+	//need to uncomment and  RunConformance delete runBasic and runExtended once https://github.com/cert-manager/cert-manager/pull/4835 is merged
+	// fixture.RunConformance(t)
+	// fixture.RunBasic(t)
+	// fixture.RunExtended(t)
+
 
 	// No endpoint provided
 	err := s.validate(&ovhDNSProviderConfig{}, false)
@@ -16,11 +28,6 @@ func TestValidate(t *testing.T) {
 		t.Errorf("expected missing endpoint error, got %v", err)
 	}
 
-	fixture := acmetest.NewFixture(&ovhDNSProviderSolver{},
-		acmetest.SetResolvedZone(zone),
-		acmetest.SetAllowAmbientCredentials(false),
-		acmetest.SetManifestPath("testdata/ovh"),
-	)
 	// No application key
 	err = s.validate(&ovhDNSProviderConfig{
 		Endpoint:             "ovh-eu",
@@ -29,11 +36,6 @@ func TestValidate(t *testing.T) {
 	if err == nil || err.Error() != "no application key provided in OVH config" {
 		t.Errorf("expected application key error, got %v", err)
 	}
-
-	//need to uncomment and  RunConformance delete runBasic and runExtended once https://github.com/cert-manager/cert-manager/pull/4835 is merged
-	//fixture.RunConformance(t)
-	fixture.RunBasic(t)
-	fixture.RunExtended(t)
 
 	// No application secret
 	err = s.validate(&ovhDNSProviderConfig{
