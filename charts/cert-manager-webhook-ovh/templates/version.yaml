@@ -3,11 +3,11 @@
   {{- $configVersion := .Values.configVersion | trimAll " " -}}
   {{- if $configVersion -}}
     {{- if (semverCompare (printf "!= %s" $expectedVersion) $configVersion) -}}
-      {{- fail (printf "Error: Incorrect configVersion: Expected: '%s', Provided: '%s'\nPlease upgrade your 'values.yaml' file accordingly." $expectedVersion $configVersion) -}}
+      {{- fail (printf "\nError: Incorrect 'configVersion': Expected: '%s', Provided: '%s'. Please upgrade your 'values.yaml' file accordingly." $expectedVersion $configVersion) -}}
     {{- end -}}
   {{- else -}}
-    {{ fail (printf "Error: The configVersion cannot be empty in your `values.yaml`. Please provide a valid configVersion.\nRetrieve the latest `values.yaml` using:\n\thelm show values cert-manager-webhook-ovh-charts/cert-manager-webhook-ovh") }}
+    {{ fail (printf "\nError: The 'configVersion' key cannot be empty in your `values.yaml`. Please provide a valid value for 'configVersion'.\nRetrieve the latest `values.yaml` using:\n\thelm show values cert-manager-webhook-ovh-charts/cert-manager-webhook-ovh") }}
   {{- end -}}
 {{- else -}}
-  {{ fail (printf "Error: The configVersion cannot be empty in your `values.yaml`. Please provide a valid configVersion.\nRetrieve the latest `values.yaml` using:\n\thelm show values cert-manager-webhook-ovh-charts/cert-manager-webhook-ovh") }}
+  {{ fail (printf "\nError: The 'configVersion' key cannot be empty in your `values.yaml`. Please provide a valid value for 'configVersion'.\nRetrieve the latest `values.yaml` using:\n\thelm show values cert-manager-webhook-ovh-charts/cert-manager-webhook-ovh") }}
 {{- end -}}

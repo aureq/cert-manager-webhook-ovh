@@ -8,19 +8,22 @@ tests:
     configVersion: 0.0.1
   asserts:
   - failedTemplate:
-      errorPattern: "Expected: '0.0.2', Provided: '0.0.1'"
+      notMatchRegex:
+        pattern: ".*Expected: '0.0.2', Provided: '0.0.1'.*"
 
-- it: Should fail when configVersion not provided
+- it: Should fail when 'configVersion' not provided
   asserts:
     - failedTemplate:
-        errorPattern: "The configVersion cannot be empty"
+        notMatchRegex:
+          pattern: "The 'configVersion' key cannot be empty.*"
 
 - it: Should fail when configVersion is an empty string
   set:
     configVersion: " "
   asserts:
     - failedTemplate:
-        errorPattern: "The configVersion cannot be empty"
+        notMatchRegex:
+          pattern: "The 'configVersion' key cannot be empty.*"
 
 - it: Should not trigger any error when configVersion is correct
   set:
