@@ -41,10 +41,13 @@ In order to use OVH IAM, you need to generate a OAuth2 Client, create a policy a
 
 The following instructions are based on the [official documentation](https://help.ovhcloud.com/csm/en-manage-service-account?id=kb_article_view&sysparm_article=KB0059343).
 
-1. Go to [api.ovh.com](https://api.ovh.com/console/) console and log-in using your credentials
-1. Create a new service account via [POST /me/api/oauth2/client](https://api.ovh.com/console/?section=%2Fme&branch=v1#post-/me/api/oauth2/client) endpoint with the following body:
+1. Go to [api.ovh.com/console/](https://api.ovh.com/console/) console
+2. Click `Authentication` link on the left handside to log-in using your OVH credentials
+3. In the top left corner, select `v1` and then select `/me` API
+4. On the left panel, search for `POST /me/api/oauth2/client` [↗️](https://api.ovh.com/console/?section=%2Fme&branch=v1#post-/me/api/oauth2/client)
+5. Create a new service account with the following request body and click `Execute`
 
-    ```yaml
+    ```json
     {
       "callbackUrls": [],
       "description": "Service account for OVH cert-manager webhook",
@@ -53,17 +56,21 @@ The following instructions are based on the [official documentation](https://hel
     }
     ```
 
-1. Take note of the `ClientId` and `clientSecret` and save them in a **secure** location. Be carefull, you will not be able to recover the client secret. You'll need to delete and create a new service account.
+6. Take note of both `ClientId` and `clientSecret` and save them in a **secure** location. Be carefull, you will not be able to retrieve the client secret later. You'll need to delete and create a new service account.
+7. Navidate to `GET /me/api/oauth2/client/{clientId}` [↗️](https://api.ovh.com/console/?section=%2Fme&branch=v1#get-/me/api/oauth2/client/-clientId-)
+8. Use the `ClientId` to retrieve the details of the service account. Take note of `identity`.
 
-1. Get the service account Unique Resource Name (URN) with [GET /me/api/oauth2/client{clientId}](https://api.ovh.com/console/?section=%2Fme&branch=v1#get-/me/api/oauth2/client/-clientId-) into the response field `identity`.
+Now, you can create the policy to grant permissions on your domain to your service account.
 
-1. Now, you can create the policy to grant permissions on your domain to your service account. Use the [POST /iam/policy](https://api.ovh.com/console/?section=%2Fiam&branch=v2#post-/iam/policy) endpoint with the followed example into the body. You need at least to replace the identity value with your service account URN. If you want to limit the service account to a specific domain, replace the `*` by your domain.:
+1. In the top left corner, select `v2` and then select `/iam` API
+2. Search for `POST /iam/policy` [↗️](https://api.ovh.com/console/?section=%2Fiam&branch=v2#post-/iam/policy)
+3. Create a new IAM policy with the following request body. Adjust the `urn` to restrict the policy to one or more specifc domains and click `Execute`.
 
-    ```yaml
+    ```json
     {
-      "description": "Allow cert-manager of create records",
+      "description": "Allow cert-manager of create and manage DNS records",
       "identities": [
-        "<service account URN>"
+        "<--- 🔥 INSERT SERVICE ACCOUNT IDENTITY FROM STEP 8 --->"
       ],
       "name": "cert-manager",
       "permissions": {
@@ -81,12 +88,16 @@ The following instructions are based on the [official documentation](https://hel
       },
       "resources": [
         {
-            "urn": "urn:v1:eu:resource:dnsZone:*"
+            "urn": "urn:v1:eu:resource:dnsZone:*", // ⚠️ all domains
+            "urn": "urn:v1:eu:resource:dnsZone:example.net", // restrict the policy to "example.net"
+            "urn": "urn:v1:eu:resource:dnsZone:example2.net", // restrict the policy to "example2.net"
         }
       ]
     }
+    ```
 
-1. You can now use the Client ID and Client Secret on the webhook.
+4. You may take note of the policy Id in the response to more easily manage it in the future.
+5. You can now use the OAuth2 Client ID and Client Secret on the webhook.
 
 ### Helm chart repository
 
@@ -175,7 +186,7 @@ See cert-manager [documentation](https://cert-manager.io/docs/concepts/issuer/) 
 
 It is usually safe to provide your OVH API keys as part of your `values.yaml` file or on the command line. However, it may be needed to separate the domain of responsibility between Ops (in charge of deploying the chart) and Security (in charge of obtaining and deploying the OVH API keys).
 
-When providing your OVH API keys directly, this chart stores the provided OVH API keys in a secret (format shown  below) and then leverages secret references. The values of `applicationKey`, `applicationSecret` and `consumerKey` are base64 encoded.
+When providing your OVH API keys directly, this chart stores the provided OVH API keys in a secret (format shown  below) and then leverages secret references. The values of `applicationKey`, `applicationSecret` and `applicationConsumerKey` are base64 encoded.
 
 If you decide to use secret references, simply indicate which secret name to use, and which key name in the secret holds the correct value.
 
@@ -193,7 +204,7 @@ metadata:
 data:
   applicationKey: YW5BcHBsaWNhdGlvbktleQ==          # anApplicationKey
   applicationSecret: YW5BcHBsaWNhdGlvblNlY3JldA==   # anApplicationSecret
-  consumerKey: YUNvbnN1bWVyS2V5                     # aConsumerKey
+  applicationConsumerKey: YUNvbnN1bWVyS2V5          # aConsumerKey
 ```
 
 ### Proxy support
