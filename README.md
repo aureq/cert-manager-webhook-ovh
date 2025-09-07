@@ -35,6 +35,59 @@ Obtaining API keys from your OVH account (in which your DNS zones are hosted) wi
 
 Take note of the `ApplicationKey`, `ApplicationSecret` and `ConsumerKey` and save them in a **secure** location.
 
+### OVH OAuth2 Client
+
+In order to use OVH IAM, you need to generate a OAuth2 Client, create a policy and link the policy to the client.
+
+The following instructions are based on the [official documentation](https://help.ovhcloud.com/csm/en-manage-service-account?id=kb_article_view&sysparm_article=KB0059343).
+
+1. Go to [api.ovh.com](https://api.ovh.com/console/) console and log-in using your credentials
+1. Create a new service account via [POST /me/api/oauth2/client](https://api.ovh.com/console/?section=%2Fme&branch=v1#post-/me/api/oauth2/client) endpoint with the following body:
+
+    ```yaml
+    {
+      "callbackUrls": [],
+      "description": "Service account for OVH cert-manager webhook",
+      "flow": "CLIENT_CREDENTIALS",
+      "name": "cert-manager"
+    }
+    ```
+
+1. Take note of the `ClientId` and `clientSecret` and save them in a **secure** location. Be carefull, you will not be able to recover the client secret. You'll need to delete and create a new service account.
+
+1. Get the service account Unique Resource Name (URN) with [GET /me/api/oauth2/client{clientId}](https://api.ovh.com/console/?section=%2Fme&branch=v1#get-/me/api/oauth2/client/-clientId-) into the response field `identity`.
+
+1. Now, you can create the policy to grant permissions on your domain to your service account. Use the [POST /iam/policy](https://api.ovh.com/console/?section=%2Fiam&branch=v2#post-/iam/policy) endpoint with the followed example into the body. You need at least to replace the identity value with your service account URN. If you want to limit the service account to a specific domain, replace the `*` by your domain.:
+
+    ```yaml
+    {
+      "description": "Allow cert-manager of create records",
+      "identities": [
+        "<service account URN>"
+      ],
+      "name": "cert-manager",
+      "permissions": {
+        "allow": [
+          {
+            "action": "dnsZone:apiovh:record/create"
+          },
+          {
+            "action": "dnsZone:apiovh:record/delete"
+          },
+          {
+            "action": "dnsZone:apiovh:refresh"
+          }
+        ]
+      },
+      "resources": [
+        {
+            "urn": "urn:v1:eu:resource:dnsZone:*"
+        }
+      ]
+    }
+
+1. You can now use the Client ID and Client Secret on the webhook.
+
 ### Helm chart repository
 
 1. Add a new Helm repository
@@ -82,10 +135,13 @@ For each issuer:
 - `acmeServerUrl` which Acme Server URL to use.
 - `email` An email address when registering an account with the Acme server.
 - `ovhEndpointName` The endpoint name of the OVH API.
+- `ovhAuthenticationMethod` Authentication method (possible values: application or oauth2)
 - `ovhAuthentication` (cannot be use when `ovhAuthenticationRef` is used)
   - `ovhAuthentication.applicationKey` Your OVH application key.
   - `ovhAuthentication.applicationSecret` Your OVH application secret.
-  - `ovhAuthentication.consumerKey` Your OVH consumer key.
+  - `ovhAuthentication.applicationConsumerKey` Your OVH consumer key.
+  - `ovhAuthentication.oauth2ClientID` the OVH OAuth 2 client ID.
+  - `ovhAuthentication.oauth2ClientSecret` the OVH OAuth 2 client Secret.
 - `ovhAuthenticationRef` (cannot be use when `ovhAuthentication` is used)
   - `applicationKeyRef`
     - `name` Name of the Kubernetes secret
@@ -93,7 +149,13 @@ For each issuer:
   - `applicationSecretRef`
     - `name` Name of the Kubernetes secret
     - `key` The key name in the secret above that holds the actual value
-  - `consumerKeyRef`
+  - `applicationConsumerKeyRef`
+    - `name` Name of the Kubernetes secret
+    - `key` The key name in the secret above that holds the actual value
+  - `oauth2ClientIDRef`
+    - `name` Name of the Kubernetes secret
+    - `key` The key name in the secret above that holds the actual value
+  - `oauth2ClientSecretRef`
     - `name` Name of the Kubernetes secret
     - `key` The key name in the secret above that holds the actual value
 
