@@ -1,10 +1,12 @@
 # Changelog
 
-## 0.8.0
+## 0.8.0-alpha.1
 
 ### Noteworthy changes
 
 - 🎉 both the build image and base image are using Alpine Linux 3.22
+- 🎉 allow creation of extra manifests via `values.yaml` (by [Rémy Jacquin](https://github.com/remyj38))
+- 🐛 fix `app.kubernetes.io/version` label when using SHA in image tag (by [Rémy Jacquin](https://github.com/remyj38))
 
 
 ### Dependencies
