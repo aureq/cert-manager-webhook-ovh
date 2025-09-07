@@ -3,6 +3,8 @@ package main
 import (
 	"os"
 	"testing"
+
+	acmetest "github.com/cert-manager/cert-manager/test/acme"
 )
 
 var (
@@ -14,11 +16,14 @@ func TestRunsSuite(t *testing.T) {
 	// snippet of valid configuration that should be included on the
 	// ChallengeRequest passed as part of the test cases.
 
-	// fixture := dns.NewFixture(&ovhDNSProviderSolver{},
-	// 	dns.SetResolvedZone(zone),
-	// 	dns.SetAllowAmbientCredentials(false),
-	// 	dns.SetManifestPath("testdata/ovh"),
-	// )
+	fixture := acmetest.NewFixture(&ovhDNSProviderSolver{},
+		acmetest.SetResolvedZone(zone),
+		acmetest.SetAllowAmbientCredentials(false),
+		acmetest.SetManifestPath("testdata/ovh"),
+	)
 
-	// fixture.RunConformance(t)
+	//need to uncomment and  RunConformance delete runBasic and runExtended once https://github.com/cert-manager/cert-manager/pull/4835 is merged
+	//fixture.RunConformance(t)
+	fixture.RunBasic(t)
+	fixture.RunExtended(t)
 }
