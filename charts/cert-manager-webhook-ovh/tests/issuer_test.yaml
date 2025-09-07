@@ -1,131 +1,131 @@
 ---
 suite: Testing issuers template
 templates:
-- issuer.yaml
+  - issuer.yaml
 values:
-- values/valid_issuers.yaml
+  - values/valid_issuers.yaml
 tests:
-- it: Validate common fields
-  documentSelector:
-    path: metadata.name
-    value: application
-  asserts:
-  - equal:
-      path: spec.acme.server
-      value: https://acme-v02.api.letsencrypt.org/directory
-  - equal:
-      path: spec.acme.email
-      value: acme@example.net
-  - equal:
-      path: spec.acme.privateKeySecretRef.name
-      value: application-account-key
+  - it: Validate common fields
+    documentSelector:
+      path: metadata.name
+      value: application
+    asserts:
+      - equal:
+          path: spec.acme.server
+          value: https://acme-v02.api.letsencrypt.org/directory
+      - equal:
+          path: spec.acme.email
+          value: acme@example.net
+      - equal:
+          path: spec.acme.privateKeySecretRef.name
+          value: application-account-key
 
-- it: Validate application issuer
-  documentSelector:
-    path: metadata.name
-    value: application
-  asserts:
-  - equal:
-      path: kind
-      value: Issuer
-  - equal:
-      path: spec.acme.solvers[0]
-      value:
-        dns01:
-          cnameStrategy: Follow
-          webhook:
-            solverName: ovh
-            groupName: "acme.mycompany.example"
-            config:
-              endpoint: "ovh-eu"
-              authenticationMethod: "application"
-              applicationKeyRef:
-                name: application-ovh-credentials
-                key: "applicationKey"
-              applicationSecretRef:
-                name: application-ovh-credentials
-                key: "applicationSecret"
-              applicationConsumerKeyRef:
-                name: application-ovh-credentials
-                key: "applicationConsumerKey"
+  - it: Validate application issuer
+    documentSelector:
+      path: metadata.name
+      value: application
+    asserts:
+      - equal:
+          path: kind
+          value: Issuer
+      - equal:
+          path: spec.acme.solvers[0]
+          value:
+            dns01:
+              cnameStrategy: Follow
+              webhook:
+                solverName: ovh
+                groupName: "acme.mycompany.example"
+                config:
+                  endpoint: "ovh-eu"
+                  authenticationMethod: "application"
+                  applicationKeyRef:
+                    name: application-ovh-credentials
+                    key: "applicationKey"
+                  applicationSecretRef:
+                    name: application-ovh-credentials
+                    key: "applicationSecret"
+                  applicationConsumerKeyRef:
+                    name: application-ovh-credentials
+                    key: "applicationConsumerKey"
 
-- it: Validate application issuer with secret ref
-  documentSelector:
-    path: metadata.name
-    value: application-with-ref
-  asserts:
-  - equal:
-      path: kind
-      value: ClusterIssuer
-  - equal:
-      path: spec.acme.solvers[0]
-      value:
-        dns01:
-          cnameStrategy: None
-          webhook:
-            solverName: ovh
-            groupName: "acme.mycompany.example"
-            config:
-              endpoint: "ovh-eu"
-              authenticationMethod: "application"
-              applicationKeyRef:
-                name: application-ref-key
-                key: applicationKey
-              applicationSecretRef:
-                name: application-ref-secret
-                key: applicationSecret
-              applicationConsumerKeyRef:
-                name: application-ref-consumer-key
-                key: applicationConsumerKey
+  - it: Validate application issuer with secret ref
+    documentSelector:
+      path: metadata.name
+      value: application-with-ref
+    asserts:
+      - equal:
+          path: kind
+          value: ClusterIssuer
+      - equal:
+          path: spec.acme.solvers[0]
+          value:
+            dns01:
+              cnameStrategy: None
+              webhook:
+                solverName: ovh
+                groupName: "acme.mycompany.example"
+                config:
+                  endpoint: "ovh-eu"
+                  authenticationMethod: "application"
+                  applicationKeyRef:
+                    name: application-ref-key
+                    key: applicationKey
+                  applicationSecretRef:
+                    name: application-ref-secret
+                    key: applicationSecret
+                  applicationConsumerKeyRef:
+                    name: application-ref-consumer-key
+                    key: applicationConsumerKey
 
-- it: Validate oauth2 issuer
-  documentSelector:
-    path: metadata.name
-    value: oauth2
-  asserts:
-  - equal:
-      path: kind
-      value: ClusterIssuer
-  - equal:
-      path: spec.acme.solvers[0]
-      value:
-        dns01:
-          cnameStrategy: None
-          webhook:
-            solverName: ovh
-            groupName: "acme.mycompany.example"
-            config:
-              endpoint: "ovh-eu"
-              authenticationMethod: "oauth2"
-              oauth2ClientIDRef:
-                name: oauth2-ovh-credentials
-                key: "oauth2ClientID"
-              oauth2ClientSecretRef:
-                name: oauth2-ovh-credentials
-                key: "oauth2ClientSecret"
+  - it: Validate oauth2 issuer
+    documentSelector:
+      path: metadata.name
+      value: oauth2
+    asserts:
+      - equal:
+          path: kind
+          value: ClusterIssuer
+      - equal:
+          path: spec.acme.solvers[0]
+          value:
+            dns01:
+              cnameStrategy: None
+              webhook:
+                solverName: ovh
+                groupName: "acme.mycompany.example"
+                config:
+                  endpoint: "ovh-eu"
+                  authenticationMethod: "oauth2"
+                  oauth2ClientIDRef:
+                    name: oauth2-ovh-credentials
+                    key: "oauth2ClientID"
+                  oauth2ClientSecretRef:
+                    name: oauth2-ovh-credentials
+                    key: "oauth2ClientSecret"
 
-- it: Validate oauth2 issuer with secret ref
-  documentSelector:
-    path: metadata.name
-    value: oauth2-with-ref
-  asserts:
-  - equal:
-      path: kind
-      value: Issuer
-  - equal:
-      path: spec.acme.solvers[0]
-      value:
-        dns01:
-          cnameStrategy: None
-          webhook:
-            solverName: ovh
-            groupName: "acme.mycompany.example"
-            config:
-              endpoint: "ovh-eu"
-              authenticationMethod: "oauth2"
-              oauth2ClientIDRef:
-                name: oauth2-client-id
-                key: oauth2ClientID
-              oauth2ClientSecretRef:
-                name: oauth2-client-secret
-                key: oauth2ClientSecret
+  - it: Validate oauth2 issuer with secret ref
+    documentSelector:
+      path: metadata.name
+      value: oauth2-with-ref
+    asserts:
+      - equal:
+          path: kind
+          value: Issuer
+      - equal:
+          path: spec.acme.solvers[0]
+          value:
+            dns01:
+              cnameStrategy: None
+              webhook:
+                solverName: ovh
+                groupName: "acme.mycompany.example"
+                config:
+                  endpoint: "ovh-eu"
+                  authenticationMethod: "oauth2"
+                  oauth2ClientIDRef:
+                    name: oauth2-client-id
+                    key: oauth2ClientID
+                  oauth2ClientSecretRef:
+                    name: oauth2-client-secret
+                    key: oauth2ClientSecret
