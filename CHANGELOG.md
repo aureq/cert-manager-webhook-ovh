@@ -5,6 +5,7 @@
 ### Major features
 
 - 🎉 add support for OAuth2 authentication when communicating with OVH API (by [Rémy Jacquin](https://github.com/remyj38))
+- 🎉 add support for ACME profiles paving the way to shortlived certificates ([docs](https://letsencrypt.org/docs/profiles/))
 
 ### Breaking changes
 
