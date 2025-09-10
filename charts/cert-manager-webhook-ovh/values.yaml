@@ -27,31 +27,45 @@ certManager:
   # cert-manager serverAccount name (default: cert-manager)
   serviceAccountName: cert-manager
 
+# One or more issuers to create
 issuers:
+
   # Name of this issuer
   - name: le-prod
+
     # When true this issuer is created.
     # This is disabled by default
     create: false
+
     # Type of issuer. Can either be ClusterIssuer or Issuer.
     # If issuer is specified, the namespace is required.
     # See for more information https://cert-manager.io/docs/concepts/issuer/
     kind: ClusterIssuer
+
     # If kind is issuer, then indicate the namespace in which this
     # issuer should be deployed into.
     namespace: default
+
     # Follow CNAME records or not. 2 options:
     # - None (default): Don't follow CNAME records
     # - Follow: Follow CNAME records
     # See https://cert-manager.io/docs/configuration/acme/dns01/#delegated-domains-for-dns01 for more information
     cnameStrategy: None
+
     # The acme server url. For Let's encrypt, you have 2 options:
     # - for production (default): https://acme-v02.api.letsencrypt.org/directory
     # - for staging: https://acme-staging-v02.api.letsencrypt.org/directory
     acmeServerUrl: https://acme-v02.api.letsencrypt.org/directory
+
     # email to use when registrering your account with Let's encrypt.
     email: acme@example.net
-    # define the eab (external account binding) key using secretRef.
+
+    # If the ACME server supports profiles, you can specify the profile name here.
+    # For more details, see https://cert-manager.io/docs/configuration/acme/#acme-certificate-profiles
+    # Available as of Cert Manager 1.18.0
+    # profile: classic # classic, tlsserver, shortlived
+
+    # Define the eab (external account binding) key using secretRef.
     # This is optional and only required if you want to use.
     # See https://cert-manager.io/docs/configuration/acme/#external-account-bindings for more information
     # externalAccountBinding:
@@ -63,20 +77,24 @@ issuers:
     #     name: <secret-name>
     #     # The key name in the secret above that holds the actual eab hmac key value
     #     key: keySecret
+
     # The endpoint name of the OVH API. It must be one of the following:
     # ovh-eu, ovh-ca, kimsufi-eu, kimsufi-ca, soyoustart-eu, soyoustart-ca, runabove-ca
     # See https://docs.certifytheweb.com/docs/dns/providers/ovh/ for more information
     ovhEndpointName: ovh-eu
+
     # Authentication method (possible values: application or oauth2)
     ovhAuthenticationMethod: application
     # define how the webhook should authenticate with the OVH API.
     # Either set your credentials and the chart will create the necessary secret for you.
     # Or provide the details of a secret already containing the OVH credentials.
     # ovhAuthentication:
+
     #   # the OVH OAuth 2 client ID. Leave empty if you are using an existing secret.
     #   oauth2ClientID: ''
     #   # the OVH OAuth 2 client secret. Leave empty if you are using an existing secret.
     #   oauth2ClientSecret: ''
+
     #   # the OVH application key. Leave emtpy if you are using an existing secret.
     #   applicationKey: ''
     #   # the OVH application secret. Leave emtpy if you are using an existing secret.
@@ -88,30 +106,36 @@ issuers:
     # in the same namespace as this deployment. If 'kind' is an Issuer,
     # then the secret needs to be present in the same namespace as the Issuer.
     # ovhAuthenticationRef:
+
     #   # The secret reference to an existing OVH OAuth 2 client ID.
     #   oauth2ClientIDRef:
+
     #     # Name of the Kubernetes secret containing the OVH OAuth 2 client ID
     #     name: ovh-credentials
     #     # The key name in the secret above that holds the actual OVH OAuth 2 client IDvalue
     #     key: oauth2ClientID
+
     #   # The secret reference to an existing OVH Auth 2 client secret.
     #   oauth2ClientSecretRef:
     #     # Name of the Kubernetes secret containing the OVH Auth 2 client secret
     #     name: ovh-credentials
     #     # The key name in the secret above that holds the actual OVH Auth 2 client secret value
     #     key: oauth2ClientSecret
+
     #   # The secret reference to an existing OVH application key.
     #   applicationKeyRef:
     #     # Name of the Kubernetes secret containing the OVH Application Key
     #     name: ovh-credentials
     #     # The key name in the secret above that holds the actual OVH application key value
     #     key: applicationKey
+
     #   # The secret reference to an existing OVH application secret.
     #   applicationSecretRef:
     #     # Name of the Kubernetes secret containing the OVH Application Secret
     #     name: ovh-credentials
     #     # The key name in the secret above that holds the actual OVH application secret value
     #     key: applicationSecret
+
     #   # The secret reference to an existing OVH consumer key
     #   applicationConsumerKeyRef:
     #     # Name of the Kubernetes secret containing the OVH consumer Key
@@ -121,28 +145,41 @@ issuers:
 
   # Name of this issuer
   - name: le-staging
+
     # When true this issuer is created.
     # This is disabled by default
     create: false
+
     # Type of issuer. Can either be ClusterIssuer or Issuer.
     # If issuer is specified, the the namespace is required.
     # See for more information https://cert-manager.io/docs/concepts/issuer/
     kind: ClusterIssuer
+
     # If kind is issuer, then indicate the namespace in which this
     # issuer should be deployed into.
     namespace: default
+
     # Follow CNAME records or not. 2 options:
     # - None (default): Don't follow CNAME records
     # - Follow: Follow CNAME records
     # See https://cert-manager.io/docs/configuration/acme/dns01/#delegated-domains-for-dns01 for more information
     cnameStrategy: None
+
     # The acme server url. For Let's encrypt, you have 2 options:
     # - for production (default): https://acme-v02.api.letsencrypt.org/directory
     # - for staging: https://acme-staging-v02.api.letsencrypt.org/directory
     acmeServerUrl: https://acme-staging-v02.api.letsencrypt.org/directory
+
     # email to use when registering your account with Let's encrypt.
     email: acme@example.net
-    # define the eab (external account binding) key using secretRef.
+
+    # If the ACME server supports profiles, you can specify the profile name here.
+    # For more details, see https://cert-manager.io/docs/configuration/acme/#acme-certificate-profiles
+    # Run the command `curl -fsSL https://acme-v02.api.letsencrypt.org/directory` and inpsect the object `profiles`.
+    # Available as of Cert Manager 1.18.0
+    # profile: classic # classic, tlsserver, shortlived
+
+    # Define the eab (external account binding) key using secretRef.
     # This is optional and only required if you want to use.
     # See https://cert-manager.io/docs/configuration/acme/#external-account-bindings for more information
     # externalAccountBinding:
@@ -154,20 +191,25 @@ issuers:
     #     name: <secret-name>
     #     # The key name in the secret above that holds the actual eab hmac key value
     #     key: keySecret
+
     # The endpoint name of the OVH API. It must be one of the following:
     # ovh-eu, ovh-ca, kimsufi-eu, kimsufi-ca, soyoustart-eu, soyoustart-ca, runabove-ca
     # See https://docs.certifytheweb.com/docs/dns/providers/ovh/ for more information
     ovhEndpointName: ovh-eu
+
     # Authentication method (possible values: application or oauth2)
     ovhAuthenticationMethod: application
+
     # define how the webhook should authenticate with the OVH API.
     # Either set your credentials and the chart will create the necessary secret for you.
     # Or provide the details of a secret already containing the OVH credentials.
     # ovhAuthentication:
+
     #   # the OVH OAuth 2 client ID. Leave empty if you are using an existing secret.
     #   oauth2ClientID: ''
     #   # the OVH OAuth 2 client secret. Leave empty if you are using an existing secret.
     #   oauth2ClientSecret: ''
+
     #   # the OVH application key. Leave emtpy if you are using an existing secret.
     #   applicationKey: ''
     #   # the OVH application secret. Leave emtpy if you are using an existing secret.
@@ -179,30 +221,35 @@ issuers:
     # in the same namespace as this deployment. If 'kind' is an Issuer,
     # then the secret needs to be present in the same namespace as the Issuer.
     # ovhAuthenticationRef:
+
     #   # The secret reference to an existing OVH OAuth 2 client ID.
     #   oauth2ClientIDRef:
     #     # Name of the Kubernetes secret containing the OVH OAuth 2 client ID
     #     name: ovh-credentials
     #     # The key name in the secret above that holds the actual OVH OAuth 2 client IDvalue
     #     key: oauth2ClientID
+
     #   # The secret reference to an existing OVH Auth 2 client secret.
     #   oauth2ClientSecretRef:
     #     # Name of the Kubernetes secret containing the OVH Auth 2 client secret
     #     name: ovh-credentials
     #     # The key name in the secret above that holds the actual OVH Auth 2 client secret value
     #     key: oauth2ClientSecret
+
     #   # The secret reference to an existing OVH application key.
     #   applicationKeyRef:
     #     # Name of the Kubernetes secret containing the OVH Application Key
     #     name: ovh-credentials
     #     # The key name in the secret above that holds the actual OVH application key value
     #     key: applicationKey
+
     #   # The secret reference to an existing OVH application secret.
     #   applicationSecretRef:
     #     # Name of the Kubernetes secret containing the OVH Application Secret
     #     name: ovh-credentials
     #     # The key name in the secret above that holds the actual OVH application secret value
     #     key: applicationSecret
+
     #   # The secret reference to an existing OVH consumer key
     #   applicationConsumerKeyRef:
     #     # Name of the Kubernetes secret containing the OVH consumer Key

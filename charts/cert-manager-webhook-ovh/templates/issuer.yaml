@@ -21,6 +21,9 @@ spec:
     {{- if .email }}
     email: {{ .email | quote }}
     {{- end }}
+    {{- if .profile }}
+    profile: {{ .profile | quote }}
+    {{- end }}
     {{- if .externalAccountBinding }}
     externalAccountBinding:
       keyID: {{ .externalAccountBinding.keyID | quote }}
