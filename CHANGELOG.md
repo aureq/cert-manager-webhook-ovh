@@ -1,5 +1,32 @@
 # Changelog
 
+## 0.8.0
+
+### Major features
+
+- 🎉 add support for OAuth2 authentication when communicating with OVH API (by [Rémy Jacquin](https://github.com/remyj38))
+
+### Breaking changes
+
+- ⚠️ renamed configuration key `consumerKey` to `applicationConsumerKey` to prevent confusion with OAuth2 authentication. See [documentation](https://aureq.github.io/cert-manager-webhook-ovh/#configuration).
+- ⚠️ renamed `ConsumerKeyRef` to `ApplicationConsumerKeyRef` to prevent confusion with OAuth2 authentication. See [documentation](https://aureq.github.io/cert-manager-webhook-ovh/#configuration).
+- ⚠️ due to the breaking changes described above, the new value for `configVersion` field is `0.0.2`.
+
+### Noteworthy changes
+
+- 🎉 add unit tests to validate the Chart (by [Rémy Jacquin](https://github.com/remyj38))
+- 🎉 add unit tests to validate the webhook (by [Rémy Jacquin](https://github.com/remyj38))
+- 🌿 add 4 end-to-end tests to fully test the webhook (combination of app/oauth2 and direct/secret references)
+- 🌿 improve some error messages when `configVersion` is invalid or missing
+- 📄 document how to configure and use the new OAuth2 authentication (by [Rémy Jacquin](https://github.com/remyj38), with modification from [Aurélien Requiem](https://github.com/aureq))
+- 📄 expand documentation on how to create IAM policy
+- 🐛 add missing permissions for the IAM policy
+
+### Dependencies
+
+- ⏩ upgrade golang to 1.24.7
+- ⏩ upgrade golang toolchain to 1.24.7
+
 ## 0.8.0-alpha.1
 
 ### Major features
