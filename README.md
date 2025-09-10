@@ -79,7 +79,13 @@ Now, you can create the policy to grant permissions on your domain to your servi
             "action": "dnsZone:apiovh:record/create"
           },
           {
+            "action": "dnsZone:apiovh:record/get"
+          },
+          {
             "action": "dnsZone:apiovh:record/delete"
+          },
+          {
+            "action": "dnsZone:apiovh:status/get"
           },
           {
             "action": "dnsZone:apiovh:refresh"
