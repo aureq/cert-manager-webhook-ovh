@@ -2,8 +2,33 @@ apiVersion: v1
 entries:
   cert-manager-webhook-ovh:
   - apiVersion: v2
+    appVersion: 0.8.1-alpha.0
+    created: "2025-10-17T08:27:16.211749475Z"
+    description: OVH DNS cert-manager ACME webhook
+    digest: 528f5a14c017b86f679875537841dbac7ea1241cca7661e3b34dfeb73c2b734b
+    home: https://github.com/aureq/cert-manager-webhook-ovh
+    icon: https://raw.githubusercontent.com/aureq/cert-manager-webhook-ovh/main/assets/images/cert-manager-webhook-ovh.svg
+    keywords:
+    - cert-manager
+    - ovh
+    - dns
+    - lets-encrypt
+    - Let's Encrypt
+    - tls
+    - certificate
+    - ssl
+    maintainers:
+    - name: Aurélien Requiem
+      url: https://github.com/aureq
+    name: cert-manager-webhook-ovh
+    sources:
+    - https://github.com/aureq/cert-manager-webhook-ovh
+    urls:
+    - https://aureq.github.io/cert-manager-webhook-ovh/packages/cert-manager-webhook-ovh-0.8.1-alpha.0.tgz
+    version: 0.8.1-alpha.0
+  - apiVersion: v2
     appVersion: 0.8.0
-    created: "2025-09-21T06:27:19.631176044Z"
+    created: "2025-10-17T08:27:16.210798749Z"
     description: OVH DNS cert-manager ACME webhook
     digest: 0ed47b8b496d9c9dc160774c793ffc388eb173ff9a703221a10deb309a87a570
     home: https://github.com/aureq/cert-manager-webhook-ovh
@@ -28,7 +53,7 @@ entries:
     version: 0.8.0
   - apiVersion: v2
     appVersion: 0.8.0-alpha.1
-    created: "2025-09-21T06:27:19.629492554Z"
+    created: "2025-10-17T08:27:16.20898041Z"
     description: OVH DNS cert-manager ACME webhook
     digest: 2b68f209f8dc779db40c475d8797814d86b80920ab123879027cbd27356d4a20
     home: https://github.com/aureq/cert-manager-webhook-ovh
@@ -53,7 +78,7 @@ entries:
     version: 0.8.0-alpha.1
   - apiVersion: v2
     appVersion: 0.7.6
-    created: "2025-09-21T06:27:19.628624845Z"
+    created: "2025-10-17T08:27:16.208130121Z"
     description: OVH DNS cert-manager ACME webhook
     digest: 572bd0ebcb44e4c7ec800124f8a6e1c728b566691de8c3f5706f7769e72253c6
     home: https://github.com/aureq/cert-manager-webhook-ovh
@@ -78,7 +103,7 @@ entries:
     version: 0.7.6
   - apiVersion: v2
     appVersion: 0.7.5
-    created: "2025-09-21T06:27:19.627858845Z"
+    created: "2025-10-17T08:27:16.20749279Z"
     description: OVH DNS cert-manager ACME webhook
     digest: de5f97812287edffb77a09080e91cc91fe004ebc5d5582cae44140c7cd08ba94
     home: https://github.com/aureq/cert-manager-webhook-ovh
@@ -103,7 +128,7 @@ entries:
     version: 0.7.5
   - apiVersion: v2
     appVersion: 0.7.4
-    created: "2025-09-21T06:27:19.627226913Z"
+    created: "2025-10-17T08:27:16.206846162Z"
     description: OVH DNS cert-manager ACME webhook
     digest: 0acaae4bde6ac52309e43b1bab240693c2adeac2d3f6b4f574ae790ced72d8ab
     home: https://github.com/aureq/cert-manager-webhook-ovh
@@ -128,7 +153,7 @@ entries:
     version: 0.7.4
   - apiVersion: v2
     appVersion: 0.7.3
-    created: "2025-09-21T06:27:19.626630738Z"
+    created: "2025-10-17T08:27:16.206213048Z"
     description: OVH DNS cert-manager ACME webhook
     digest: 9ea8759e314fd6704303ba57e19b8e0e6b92b0a243349d971789c97321e5bc69
     home: https://github.com/aureq/cert-manager-webhook-ovh
@@ -153,7 +178,7 @@ entries:
     version: 0.7.3
   - apiVersion: v2
     appVersion: 0.7.2
-    created: "2025-09-21T06:27:19.625965885Z"
+    created: "2025-10-17T08:27:16.205606905Z"
     description: OVH DNS cert-manager ACME webhook
     digest: 2cd30932f55949f5f0d252b19baffc6ba221e5846f9581bcd0bbfcec777c2347
     home: https://github.com/aureq/cert-manager-webhook-ovh
@@ -178,7 +203,7 @@ entries:
     version: 0.7.2
   - apiVersion: v2
     appVersion: 0.7.1
-    created: "2025-09-21T06:27:19.625367545Z"
+    created: "2025-10-17T08:27:16.20497799Z"
     description: OVH DNS cert-manager ACME webhook
     digest: de03b8c3dc8f15e36c2f36fd3ceeefe8a47bde7ee179cc695da6f87904a8657c
     home: https://github.com/aureq/cert-manager-webhook-ovh
@@ -203,7 +228,7 @@ entries:
     version: 0.7.1
   - apiVersion: v2
     appVersion: 0.7.0
-    created: "2025-09-21T06:27:19.62473924Z"
+    created: "2025-10-17T08:27:16.204355597Z"
     description: OVH DNS cert-manager ACME webhook
     digest: a6c783372bc19f2230a1036542fb96a691fe2e2ac4fcffd0f879a64d942a824c
     home: https://github.com/aureq/cert-manager-webhook-ovh
@@ -228,7 +253,7 @@ entries:
     version: 0.7.0
   - apiVersion: v2
     appVersion: 0.7.0-alpha.3
-    created: "2025-09-21T06:27:19.624086901Z"
+    created: "2025-10-17T08:27:16.203624801Z"
     description: OVH DNS cert-manager ACME webhook
     digest: f063c79f170ba740e063c0b9e18be22966330a2297ddd6455ec33e4ec2aa6c73
     home: https://github.com/aureq/cert-manager-webhook-ovh
@@ -253,7 +278,7 @@ entries:
     version: 0.7.0-alpha.3
   - apiVersion: v2
     appVersion: 0.7.0-alpha.2
-    created: "2025-09-21T06:27:19.623227527Z"
+    created: "2025-10-17T08:27:16.202181587Z"
     description: OVH DNS cert-manager ACME webhook
     digest: 49982a45ddcd0a9f2cbef3c67f9a1cc5ba01efc02a58af189424e32c0c2bf22b
     home: https://github.com/aureq/cert-manager-webhook-ovh
@@ -278,7 +303,7 @@ entries:
     version: 0.7.0-alpha.2
   - apiVersion: v2
     appVersion: 0.7.0-alpha.1
-    created: "2025-09-21T06:27:19.621919319Z"
+    created: "2025-10-17T08:27:16.201437547Z"
     description: OVH DNS cert-manager ACME webhook
     digest: a6b373a041468ffda8228d7eb96fce3a87793dea17bbf01454b7545f29d1edd1
     home: https://github.com/aureq/cert-manager-webhook-ovh
@@ -303,7 +328,7 @@ entries:
     version: 0.7.0-alpha.1
   - apiVersion: v2
     appVersion: 0.6.0
-    created: "2025-09-21T06:27:19.621265166Z"
+    created: "2025-10-17T08:27:16.200785899Z"
     description: OVH DNS cert-manager ACME webhook
     digest: be14cc13eab2ada611aa71d0370f87d47b69824650fe796e5e51669fc6e4bfb6
     home: https://github.com/aureq/cert-manager-webhook-ovh
@@ -328,7 +353,7 @@ entries:
     version: 0.6.0
   - apiVersion: v2
     appVersion: 0.5.2
-    created: "2025-09-21T06:27:19.614953743Z"
+    created: "2025-10-17T08:27:16.200181279Z"
     description: OVH DNS cert-manager ACME webhook
     digest: 861e5f0638e45645955eff9d957d0735ff165c9ce0faa587db15bf62cbb3b54e
     home: https://github.com/aureq/cert-manager-webhook-ovh
@@ -353,7 +378,7 @@ entries:
     version: 0.5.2
   - apiVersion: v2
     appVersion: 0.5.1
-    created: "2025-09-21T06:27:19.614362586Z"
+    created: "2025-10-17T08:27:16.199603299Z"
     description: OVH DNS cert-manager ACME webhook
     digest: 9556b67b88be57f3daeb84340a9d0952b146631e9f1bdad7ae581bb9b901e70f
     home: https://github.com/aureq/cert-manager-webhook-ovh
@@ -378,7 +403,7 @@ entries:
     version: 0.5.1
   - apiVersion: v2
     appVersion: 0.5.0
-    created: "2025-09-21T06:27:19.61375Z"
+    created: "2025-10-17T08:27:16.198945359Z"
     description: OVH DNS cert-manager ACME webhook
     digest: c2e321ab1a0389a81c497d4706903337940f3d92aa451abb8243f71eb0a03797
     home: https://github.com/aureq/cert-manager-webhook-ovh
@@ -403,7 +428,7 @@ entries:
     version: 0.5.0
   - apiVersion: v2
     appVersion: 0.5.0-alpha.2
-    created: "2025-09-21T06:27:19.613078415Z"
+    created: "2025-10-17T08:27:16.19832545Z"
     description: OVH DNS cert-manager ACME webhook
     digest: d218e87f1f32d952a7cd5f9814fddde5d3d0be6730c3aa1118f60d52521df0ee
     home: https://github.com/aureq/cert-manager-webhook-ovh
@@ -428,7 +453,7 @@ entries:
     version: 0.5.0-alpha.2
   - apiVersion: v2
     appVersion: 0.5.0-alpha.1
-    created: "2025-09-21T06:27:19.612441644Z"
+    created: "2025-10-17T08:27:16.197672079Z"
     description: OVH DNS cert-manager ACME webhook
     digest: e4cabf5e0623660cd24ed0d35a111048252acff87a95ffcf676260fa22ba1f4e
     home: https://github.com/aureq/cert-manager-webhook-ovh
@@ -453,7 +478,7 @@ entries:
     version: 0.5.0-alpha.1
   - apiVersion: v1
     appVersion: v0.4.2
-    created: "2025-09-21T06:27:19.634390254Z"
+    created: "2025-10-17T08:27:16.215041118Z"
     description: OVH DNS cert-manager ACME webhook
     digest: 97c7c2531f64424e23f7243862957a7db71bc18c79177582a71790298b4ac6c8
     home: https://github.com/aureq/cert-manager-webhook-ovh
@@ -478,7 +503,7 @@ entries:
     version: v0.4.2
   - apiVersion: v1
     appVersion: v0.4.2-alpha.1
-    created: "2025-09-21T06:27:19.633850343Z"
+    created: "2025-10-17T08:27:16.214501178Z"
     description: OVH DNS cert-manager ACME webhook
     digest: 87ea6d5882f24c40bd380a219e424c628d4dd8c35e3521f728f3fe9970cea195
     home: https://github.com/aureq/cert-manager-webhook-ovh
@@ -503,7 +528,7 @@ entries:
     version: v0.4.2-alpha.1
   - apiVersion: v1
     appVersion: v0.4.2-alpha.0
-    created: "2025-09-21T06:27:19.633327763Z"
+    created: "2025-10-17T08:27:16.213949417Z"
     description: OVH DNS cert-manager ACME webhook
     digest: 4b5e85a649e1eef6a8188ec55e18743d51ed3b24bf8660a795bca2c558e1fc63
     home: https://github.com/aureq/cert-manager-webhook-ovh
@@ -528,7 +553,7 @@ entries:
     version: v0.4.2-alpha.0
   - apiVersion: v1
     appVersion: v0.4.1
-    created: "2025-09-21T06:27:19.632876447Z"
+    created: "2025-10-17T08:27:16.213508613Z"
     description: OVH DNS cert-manager ACME webhook
     digest: b613bee8f3287865b15e7ea5e4feb0384d4568901a3c86f3dbd183d327cf47b8
     home: https://github.com/aureq/cert-manager-webhook-ovh
@@ -553,7 +578,7 @@ entries:
     version: v0.4.1
   - apiVersion: v1
     appVersion: v0.4.0
-    created: "2025-09-21T06:27:19.632447261Z"
+    created: "2025-10-17T08:27:16.213033265Z"
     description: OVH DNS cert-manager ACME webhook
     digest: 0d7442389c7aa3f23b1f11cb7409db2d370bbbfe50c3927fc0314bbf652fdd5e
     home: https://github.com/aureq/cert-manager-webhook-ovh
@@ -578,7 +603,7 @@ entries:
     version: v0.4.0
   - apiVersion: v1
     appVersion: v0.4.0-alpha.1
-    created: "2025-09-21T06:27:19.632000633Z"
+    created: "2025-10-17T08:27:16.212532148Z"
     description: OVH DNS cert-manager ACME webhook
     digest: 5ec08a8cf5672fc294d1bd35fa0961fb60c184e35e86e568696124d80a7207dd
     home: https://github.com/aureq/cert-manager-webhook-ovh
@@ -603,7 +628,7 @@ entries:
     version: v0.4.0-alpha.1
   - apiVersion: v1
     appVersion: v0.4.0-alpha.0
-    created: "2025-09-21T06:27:19.631547913Z"
+    created: "2025-10-17T08:27:16.212068692Z"
     description: OVH DNS cert-manager ACME webhook
     digest: 3ebc342393f8cb54ecee2afa24005db325e6178b9a8c74005b5318f4f8a9eafd
     home: https://github.com/aureq/cert-manager-webhook-ovh
@@ -626,4 +651,4 @@ entries:
     urls:
     - https://aureq.github.io/cert-manager-webhook-ovh/packages/cert-manager-webhook-ovh-v0.4.0-alpha.0.tgz
     version: v0.4.0-alpha.0
-generated: "2025-09-21T06:27:19.611652912Z"
+generated: "2025-10-17T08:27:16.196857887Z"
