@@ -24,7 +24,7 @@ build:
 		--build-arg "HTTP_PROXY=$$HTTP_PROXY" \
 		--build-arg "HTTPS_PROXY=$$HTTPS_PROXY" \
 		-t "$(IMAGE_NAME):$(IMAGE_TAG)" .
-	@test ! -z "$$HTTP_PROXY" -o ! -z "$$HTTPS_PROXY" || docker build \
+	@test ! -z "$$HTTP_PROXY" -o ! -z "$$HTTPS_PROXY" || docker buildx build \
 		--progress=plain \
 		--compress \
 		--output type=image,oci-mediatypes=true,compression=estargz,force-compression=true,push=false \
