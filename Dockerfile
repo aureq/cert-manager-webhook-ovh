@@ -1,4 +1,4 @@
-FROM docker.io/golang:1.24-alpine3.22 AS build
+FROM docker.io/golang:1.25-alpine3.22 AS build
 
 RUN apk update && \
     apk upgrade && \
