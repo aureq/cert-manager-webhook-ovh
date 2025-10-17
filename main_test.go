@@ -21,7 +21,6 @@ func TestValidate(t *testing.T) {
 	// fixture.RunBasic(t)
 	// fixture.RunExtended(t)
 
-
 	// No endpoint provided
 	err := s.validate(&ovhDNSProviderConfig{}, false)
 	if err == nil || err.Error() != "no endpoint provided in OVH config" {
@@ -82,7 +81,7 @@ func TestValidate(t *testing.T) {
 		Endpoint:             "ovh-eu",
 		AuthenticationMethod: "foo",
 	}, false)
-	if err == nil || err.Error() != "invalid value for authentifaction method, allowed values: application, oauth2" {
+	if err == nil || err.Error() != "invalid value for authentifaction method, allowed values: 'application' and 'oauth2'" {
 		t.Errorf("expected invalid method error, got %v", err)
 	}
 
