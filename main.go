@@ -347,6 +347,7 @@ func removeTXTRecord(ovhClient *ovh.Client, domain, subDomain, target string) er
 		}
 		// Remove surrounded quotes as OVH seems to implicitly add them for a TXT record
 		if strings.Trim(record.Target, "\"") != target {
+			getLogger().Warn("Skipping deletion of TXT record as target does not match", "domain", domain, "subdomain", subDomain, "recordID", id, "recordTarget", record.Target, "expectedTarget", target)
 			continue
 		}
 		err = deleteRecord(ovhClient, domain, id)
