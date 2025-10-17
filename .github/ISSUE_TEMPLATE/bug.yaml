@@ -5,7 +5,39 @@ body:
   - type: markdown
     attributes:
       value: |
-        Thanks for taking the time to fill out this bug report! Please fill the form below.
+        Thanks for taking the time to fill out this bug report!
+
+        Please review the following requirements before submitting this issue type:
+
+        1. Please try to give as much information as possible for us to be able to reproduce the issue and provide a quick fix.
+        2. Please ensure an issue does not already exist for this potential bug.
+        3. Please only provide a released specific version or versions. Latest is not a version.
+        4. Please read the [Documentation](https://aureq.github.io/cert-manager-webhook-ovh/)
+
+  - type: input
+    id: chartversion
+    attributes:
+      label: Chart version in use
+      description: Provide the relevant version information for this Chart.
+      placeholder: x.x.x
+    validations:
+      required: true
+  - type: input
+    id: certmanagerversion
+    attributes:
+      label: Cert Manager version in use
+      description: Provide the relevant version information for Cert Manager.
+      placeholder: x.x.x
+    validations:
+      required: true
+  - type: input
+    id: kubernetesversion
+    attributes:
+      label: Kubernetes version in use
+      description: Provide the relevant version information for Kubernetes.
+      placeholder: x.x.x
+    validations:
+      required: true
   - type: textarea
     id: what-happened
     attributes:
@@ -13,6 +45,14 @@ body:
       description: Provide a general description of the issue, including what you're trying to accomplish. Add any relevant logs and configuration files.
     validations:
       required: true
+  - type: textarea
+    id: 'logs'
+    attributes:
+      label: Logs
+      description: Provide the complete debug logs if available and relevant (This will be formatted automatically into a code block).
+      render: shell
+    validations:
+      required: false
   - type: textarea
     id: expected
     attributes:
@@ -25,15 +65,8 @@ body:
     attributes:
       label: Steps to reproduce
       description: |
-        Provide a link to a live example or a clear set of steps to reproduce this bug.
-        Include any relevant code or configuration used.
-    validations:
-      required: true
-  - type: textarea
-    id: versions
-    attributes:
-      label: Versions in use
-      description: Provide the relevant version information for this Chart, Cert Manager and your Kubernetes version.
+        Provide a steps-by-step guide to reproduce this bug.
+        Include any relevant configuration used.
     validations:
       required: true
   - type: textarea
@@ -43,10 +76,21 @@ body:
       description: Anything else you would like to add?
     validations:
       required: false
+  - type: dropdown
+    id: ai
+    attributes:
+      label: Generative AI
+      description: Indicate if generative AI has been used to create this issue.
+      options:
+        - Yes
+        - No
+    validations:
+      required: true
   - type: textarea
     id: voting
     attributes:
       label: Contributing
       value: |
+        <!-- Please do not edit this section -->
         Vote on this issue by adding a 👍 reaction.
         To contribute a fix for this issue, leave a comment (and link to your pull request, if you've opened one already).
