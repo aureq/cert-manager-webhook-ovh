@@ -1,5 +1,24 @@
 # Changelog
 
+## 0.8.1-alpha.0
+
+### Noteworthy changes
+
+- 🐛 trim `"` around TXT records when checking value before deciding to delete (by [flodakto](https://github.com/flodakto))
+- 🌿 add warning log when skipping TXT record deletion due to values mismatch
+- 🌿 improve error logging throughout the entire webhook
+- 🌿 add charmbracelet/log v0.4.2 to perform structured logging functions
+
+### Dependencies
+
+- ⏩ add charmbracelet/log v0.4.2
+- ⏩ upgrade golang to 1.25.0
+- ⏩ upgrade golang toolchain to 1.25.0
+- ⏩ upgrade github.com/cert-manager/cert-manager to v1.19.1
+- ⏩ upgrade k8s.io/api to v0.34.1
+- ⏩ upgrade k8s.io/apimachinery to v0.34.1
+- ⏩ upgrade k8s.io/client-go to v0.34.1
+
 ## 0.8.0
 
 ### Major features
