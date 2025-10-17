@@ -67,6 +67,10 @@ body:
       description: |
         Provide a steps-by-step guide to reproduce this bug.
         Include any relevant configuration used.
+      placeholder: |
+        1. ...
+        2. ...
+        3. ...
     validations:
       required: true
   - type: textarea
@@ -77,13 +81,13 @@ body:
     validations:
       required: false
   - type: dropdown
-    id: ai
+    id: genai
     attributes:
       label: Generative AI
       description: Indicate if generative AI has been used to create this issue.
       options:
-        - Yes
-        - No
+        - 'Yes'
+        - 'No'
     validations:
       required: true
   - type: textarea
