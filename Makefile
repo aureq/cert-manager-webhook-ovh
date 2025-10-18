@@ -40,3 +40,9 @@ rendered-manifest.yaml:
         --set image.repository=$(IMAGE_NAME) \
         --set image.tag=$(IMAGE_TAG) \
         charts/cert-manager-webhook-ovh > "$(OUT)/rendered-manifest.yaml"
+
+schema: install-helm-schema
+	@helm schema
+
+install-helm-schema:
+	@helm schema --version >/dev/null 2>&1 || helm plugin install https://github.com/dadav/helm-schema
