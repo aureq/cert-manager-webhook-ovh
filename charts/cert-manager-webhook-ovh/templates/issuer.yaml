@@ -31,6 +31,9 @@ spec:
         name: {{ .externalAccountBinding.keySecretRef.name | quote }}
         key: {{ .externalAccountBinding.keySecretRef.key | quote }}
     {{- end}}
+    {{- if .disableAccountKeyGeneration }}
+    disableAccountKeyGeneration: {{ .disableAccountKeyGeneration }}
+    {{- end}}
     privateKeySecretRef:
       name: {{ printf "%s-account-key" .name | quote }}
     solvers:
