@@ -173,6 +173,9 @@ issuers:
     # email to use when registering your account with Let's encrypt.
     email: acme@example.net
 
+    # If the disableAccountKeyGeneration field is set, cert-manager will not create a new ACME account and use the existing key specified in privateKeySecretRef
+    # disableAccountKeyGeneration: true
+
     # If the ACME server supports profiles, you can specify the profile name here.
     # For more details, see https://cert-manager.io/docs/configuration/acme/#acme-certificate-profiles
     # Run the command `curl -fsSL https://acme-v02.api.letsencrypt.org/directory` and inpsect the object `profiles`.
