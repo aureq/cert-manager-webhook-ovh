@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.8.1-alpha.1
+
+- 🐛 zone entry does not exists #70
+- 🌿add info when creating TXT record
+
 ## 0.8.1-alpha.0
 
 ### Noteworthy changes

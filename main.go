@@ -246,9 +246,15 @@ func (s *ovhDNSProviderSolver) Present(ch *v1alpha1.ChallengeRequest) error {
 		return err
 	}
 	domain := util.UnFqdn(ch.ResolvedZone)
-	subDomain := getSubDomain(domain, ch.ResolvedFQDN)
+	zone, err := getOvhZone(ovhClient, domain)
+	if err != nil {
+		getLogger().Warn("Failed to get OVH Zones falling back to domain", "domain", domain, "error", err)
+		// do not return
+		// return err
+	}
+	subDomain := getSubDomain(zone, ch.ResolvedFQDN)
 	target := ch.Key
-	return addTXTRecord(ovhClient, domain, subDomain, target)
+	return addTXTRecord(ovhClient, zone, domain, subDomain, target)
 }
 
 // CleanUp should delete the relevant TXT record from the DNS provider console.
@@ -264,9 +270,15 @@ func (s *ovhDNSProviderSolver) CleanUp(ch *v1alpha1.ChallengeRequest) error {
 		return err
 	}
 	domain := util.UnFqdn(ch.ResolvedZone)
-	subDomain := getSubDomain(domain, ch.ResolvedFQDN)
+	zone, err := getOvhZone(ovhClient, domain)
+	if err != nil {
+		getLogger().Warn("Failed to get OVH Zones falling back to domain", "domain", domain, "error", err)
+		// do not return
+		// return err
+	}
+	subDomain := getSubDomain(zone, ch.ResolvedFQDN)
 	target := ch.Key
-	return removeTXTRecord(ovhClient, domain, subDomain, target)
+	return removeTXTRecord(ovhClient, zone, domain, subDomain, target)
 }
 
 // Initialize will be called when the webhook first starts.
@@ -305,11 +317,40 @@ func loadConfig(cfgJSON *extapi.JSON) (ovhDNSProviderConfig, error) {
 	return cfg, nil
 }
 
+// This function tries to find the top most zone for the given domain
+// falling back to input domain if not found. 
+func getOvhZone(ovhClient *ovh.Client, domain string) (string, error) {
+	url := "/domain/zone"
+	zones := []string {}
+	err := ovhClient.Get(url, &zones)
+	if (err != nil) {
+		return domain, err
+	}
+	longestMatchSize := 0
+	longestMatchZone := domain
+	domainLen := len(domain)
+	for _, zone := range zones {
+		zoneLen := len(zone)
+		if zoneLen < domainLen {
+			i := 0
+			for i < zoneLen && zone[zoneLen - i - 1] == domain[domainLen - i - 1] {
+				i += 1
+			}
+			if longestMatchSize < i {
+				longestMatchSize = i
+				longestMatchZone = zone
+			}
+		}
+	}
+	return longestMatchZone, nil
+}
+
 // getSubDomain extracts the subdomain from the fully qualified domain name (FQDN)
 // by removing the main domain part. If the main domain is not found in the FQDN,
 // it returns the FQDN without the trailing dot.
-func getSubDomain(domain, fqdn string) string {
-	if idx := strings.Index(fqdn, "."+domain); idx != -1 {
+func getSubDomain(zone, fqdn string) string {
+	idx := strings.Index(fqdn, "."+zone)
+	if idx != -1 {
 		return fqdn[:idx]
 	}
 
@@ -317,30 +358,30 @@ func getSubDomain(domain, fqdn string) string {
 }
 
 // addTXTRecord adds a TXT record to the OVH DNS zone for the specified domain and subdomain.
-func addTXTRecord(ovhClient *ovh.Client, domain, subDomain, target string) error {
-	err := validateZone(ovhClient, domain)
+func addTXTRecord(ovhClient *ovh.Client, zone, domain, subDomain, target string) error {
+	err := validateZone(ovhClient, zone, domain)
 	if err != nil {
 		getLogger().Error("Failed to validate DNS zone", "domain", domain, "subdomain", subDomain, "error", err)
 		return err
 	}
 
-	_, err = createRecord(ovhClient, domain, "TXT", subDomain, target)
+	_, err = createRecord(ovhClient, zone, domain, "TXT", subDomain, target)
 	if err != nil {
 		getLogger().Error("Failed to create TXT record", "domain", domain, "subdomain", subDomain, "error", err)
 		return err
 	}
-	return refreshRecords(ovhClient, domain)
+	return refreshRecords(ovhClient, zone, domain)
 }
 
-func removeTXTRecord(ovhClient *ovh.Client, domain, subDomain, target string) error {
-	ids, err := listRecords(ovhClient, domain, "TXT", subDomain)
+func removeTXTRecord(ovhClient *ovh.Client, zone, domain, subDomain, target string) error {
+	ids, err := listRecords(ovhClient, zone, domain, "TXT", subDomain)
 	if err != nil {
 		getLogger().Error("Failed to list TXT records", "domain", domain, "subdomain", subDomain, "error", err)
 		return err
 	}
 
 	for _, id := range ids {
-		record, err := getRecord(ovhClient, domain, id)
+		record, err := getRecord(ovhClient, zone, domain, id)
 		if err != nil {
 			getLogger().Error("Failed to get TXT record", "domain", domain, "subdomain", subDomain, "recordID", id, "error", err)
 			return err
@@ -350,27 +391,27 @@ func removeTXTRecord(ovhClient *ovh.Client, domain, subDomain, target string) er
 			getLogger().Warn("Skipping deletion of TXT record as target does not match", "domain", domain, "subdomain", subDomain, "recordID", id, "recordTarget", record.Target, "expectedTarget", target)
 			continue
 		}
-		err = deleteRecord(ovhClient, domain, id)
+		err = deleteRecord(ovhClient, zone, domain, id)
 		if err != nil {
 			getLogger().Error("Failed to delete TXT record", "domain", domain, "subdomain", subDomain, "recordID", id, "error", err)
 			return err
 		}
 	}
 
-	return refreshRecords(ovhClient, domain)
+	return refreshRecords(ovhClient, zone, domain)
 }
 
 // validateZone checks if the DNS zone for the given domain is deployed in OVH.
-func validateZone(ovhClient *ovh.Client, domain string) error {
-	url := "/domain/zone/" + domain + "/status"
+func validateZone(ovhClient *ovh.Client, zone, domain string) error {
+	url := "/domain/zone/" + zone + "/status"
 	zoneStatus := ovhZoneStatus{}
 	err := ovhClient.Get(url, &zoneStatus)
 	if err != nil {
-		getLogger().Error("Failed to get DNS zone status", "domain", domain, "error", err)
+		getLogger().Error("Failed to get DNS zone status", "zone", zone, "domain", domain, "error", err)
 		return fmt.Errorf("OVH API call failed: GET %s - %v", url, err)
 	}
 	if !zoneStatus.IsDeployed {
-		getLogger().Error("DNS zone not deployed", "domain", domain)
+		getLogger().Error("DNS zone not deployed", "zone", zone, "domain", domain)
 		return fmt.Errorf("DNS zone not deployed for domain %s", domain)
 	}
 
@@ -378,20 +419,20 @@ func validateZone(ovhClient *ovh.Client, domain string) error {
 }
 
 // listRecords retrieves the IDs of DNS records for the specified domain, field type, and subdomain.
-func listRecords(ovhClient *ovh.Client, domain, fieldType, subDomain string) ([]int64, error) {
-	url := "/domain/zone/" + domain + "/record?fieldType=" + fieldType + "&subDomain=" + subDomain
+func listRecords(ovhClient *ovh.Client, zone, domain, fieldType, subDomain string) ([]int64, error) {
+	url := "/domain/zone/" + zone + "/record?fieldType=" + fieldType + "&subDomain=" + subDomain
 	ids := []int64{}
 	err := ovhClient.Get(url, &ids)
 	if err != nil {
-		getLogger().Error("Failed to list DNS records", "domain", domain, "fieldType", fieldType, "subDomain", subDomain, "url", url, "error", err)
+		getLogger().Error("Failed to list DNS records", "zone", zone, "domain", domain, "fieldType", fieldType, "subDomain", subDomain, "url", url, "error", err)
 		return nil, fmt.Errorf("OVH API call failed: GET %s - %v", url, err)
 	}
 	return ids, nil
 }
 
 // getRecord retrieves the details of a DNS record for the specified domain and record ID.
-func getRecord(ovhClient *ovh.Client, domain string, id int64) (*ovhZoneRecord, error) {
-	url := "/domain/zone/" + domain + "/record/" + strconv.FormatInt(id, 10)
+func getRecord(ovhClient *ovh.Client, zone, domain string, id int64) (*ovhZoneRecord, error) {
+	url := "/domain/zone/" + zone + "/record/" + strconv.FormatInt(id, 10)
 	record := ovhZoneRecord{}
 	err := ovhClient.Get(url, &record)
 	if err != nil {
@@ -401,8 +442,8 @@ func getRecord(ovhClient *ovh.Client, domain string, id int64) (*ovhZoneRecord, 
 	return &record, nil
 }
 
-func deleteRecord(ovhClient *ovh.Client, domain string, id int64) error {
-	url := "/domain/zone/" + domain + "/record/" + strconv.FormatInt(id, 10)
+func deleteRecord(ovhClient *ovh.Client, zone, domain string, id int64) error {
+	url := "/domain/zone/" + zone + "/record/" + strconv.FormatInt(id, 10)
 	err := ovhClient.Delete(url, nil)
 	if err != nil {
 		getLogger().Error("Failed to delete DNS record", "domain", domain, "recordID", id, "url", url, "error", err)
@@ -411,8 +452,10 @@ func deleteRecord(ovhClient *ovh.Client, domain string, id int64) error {
 	return nil
 }
 
-func createRecord(ovhClient *ovh.Client, domain, fieldType, subDomain, target string) (*ovhZoneRecord, error) {
-	url := "/domain/zone/" + domain + "/record"
+func createRecord(ovhClient *ovh.Client, zone, domain, fieldType, subDomain, target string) (*ovhZoneRecord, error) {
+	url := "/domain/zone/" + zone + "/record"
+	getLogger().Info("Creating record", "zone", zone, "subDomain", subDomain)
+
 	params := ovhZoneRecord{
 		FieldType: fieldType,
 		SubDomain: subDomain,
@@ -422,15 +465,15 @@ func createRecord(ovhClient *ovh.Client, domain, fieldType, subDomain, target st
 	record := ovhZoneRecord{}
 	err := ovhClient.Post(url, &params, &record)
 	if err != nil {
-		getLogger().Error("Failed to create DNS record", "domain", domain, "subDomain", subDomain, "url", url, "error", err)
+		getLogger().Error("Failed to create DNS record", "zone", zone,  "domain", domain, "subDomain", subDomain, "url", url, "error", err)
 		return nil, fmt.Errorf("OVH API call failed: POST %s - %v", url, err)
 	}
 
 	return &record, nil
 }
 
-func refreshRecords(ovhClient *ovh.Client, domain string) error {
-	url := "/domain/zone/" + domain + "/refresh"
+func refreshRecords(ovhClient *ovh.Client, zone, domain string) error {
+	url := "/domain/zone/" + zone + "/refresh"
 	err := ovhClient.Post(url, nil, nil)
 	if err != nil {
 		getLogger().Error("Failed to refresh DNS records", "domain", domain, "url", url, "error", err)
