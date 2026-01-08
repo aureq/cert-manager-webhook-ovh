@@ -309,11 +309,22 @@ func loadConfig(cfgJSON *extapi.JSON) (ovhDNSProviderConfig, error) {
 // by removing the main domain part. If the main domain is not found in the FQDN,
 // it returns the FQDN without the trailing dot.
 func getSubDomain(domain, fqdn string) string {
-	if idx := strings.Index(fqdn, "."+domain); idx != -1 {
-		return fqdn[:idx]
+	// Ensure both domain and fqdn are in unfqdn format for comparison
+	domain = util.UnFqdn(domain)
+	fqdn = util.UnFqdn(fqdn)
+
+	// Check if fqdn ends with the domain
+	if strings.HasSuffix(fqdn, "."+domain) {
+		// Remove the domain part and the dot before it
+		return strings.TrimSuffix(fqdn, "."+domain)
 	}
 
-	return util.UnFqdn(fqdn)
+	// If the fqdn equals the domain exactly, return empty string
+	if fqdn == domain {
+		return ""
+	}
+
+	return fqdn
 }
 
 // addTXTRecord adds a TXT record to the OVH DNS zone for the specified domain and subdomain.
