@@ -7,6 +7,17 @@
 - 🌿 add helm schema support
 - 📄 improved documentation so readers have instructions on how to perform the setup with the [OVH cli](https://github.com/ovh/ovhcloud-cli)
 
+### Dependencies
+
+- ⏩ upgrade alpine to 3.23
+- ⏩ upgrade golang to 1.25.5
+- ⏩ upgrade golang toolchain to 1.25.5
+- ⏩ upgrade github.com/cert-manager/cert-manager to v1.19.2
+- ⏩ upgrade k8s.io/api to v0.34.3
+- ⏩ upgrade k8s.io/apiextensions-apiserver to v0.34.3
+- ⏩ upgrade k8s.io/apimachinery to v0.34.3
+- ⏩ upgrade k8s.io/client-go to v0.34.3
+
 ## 0.8.1-alpha.0
 
 ### Noteworthy changes
