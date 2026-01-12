@@ -41,11 +41,13 @@ In order to use OVH IAM, you need to generate a OAuth2 Client, create a policy a
 
 The following instructions are based on the [official documentation](https://help.ovhcloud.com/csm/en-manage-service-account?id=kb_article_view&sysparm_article=KB0059343).
 
+With the OVHcloud API:
+
 1. Go to [api.ovh.com/console/](https://api.ovh.com/console/) console
 2. Click `Authentication` link on the left handside to log-in using your OVH credentials
 3. In the top left corner, select `v1` and then select `/me` API
 4. On the left panel, search for `POST /me/api/oauth2/client` [↗️](https://api.ovh.com/console/?section=%2Fme&branch=v1#post-/me/api/oauth2/client)
-5. Create a new service account with the following request body and click `Execute`
+5. Create a new service account with the following request body and click on the `Execute` button.
 
     ```json
     {
@@ -56,11 +58,47 @@ The following instructions are based on the [official documentation](https://hel
     }
     ```
 
-6. Take note of both `ClientId` and `clientSecret` and save them in a **secure** location. Be carefull, you will not be able to retrieve the client secret later. You'll need to delete and create a new service account.
-7. Navidate to `GET /me/api/oauth2/client/{clientId}` [↗️](https://api.ovh.com/console/?section=%2Fme&branch=v1#get-/me/api/oauth2/client/-clientId-)
+6. Take note of both `ClientId` and `ClientSecret` and save them in a **secure** location. Be carefull, you will not be able to retrieve the client secret later. You'll need to delete and create a new service account.
+7. Navigate to `GET /me/api/oauth2/client/{clientId}` [↗️](https://api.ovh.com/console/?section=%2Fme&branch=v1#get-/me/api/oauth2/client/-clientId-)
 8. Use the `ClientId` to retrieve the details of the service account. Take note of `identity`.
 
+OR, with the `ovhcloud` CLI:
+
+```
+ovhcloud account api oauth2 client create --description Service account for OVH cert-manager webhook --flow CLIENT_CREDENTIALS --name cert-manager
+```
+
+You should obtain a response like this:
+```
+✅ OAuth2 client created successfully (client ID: xxxxxxxx, client secret: xxxxxxxx)
+```
+
+Take note of both `ClientId` and `ClientSecret` and save them in a **secure** location. Be carefull, you will not be able to retrieve the client secret later. You'll need to delete and create a new service account.
+
+Use the `ClientId` to retrieve the details of the service account:
+
+```
+ovhcloud account api oauth2 client get EU.590d00c34ddd55c3
+```
+
+You should obtain a response like this:
+```json
+{
+  "callbackUrls": null,
+  "clientId": "xxxxxxxxxx",
+  "createdAt": "2025-11-26T14:30:04.492Z",
+  "description": "Service",
+  "flow": "CLIENT_CREDENTIALS",
+  "identity": "urn:v1:eu:identity:credential:xxxxxxxxxx/oauth2-xxxxxxxxxx",
+  "name": "cert-manager"
+}
+```
+
+Take note of the value of the `identity` field.
+
 Now, you can create the policy to grant permissions on your domain to your service account.
+
+With the OVHcloud API:
 
 1. In the top left corner, select `v2` and then select `/iam` API
 2. Search for `POST /iam/policy` [↗️](https://api.ovh.com/console/?section=%2Fiam&branch=v2#post-/iam/policy)
