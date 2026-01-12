@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.8.1-alpha.1
+
+### Noteworthy changes
+
+- 🌿 add helm schema support
+
 ## 0.8.1-alpha.0
 
 ### Noteworthy changes
