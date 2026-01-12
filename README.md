@@ -71,3 +71,4 @@ We appreciate your understanding and cooperation in maintaining a positive and p
 - [Sebastien MALOT](https://github.com/smalot)
 - [Rémy Jacquin](https://github.com/remyj38)
 - [flodakto](https://github.com/flodakto)
+- [Aurelie Vache](https://github.com/scraly)

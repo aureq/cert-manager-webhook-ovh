@@ -5,6 +5,7 @@
 ### Noteworthy changes
 
 - 🌿 add helm schema support
+- 📄 improved documentation so readers have instructions on how to perform the setup with the [OVH cli](https://github.com/ovh/ovhcloud-cli)
 
 ## 0.8.1-alpha.0
 
