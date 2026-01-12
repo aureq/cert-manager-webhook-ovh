@@ -42,7 +42,7 @@ rendered-manifest.yaml:
         charts/cert-manager-webhook-ovh > "$(OUT)/rendered-manifest.yaml"
 
 schema: install-helm-schema
-	@helm schema
+	@helm schema --no-dependencies --skip-auto-generation additionalProperties
 
 install-helm-schema:
 	@helm schema --version >/dev/null 2>&1 || helm plugin install https://github.com/dadav/helm-schema
