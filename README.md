@@ -73,3 +73,4 @@ We appreciate your understanding and cooperation in maintaining a positive and p
 - [flodakto](https://github.com/flodakto)
 - [Aurelie Vache](https://github.com/scraly)
 - [Karol Stoiński](https://github.com/KarolStoinski)
+- [Pierre Mahot](https://github.com/pierremahot)
