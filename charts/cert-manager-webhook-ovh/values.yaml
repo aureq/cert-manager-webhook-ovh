@@ -313,6 +313,9 @@ hostNetwork: false
 # It may be useful to change it if the hostNetwork mode is activated to use an available port.
 port: 8443
 
+# The optional priority class to be used for the cert-manager-webhook-ovh pod.
+priorityClassName: ""
+
 resources: {}
   # We usually recommend not to specify default resources and to leave this as a conscious
   # choice for the user. This also increases chances charts run on environments with little
