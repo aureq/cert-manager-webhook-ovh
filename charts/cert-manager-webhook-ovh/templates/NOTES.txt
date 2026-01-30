@@ -1,0 +1,16 @@
+Thank you for installing the OVH WebHook chart {{ .Chart.AppVersion }} for cert-manager.
+
+{{- if lt (include "cert-manager-webhook-ovh.isIssuerToCreate" $ | int ) 1 }}
+
+⚠️  WARNING: No Issuer or ClusterIssuer will be created by this chart.
+For any Issuer or ClusterIssuer you wish to create, please ensure you also create the corresponding Role and RoleBinding.
+
+{{- end }}
+
+More information can be found in our documentation 📄 https://aureq.github.io/cert-manager-webhook-ovh/
+
+If you have any questions or found a bug 🐛, please open an issue on GitHub https://github.com/aureq/cert-manager-webhook-ovh/issues
+
+Please consider starring ⭐ the project on GitHub if you find it useful.
+
+Thank you for using our chart!
