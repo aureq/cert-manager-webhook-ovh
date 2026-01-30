@@ -5,6 +5,7 @@
 ### Noteworthy changes
 
 - 🌿 add helm schema support
+- 📝 add helpful post-install notes to Helm chart
 - 📄 improved documentation so readers have instructions on how to perform the setup with the [OVH cli](https://github.com/ovh/ovhcloud-cli)
 
 ### Dependencies
