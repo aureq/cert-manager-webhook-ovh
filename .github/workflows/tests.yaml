@@ -32,8 +32,8 @@ jobs:
           helm plugin install https://github.com/helm-unittest/helm-unittest
 
       - name: Run unitests
-        if: steps.list-changed.outputs.changed == 'true'
-        run: make helm-test
+        run: |
+          make helm-test
 
   go-test:
     runs-on: ubuntu-latest
