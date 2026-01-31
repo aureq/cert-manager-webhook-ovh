@@ -21,6 +21,8 @@
 - ⏩ upgrade k8s.io/apiextensions-apiserver to v0.34.3
 - ⏩ upgrade k8s.io/apimachinery to v0.34.3
 - ⏩ upgrade k8s.io/client-go to v0.34.3
+- ⏩ upgrade Helm to v3.19.5 in tests workflow
+- ⏩ upgrade step-security/harden-runner to v2.14.1
 
 ## 0.8.1-alpha.0
 
