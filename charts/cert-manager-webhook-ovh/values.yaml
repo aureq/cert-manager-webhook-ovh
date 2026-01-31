@@ -1,3 +1,6 @@
+# vim: set ft=yaml
+# yaml-language-server: $schema=values.schema.json
+
 # The `configVersion` is used to assist with breaking changes before an upgrade
 # is applied.
 # Each time breaking change are introduced, the internal `configVersion` is
