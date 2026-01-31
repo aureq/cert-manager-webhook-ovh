@@ -7,7 +7,6 @@
 - 🐛 fix ACME challenge subdomain parsing for multi-level subdomains. [#75](https://github.com/aureq/cert-manager-webhook-ovh/pull/75) (by [Karol Stoiński](https://github.com/KarolStoinski))
 - 🌱 Add optional `priorityClassName` to deployment template. [#71](https://github.com/aureq/cert-manager-webhook-ovh/pull/71) (by [Pierre Mahot](https://github.com/pierremahot))
 - 🌿 Add cluster issuer disableAccountKeyGeneration option. [#68](https://github.com/aureq/cert-manager-webhook-ovh/pull/68) (by [Thomas Coudert](https://github.com/thcdrt))
-- 🌿 add helm schema support
 - 📝 add helpful post-install notes to Helm chart
 - 📄 improved documentation so readers have instructions on how to perform the setup with the [OVH cli](https://github.com/ovh/ovhcloud-cli)
 
