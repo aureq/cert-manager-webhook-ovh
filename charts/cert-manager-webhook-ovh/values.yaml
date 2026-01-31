@@ -10,7 +10,7 @@
 # The latest `values.yaml` contains the correct `configVersion` but the line is
 # commented. The latest `values.yaml` can be retrieved with the command below:
 #    helm show values cert-manager-webhook-ovh-charts/cert-manager-webhook-ovh
-# configVersion: 0.0.2
+configVersion: 0.0.2
 
 # The GroupName here is used to identify your company or business unit that
 # created this webhook.
