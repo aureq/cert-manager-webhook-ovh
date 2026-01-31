@@ -70,7 +70,8 @@ issuers:
     # If the ACME server supports profiles, you can specify the profile name here.
     # For more details, see https://cert-manager.io/docs/configuration/acme/#acme-certificate-profiles
     # Available as of Cert Manager 1.18.0
-    # profile: classic # classic, tlsserver, shortlived
+    # Possible profiles are: classic, tlsserver, shortlived
+    # profile: classic
 
     # Define the eab (external account binding) key using secretRef.
     # This is optional and only required if you want to use.
@@ -191,7 +192,8 @@ issuers:
     # For more details, see https://cert-manager.io/docs/configuration/acme/#acme-certificate-profiles
     # Run the command `curl -fsSL https://acme-v02.api.letsencrypt.org/directory` and inpsect the object `profiles`.
     # Available as of Cert Manager 1.18.0
-    # profile: classic # classic, tlsserver, shortlived
+    # Possible profiles are: classic, tlsserver, shortlived
+    # profile: classic
 
     # Define the eab (external account binding) key using secretRef.
     # This is optional and only required if you want to use.
