@@ -74,3 +74,4 @@ We appreciate your understanding and cooperation in maintaining a positive and p
 - [Aurelie Vache](https://github.com/scraly)
 - [Karol Stoiński](https://github.com/KarolStoinski)
 - [Pierre Mahot](https://github.com/pierremahot)
+- [Thomas Coudert](https://github.com/thcdrt)

@@ -60,6 +60,13 @@ issuers:
     # email to use when registrering your account with Let's encrypt.
     email: acme@example.net
 
+    # Enables or disables generating a new ACME account key.
+    # If true, the Issuer resource will not request a new account but will expect the account key to be supplied via an existing secret.
+    # If false, the cert-manager system will generate a new ACME account key for the Issuer.
+    # Defaults to false.
+    # See https://cert-manager.io/docs/reference/api-docs/#acme.cert-manager.io/v1.ACMEIssuer
+    # disableAccountKeyGeneration: true
+
     # If the ACME server supports profiles, you can specify the profile name here.
     # For more details, see https://cert-manager.io/docs/configuration/acme/#acme-certificate-profiles
     # Available as of Cert Manager 1.18.0
@@ -173,7 +180,11 @@ issuers:
     # email to use when registering your account with Let's encrypt.
     email: acme@example.net
 
-    # If the disableAccountKeyGeneration field is set, cert-manager will not create a new ACME account and use the existing key specified in privateKeySecretRef
+    # Enables or disables generating a new ACME account key.
+    # If true, the Issuer resource will not request a new account but will expect the account key to be supplied via an existing secret.
+    # If false, the cert-manager system will generate a new ACME account key for the Issuer.
+    # Defaults to false.
+    # See https://cert-manager.io/docs/reference/api-docs/#acme.cert-manager.io/v1.ACMEIssuer
     # disableAccountKeyGeneration: true
 
     # If the ACME server supports profiles, you can specify the profile name here.
