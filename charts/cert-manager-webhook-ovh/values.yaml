@@ -154,7 +154,7 @@ issuers:
     #     # The key name in the secret above that holds the actual OVH consumer key value
     #     key: applicationConsumerKey
 
-  # Name of this issuer
+  # Name of the second issuer
   - name: le-staging
 
     # When true this issuer is created.
@@ -276,6 +276,7 @@ issuers:
     #     # The key name in the secret above that holds the actual OVH consumer key value
     #     key: applicationConsumerKey
 
+# RBAC configuration for the webhook deployment
 rbac:
   # If the secret of the issuer is in a different namespace, change `Role` (default)
   # to `ClusterRole` so the webhook is able to access this secret.
@@ -286,24 +287,36 @@ rbac:
 # pod securityContext and container securityContext will be inserted as-is in their respective places so that
 # it is possible to edit any supported field (e.g. capabilities, seccompProfile, privileged)
 securityContext:
+  # Enable or disable the security context for the webhook deployment.
   enabled: true
+  # Settings applied to the pod security context.
   pod:
+    # The user ID to run the container process as.
     runAsUser: 1000
+    # The group ID to run the container process as.
     runAsGroup: 1000
+  # Settings applied to the container security context.
   container:
+    # Whether the container is allowed to escalate privileges.
     allowPrivilegeEscalation: false
+    # Whether the container's root filesystem is read-only.
     readOnlyRootFilesystem: true
 
 image:
+  # The container image repository
   repository: ghcr.io/aureq/cert-manager-webhook-ovh
+  # The container image tag. When unspecified, the chart `appVersion` is used.
   # tag: ""
+  # The image pull policy as defined in the Kubernetes documentation.
   pullPolicy: IfNotPresent
-  # Use this set to assign a list of default pullSecrets
+  # Optional, provide one or more `imagePullSecrets` if your registry requires it.
   pullSecrets: []
     # - name: docker-registry-secret
     # - name: internal-registry-secret
 
+# Override the name of the deployed resources
 nameOverride: ""
+# Override the full name of the deployed resources
 fullnameOverride: ""
 
 # Use this field to add environment variables relevant to this webhook.
@@ -317,8 +330,11 @@ environment:
 # number of replicas in this deployment
 replicas: 1
 
+# Service configuration for the webhook deployment
 service:
+  # The service type to use.
   type: ClusterIP
+  # The port used by the service to expose the webhook.
   port: 443
 
 # Specifies if the webhook should be started in hostNetwork mode.
@@ -335,6 +351,7 @@ port: 8443
 # The optional priority class to be used for the cert-manager-webhook-ovh pod.
 priorityClassName: ""
 
+# Resource requests and limits used by the webhook deployment
 resources: {}
   # We usually recommend not to specify default resources and to leave this as a conscious
   # choice for the user. This also increases chances charts run on environments with little
