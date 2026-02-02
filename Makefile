@@ -1,7 +1,7 @@
 IMAGE_NAME := "aureq/cert-manager-webhook-ovh"
 IMAGE_TAG := "latest"
 
-.PHONY: rendered-manifest.yaml test build
+.PHONY: test build helm-test rendered-manifest.yaml install-helm-docs schema install-helm-schema
 
 OUT := $(shell pwd)/_out
 TEST_ASSET_ETCD := $(OUT)/kubebuilder/bin/etcd
@@ -30,9 +30,6 @@ build:
 		--output type=image,oci-mediatypes=true,compression=estargz,force-compression=true,push=false \
 		-t "$(IMAGE_NAME):$(IMAGE_TAG)" .
 
-helm-test:
-	@helm unittest charts/cert-manager-webhook-ovh/
-
 rendered-manifest.yaml:
 	@test -d "$(OUT)" || mkdir -p "$(OUT)"
 	@helm template \
@@ -41,8 +38,20 @@ rendered-manifest.yaml:
         --set image.tag=$(IMAGE_TAG) \
         charts/cert-manager-webhook-ovh > "$(OUT)/rendered-manifest.yaml"
 
-schema: install-helm-schema
-	@helm schema --no-dependencies --skip-auto-generation additionalProperties
+helm-unittest: install-helm-unittest
+	@helm unittest charts/cert-manager-webhook-ovh/
+
+helm-docs: install-helm-docs
+	@helm-docs --chart-search-root charts/cert-manager-webhook-ovh/ --sort-values-order=file
+
+helm-schema: install-helm-schema
+	@helm-schema --chart-search-root charts/cert-manager-webhook-ovh/ --add-schema-reference --keep-full-comment
+
+install-helm-unittest:
+	@helm plugin install https://github.com/helm-unittest/helm-unittest
+
+install-helm-docs:
+	@go install github.com/norwoodj/helm-docs/cmd/helm-docs@latest
 
 install-helm-schema:
-	@helm schema --version >/dev/null 2>&1 || helm plugin install https://github.com/dadav/helm-schema
+	@go install github.com/dadav/helm-schema/cmd/helm-schema@latest
