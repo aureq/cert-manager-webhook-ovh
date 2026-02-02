@@ -5,6 +5,15 @@
 *.so
 *.dylib
 
+# Common backup files
+*.swp
+*.bak
+*.tmp
+*~
+*.orig
+*.rej
+*.org
+
 # Test binary, build with `go test -c`
 *.test
 
@@ -23,9 +32,11 @@ testdata/ovh/ovh-credentials.yaml
 # dummy data
 tmp
 
-# IDE files
-.idea
-.vscode
+# OSx specific files
+.DS_Store
+
+# Windows specific files
+Thumbs.db
 
 # aider
 .aider*
