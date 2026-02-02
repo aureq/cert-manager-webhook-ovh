@@ -48,7 +48,7 @@ helm-schema: install-helm-schema
 	@helm-schema --chart-search-root charts/cert-manager-webhook-ovh/ --add-schema-reference --keep-full-comment
 
 install-helm-unittest:
-	@helm plugin install https://github.com/helm-unittest/helm-unittest
+	@helm plugin list | grep ^unittest >/dev/null 2>&1 || helm plugin install https://github.com/helm-unittest/helm-unittest
 
 install-helm-docs:
 	@go install github.com/norwoodj/helm-docs/cmd/helm-docs@latest
