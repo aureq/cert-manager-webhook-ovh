@@ -48,24 +48,89 @@ Create chart name and version as used by the chart label.
 {{- end -}}
 
 {{/*
+Returns true if ovhAuthentication is correctly set when ovhAuthenticationMethod is "application".
+*/}}
+{{- define "cert-manager-webhook-ovh.applicationOvhAuthenticationAvail" -}}
+  {{- if . -}}
+    {{- with .ovhAuthentication -}}
+      {{- if and (.applicationConsumerKey) (.applicationKey) (.applicationSecret) -}}
+        {{- eq "true" "true" -}}
+      {{- end -}}
+    {{- end -}}
+  {{- end -}}
+{{- end -}}
+
+{{/*
+Returns true if ovhAuthentication is correctly set when ovhAuthenticationMethod is "oauth2".
+*/}}
+{{- define "cert-manager-webhook-ovh.oauth2OvhAuthenticationAvail" -}}
+  {{- if . -}}
+    {{- with .ovhAuthentication -}}
+      {{- if and (.oauth2ClientID) (.oauth2ClientSecret) -}}
+        {{- eq "true" "true" -}}
+      {{- end -}}
+    {{- end -}}
+  {{- end -}}
+{{- end -}}
+
+{{/*
 Returns true if ovhAuthentication is correctly set.
 */}}
 {{- define "cert-manager-webhook-ovh.isOvhAuthenticationAvail" -}}
   {{- if . -}}
     {{- if eq .ovhAuthenticationMethod "application" -}}
-      {{- with .ovhAuthentication -}}
-        {{- if and (.applicationConsumerKey) (.applicationKey) (.applicationSecret) -}}
-          {{- eq "true" "true" -}}
-        {{- end -}}
-      {{- end -}}
+      {{ include "cert-manager-webhook-ovh.applicationOvhAuthenticationAvail" . }}
     {{- else if eq .ovhAuthenticationMethod "oauth2" -}}
-      {{- with .ovhAuthentication -}}
-        {{- if and (.oauth2ClientID) (.oauth2ClientSecret) -}}
-          {{- eq "true" "true" -}}
-        {{- end -}}
-      {{- end -}}
+      {{ include "cert-manager-webhook-ovh.oauth2OvhAuthenticationAvail" . }}
     {{- end -}}
   {{- end -}}
+{{- end -}}
+
+{{/*
+Returns true if ovhAuthenticationRef is correctly set when ovhAuthenticationMethod is "application".
+*/}}
+{{- define "cert-manager-webhook-ovh.applicationOvhAuthenticationRefAvail" -}}
+  {{- if .ovhAuthenticationRef -}}
+    {{- if eq .ovhAuthenticationMethod "application" -}}
+      {{- with .ovhAuthenticationRef -}}
+        {{- if or (not .applicationConsumerKeyRef) (not .applicationKeyRef) (not .applicationSecretRef) }}
+          {{- fail "Error: When 'ovhAuthenticationRef' is used, 'applicationConsumerKeyRef', 'applicationKeyRef' and 'applicationSecretRef' need to be provided." }}
+        {{- end }}
+        {{- if or (not .applicationConsumerKeyRef.name) (not .applicationConsumerKeyRef.key) }}
+          {{- eq "true" "false" -}}
+        {{- end }}
+        {{- if or (not .applicationKeyRef.name) (not .applicationKeyRef.key) }}
+          {{- eq "true" "false" -}}
+        {{- end }}
+        {{- if or (not .applicationSecretRef.name) (not .applicationSecretRef.key) }}
+          {{- eq "true" "false" -}}
+        {{- end }}
+      {{- end -}}
+    {{- end -}}{{/* end if ovhAuthenticationMethod */}}
+    {{- eq "true" "true" -}}
+  {{- end -}}{{/* end if ovhAuthenticationRef */}}
+{{- end -}}
+
+{{/*
+Returns true if ovhAuthenticationRef is correctly set when ovhAuthenticationMethod is "oauth2".
+*/}}
+{{- define "cert-manager-webhook-ovh.oauth2OvhAuthenticationRefAvail" -}}
+  {{- if .ovhAuthenticationRef -}}
+    {{- if eq .ovhAuthenticationMethod "oauth2" -}}
+      {{- with .ovhAuthenticationRef -}}
+        {{- if or (not .oauth2ClientIDRef) (not .oauth2ClientSecretRef) }}
+          {{- eq "true" "false" -}}
+        {{- end }}
+        {{- if or (not .oauth2ClientIDRef.name) (not .oauth2ClientIDRef.key) }}
+          {{- eq "true" "false" -}}
+        {{- end }}
+        {{- if or (not .oauth2ClientSecretRef.name) (not .oauth2ClientSecretRef.key) }}
+          {{- eq "true" "false" -}}
+        {{- end }}
+      {{- end -}}
+    {{- end -}}{{/* end if ovhAuthenticationMethod */}}
+    {{- eq "true" "true" -}}
+  {{- end -}}{{/* end if ovhAuthenticationRef */}}
 {{- end -}}
 
 {{/*
@@ -74,36 +139,25 @@ Returns true if ovhAuthenticationRef is correctly set.
 {{- define "cert-manager-webhook-ovh.isOvhAuthenticationRefAvail" -}}
   {{- if .ovhAuthenticationRef -}}
     {{- if eq .ovhAuthenticationMethod "application" -}}
-      {{- with .ovhAuthenticationRef -}}
-        {{- if or (not .applicationConsumerKeyRef) (not .applicationKeyRef) (not .applicationSecretRef) }}
-          {{- fail "Error: When 'ovhAuthenticationRef' is used, 'applicationConsumerKeyRef', 'applicationKeyRef' and 'applicationSecretRef' need to be provided." }}
-        {{- end }}
-        {{- if or (not .applicationConsumerKeyRef.name) (not .applicationConsumerKeyRef.key) }}
-          {{- fail "Error: When 'ovhAuthenticationRef' is used, you need to provide 'ovhAuthenticationRef.applicationConsumerKeyRef.name' and 'ovhAuthenticationRef.applicationConsumerKeyRef.key'" }}
-        {{- end }}
-        {{- if or (not .applicationKeyRef.name) (not .applicationKeyRef.key) }}
-          {{- fail "Error: When 'ovhAuthenticationRef' is used, you need to provide 'ovhAuthenticationRef.applicationKeyRef.name' and 'ovhAuthenticationRef.applicationKeyRef.key'" }}
-        {{- end }}
-        {{- if or (not .applicationSecretRef.name) (not .applicationSecretRef.key) }}
-          {{ fail "Error: When 'ovhAuthenticationRef' is used, you need to provide 'ovhAuthenticationRef.applicationSecretRef.name' and 'ovhAuthenticationRef.applicationSecretRef.key'" }}
-        {{- end }}
-      {{- end -}}
+      {{ include "cert-manager-webhook-ovh.applicationOvhAuthenticationRefAvail" . }}
     {{- else if eq .ovhAuthenticationMethod "oauth2" -}}
-      {{- with .ovhAuthenticationRef -}}
-        {{- if or (not .oauth2ClientIDRef) (not .oauth2ClientSecretRef) }}
-          {{- fail "Error: When 'ovhAuthenticationRef' is used, 'oauth2ClientIDRef' and 'oauth2ClientSecretRef' need to be provided." }}
-        {{- end }}
-        {{- if or (not .oauth2ClientIDRef.name) (not .oauth2ClientIDRef.key) }}
-          {{- fail "Error: When 'ovhAuthenticationRef' is used, you need to provide 'ovhAuthenticationRef.oauth2ClientIDRef.name' and 'ovhAuthenticationRef.oauth2ClientIDRef.key'" }}
-        {{- end }}
-        {{- if or (not .oauth2ClientSecretRef.name) (not .oauth2ClientSecretRef.key) }}
-          {{- fail "Error: When 'ovhAuthenticationRef' is used, you need to provide 'ovhAuthenticationRef.oauth2ClientSecretRef.name' and 'ovhAuthenticationRef.oauth2ClientSecretRef.key'" }}
-        {{- end }}
-      {{- end -}}
+      {{ include "cert-manager-webhook-ovh.oauth2OvhAuthenticationRefAvail" . }}
     {{- end -}}{{/* end if ovhAuthenticationMethod */}}
     {{- eq "true" "true" -}}
   {{- end -}}{{/* end if ovhAuthenticationRef */}}
 {{- end -}}
+
+{{/*
+Returns true if externalAccountBinding is correctly set.
+*/}}
+{{- define "cert-manager-webhook-ovh.isExternalAccountBindingAvail" -}}
+  {{- if .externalAccountBinding.enabled -}}
+    {{- if and (.externalAccountBinding.keyID) (.externalAccountBinding.keySecretRef.name) (.externalAccountBinding.keySecretRef.key) -}}
+      {{- eq "true" "true" -}}
+    {{- end -}}
+  {{- end -}}
+{{- end -}}
+
 
 {{/*
 Returns the number of Issuer/ClusterIssuer to create
@@ -138,4 +192,18 @@ Selector labels
 {{- define "cert-manager-webhook-ovh.selectorLabels" -}}
 app.kubernetes.io/name: {{ include "cert-manager-webhook-ovh.name" . }}
 app.kubernetes.io/instance: {{ .Release.Name }}
+{{- end -}}
+
+{{/*
+Return the proper image name
+*/}}
+{{- define "cert-manager-webhook-ovh.image" -}}
+    {{- $registryName := default "ghcr.io" .Values.image.registry -}}
+    {{- $repositoryName := default "authelia/authelia" .Values.image.repository -}}
+    {{- $tag := .Values.image.tag | default .Chart.AppVersion  | toString -}}
+    {{- if hasPrefix "sha256:" $tag }}
+    {{- printf "%s/%s@%s" $registryName $repositoryName $tag -}}
+    {{- else -}}
+    {{- printf "%s/%s:%s" $registryName $repositoryName $tag -}}
+    {{- end -}}
 {{- end -}}

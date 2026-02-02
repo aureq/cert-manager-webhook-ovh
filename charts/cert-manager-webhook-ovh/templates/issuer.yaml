@@ -1,10 +1,7 @@
 {{- range $.Values.issuers }}
   {{- if .create }}
-    {{- if or (and (.ovhAuthentication) (.ovhAuthenticationRef)) (and (not .ovhAuthentication) (not .ovhAuthenticationRef)) }}
-      {{ fail (printf "Invalid issuer %s: For each issuer you wish to create, you need to define either 'ovhAuthentication' or 'ovhAuthenticationRef'" .name) }}
-    {{- end }}
-    {{- if not (has .ovhAuthenticationMethod (list "application" "oauth2") ) }}
-      {{ fail (printf "Invalid issuer %s: 'ovhAuthenticationMethod' is invalid. Allowed values are: application, oauth2" .name) }}
+    {{- if and (eq (include "cert-manager-webhook-ovh.isOvhAuthenticationAvail" .) "true") (eq (include "cert-manager-webhook-ovh.isOvhAuthenticationRefAvail" .) "true") }}
+        {{ fail (printf "Invalid issuer %s: You cannot define both 'ovhAuthentication' and 'ovhAuthenticationRef' for '%s' authentication method" .name .ovhAuthenticationMethod) }}
     {{- end }}
 apiVersion: cert-manager.io/v1
 kind: {{ .kind }}
@@ -24,7 +21,7 @@ spec:
     {{- if .profile }}
     profile: {{ .profile | quote }}
     {{- end }}
-    {{- if .externalAccountBinding }}
+    {{- if eq (include "cert-manager-webhook-ovh.isExternalAccountBindingAvail" .) "true" }}
     externalAccountBinding:
       keyID: {{ .externalAccountBinding.keyID | quote }}
       keySecretRef:

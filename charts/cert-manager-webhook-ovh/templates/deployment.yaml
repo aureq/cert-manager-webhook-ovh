@@ -5,60 +5,59 @@ metadata:
   namespace: {{ .Release.Namespace | quote }}
   labels:
     {{- include "cert-manager-webhook-ovh.labels" $ | nindent 4 }}
-  {{- with .Values.annotations }}
-  annotations:
-    {{- toYaml . | nindent 4 }}
+  {{- with $context := .Values.pod.annotations }}
+  annotations: {{- toYaml $context | nindent 4 }}
   {{- end }}
 spec:
-  replicas: {{ .Values.replicas }}
+  replicas: {{ .Values.pod.replicas | default 1 }}
   selector:
     matchLabels:
       {{- include "cert-manager-webhook-ovh.selectorLabels" $ | nindent 6 }}
   template:
     metadata:
       labels:
-      {{- range $key, $value := .Values.podLabels }}
+      {{- range $key, $value := .Values.pod.podLabels }}
         {{ $key }}: {{ $value | quote }}
       {{- end }}
         {{- include "cert-manager-webhook-ovh.selectorLabels" $ | nindent 8 }}
-      {{- with .Values.podAnnotations }}
-      annotations:
-        {{- toYaml . | nindent 8 }}
+      {{- with $context := .Values.pod.podAnnotations }}
+      annotations: {{- toYaml $context | nindent 8 }}
       {{- end }}
     spec:
-      imagePullSecrets:
-{{ toYaml .Values.image.pullSecrets | indent 8 }}
+      {{- with $pullSecrets := .Values.image.pullSecrets }}
+      imagePullSecrets: {{- range $k, $secretName := $pullSecrets }}
+        - name: {{ $secretName }}
+      {{- end }}
+      {{- end }}
       serviceAccountName: {{ include "cert-manager-webhook-ovh.fullname" . }}
-      {{- if .Values.securityContext.enabled }}
-      {{- with .Values.securityContext.pod }}
-      securityContext:
-        {{- toYaml . | nindent 8 }}
+      {{- with $context := .Values.pod.securityContext.pod }}
+      securityContext: {{- toYaml $context | nindent 8 }}
       {{- end }}
+
+      {{- with $context := .Values.pod.hostNetwork }}
+      hostNetwork: {{ $context }}
       {{- end }}
-      {{- if .Values.hostNetwork }}
-      hostNetwork: true
-      {{- end }}
-      {{- with .Values.priorityClassName }}
-      priorityClassName: {{ . | quote }}
+      {{- with $context := .Values.priorityClassName }}
+      priorityClassName: {{ $context | quote }}
       {{- end }}
       containers:
         - name: {{ .Chart.Name }}
-          image: "{{ .Values.image.repository }}:{{ default .Chart.AppVersion .Values.image.tag }}"
-          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          image: {{ template "cert-manager-webhook-ovh.image" . }}
+          imagePullPolicy: {{ .Values.image.pullPolicy | default "IfNotPresent" }}
           args:
-            - --secure-port={{ .Values.port | default 8443 }}
+            - --secure-port={{ .Values.pod.port | default 8443 }}
             - --tls-cert-file=/tls/tls.crt
             - --tls-private-key-file=/tls/tls.key
           env:
             - name: GROUP_NAME
               value: {{ .Values.groupName | quote }}
-            {{- range $key, $val := .Values.environment }}
+            {{- range $key, $val := .Values.pod.environment }}
             - name: {{ $key }}
               value: {{ $val | quote }}
             {{- end}}
           ports:
             - name: https
-              containerPort: {{ .Values.port | default 8443 }}
+              containerPort: {{ .Values.pod.port | default 8443 }}
               protocol: TCP
           livenessProbe:
             httpGet:
@@ -74,27 +73,22 @@ spec:
             - name: certs
               mountPath: /tls
               readOnly: true
-          resources:
-{{ toYaml .Values.resources | indent 12 }}
-          {{- if .Values.securityContext.enabled }}
-          {{- with .Values.securityContext.container }}
-          securityContext:
-            {{- toYaml . | nindent 12 }}
+          {{- with $context :=.Values.pod.resources }}
+          resources: {{ toYaml $context | nindent 12 }}
           {{- end }}
+          {{- with $context := .Values.pod.securityContext.container }}
+          securityContext: {{- toYaml $context | nindent 12 }}
           {{- end }}
       volumes:
         - name: certs
           secret:
             secretName: {{ include "cert-manager-webhook-ovh.servingCertificate" . }}
-    {{- with .Values.nodeSelector }}
-      nodeSelector:
-{{ toYaml . | indent 8 }}
-    {{- end }}
-    {{- with .Values.affinity }}
-      affinity:
-{{ toYaml . | indent 8 }}
-    {{- end }}
-    {{- with .Values.tolerations }}
-      tolerations:
-{{ toYaml . | indent 8 }}
-    {{- end }}
+      {{- with $context := .Values.pod.selectors.nodeSelector }}
+      nodeSelector: {{ toYaml $context | indent 8 }}
+      {{- end }}
+      {{- with $context := .Values.pod.affinity }}
+      affinity: {{ toYaml $context | indent 8 }}
+      {{- end }}
+      {{- with $context := .Values.pod.tolerations }}
+      tolerations: {{ toYaml $context | indent 8 }}
+      {{- end }}

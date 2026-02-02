@@ -1,20 +1,13 @@
 # vim: set ft=yaml
 # yaml-language-server: $schema=values.schema.json
 
-# The `configVersion` is used to assist with breaking changes before an upgrade
-# is applied.
-# Each time breaking change are introduced, the internal `configVersion` is
-# increased. If the user doesn't set the correct `configVersion` in their
-# `values.yaml` indicating they have performed the required configuration
-# changes, the new Chart version won't be installed preventing any outages.
-# The latest `values.yaml` contains the correct `configVersion` but the line is
-# commented. The latest `values.yaml` can be retrieved with the command below:
-#    helm show values cert-manager-webhook-ovh-charts/cert-manager-webhook-ovh
-configVersion: 0.0.2
-
-# The GroupName here is used to identify your company or business unit that
+# @schema
+# required: true
+# type: string
+# @schema
+# -- The `groupName` here is used to identify your company or business unit that
 # created this webhook.
-# For example, this may be "acme.mycompany.example".
+# For example, this may be `acme.mycompany.example`.
 # This name will need to be referenced in each Issuer's `webhook` stanza to
 # inform cert-manager of where to send ChallengePayload resources in order to
 # solve the DNS01 challenge.
@@ -22,370 +15,836 @@ configVersion: 0.0.2
 # here is recommended.
 groupName: acme.mycompany.example
 
-# The values below should match your cert-manager deployment.
+# @schema
+# required: true
+# type: object
+# @schema
+# -- The values below should match your cert-manager deployment.
 # If not, you will get permissions errors.
 certManager:
-  # namespace in which your cert-manager is deployed
+
+  # @schema
+  # required: true
+  # type: string
+  # @schema
+  # -- namespace in which your cert-manager is deployed
   namespace: cert-manager
-  # cert-manager serverAccount name (default: cert-manager)
+
+  # @schema
+  # required: true
+  # type: string
+  # default: cert-manager
+  # @schema
+  # -- cert-manager serverAccount name (default: cert-manager)
   serviceAccountName: cert-manager
 
-# One or more issuers to create
+# @schema
+# required: false
+# type: array
+# @schema
+# -- One or more issuers to create
 issuers:
 
-  # Name of this issuer
+  # @schema
+  # required: true
+  # type: string
+  # @schema
+  # -- Name of this issuer
   - name: le-prod
 
-    # When true this issuer is created.
-    # This is disabled by default
+    # @schema
+    # required: true
+    # type: boolean
+    # @schema
+    # -- When true this issuer is created.
     create: false
 
-    # Type of issuer. Can either be ClusterIssuer or Issuer.
-    # If issuer is specified, the namespace is required.
-    # See for more information https://cert-manager.io/docs/concepts/issuer/
+    # @schema
+    # required: true
+    # enum: [ClusterIssuer, Issuer]
+    # @schema
+    # -- The type of issuer to create. It can either be `ClusterIssuer` or `Issuer`.
+    # If `Issuer` is specified, then the `namespace` is also required.
+    # See https://cert-manager.io/docs/concepts/issuer/ for more information.
     kind: ClusterIssuer
 
-    # If kind is issuer, then indicate the namespace in which this
-    # issuer should be deployed into.
+    # @schema
+    # required: false
+    # type: string
+    # @schema
+    # -- If `kind` is `Issuer`, then indicate the namespace in which this issuer should be deployed into.
     namespace: default
 
-    # Follow CNAME records or not. 2 options:
-    # - None (default): Don't follow CNAME records
-    # - Follow: Follow CNAME records
-    # See https://cert-manager.io/docs/configuration/acme/dns01/#delegated-domains-for-dns01 for more information
-    cnameStrategy: None
-
-    # The acme server url. For Let's encrypt, you have 2 options:
-    # - for production (default): https://acme-v02.api.letsencrypt.org/directory
-    # - for staging: https://acme-staging-v02.api.letsencrypt.org/directory
+    # @schema
+    # required: true
+    # type: string
+    # format: uri
+    # default: https://acme-v02.api.letsencrypt.org/directory
+    # @schema
+    # -– The ACME server URL. For Let's Encrypt, you have 2 options:
+    # - for production (default): `https://acme-v02.api.letsencrypt.org/directory`
+    # - for staging: `https://acme-staging-v02.api.letsencrypt.org/directory`
     acmeServerUrl: https://acme-v02.api.letsencrypt.org/directory
 
-    # email to use when registrering your account with Let's encrypt.
+    # @schema
+    # required: true
+    # type: string
+    # format: idn-email
+    # @schema
+    # -- Email to use when registering your account with Let's Encrypt.
     email: acme@example.net
 
-    # Enables or disables generating a new ACME account key.
-    # If true, the Issuer resource will not request a new account but will expect the account key to be supplied via an existing secret.
-    # If false, the cert-manager system will generate a new ACME account key for the Issuer.
-    # Defaults to false.
+    # @schema
+    # required: false
+    # type: boolean
+    # default: false
+    # @schema
+    # -- Enables or disables generating a new ACME account key.
+    # If `true`, the Issuer resource will not request a new account but will expect the account key to be supplied via an existing secret.
+    # If `false`, the cert-manager system will generate a new ACME account key for the Issuer.
+    # Defaults to `false` when unspecified.
     # See https://cert-manager.io/docs/reference/api-docs/#acme.cert-manager.io/v1.ACMEIssuer
-    # disableAccountKeyGeneration: true
+    disableAccountKeyGeneration: false
 
-    # If the ACME server supports profiles, you can specify the profile name here.
+    # @schema
+    # required: false
+    # enum: [classic, tlsserver, shortlived]
+    # default: classic
+    # @schema
+    # -- If the ACME server supports profiles, you can specify the profile name here.
     # For more details, see https://cert-manager.io/docs/configuration/acme/#acme-certificate-profiles
-    # Available as of Cert Manager 1.18.0
-    # Possible profiles are: classic, tlsserver, shortlived
-    # profile: classic
+    # Possible profiles are: `classic`, `tlsserver`, `shortlived`.
+    profile: classic
 
-    # Define the eab (external account binding) key using secretRef.
-    # This is optional and only required if you want to use.
-    # See https://cert-manager.io/docs/configuration/acme/#external-account-bindings for more information
-    # externalAccountBinding:
-    #   # eab key identifier.
-    #   keyID: keyID
-    #   # The secret reference to an existing eab key identifier.
-    #   keySecretRef:
-    #     # Name of the Kubernetes secret containing the eab hmac key
-    #     name: <secret-name>
-    #     # The key name in the secret above that holds the actual eab hmac key value
-    #     key: keySecret
-
-    # The endpoint name of the OVH API. It must be one of the following:
-    # ovh-eu, ovh-ca, kimsufi-eu, kimsufi-ca, soyoustart-eu, soyoustart-ca, runabove-ca
-    # See https://docs.certifytheweb.com/docs/dns/providers/ovh/ for more information
-    ovhEndpointName: ovh-eu
-
-    # Authentication method (possible values: application or oauth2)
-    ovhAuthenticationMethod: application
-    # define how the webhook should authenticate with the OVH API.
-    # Either set your credentials and the chart will create the necessary secret for you.
-    # Or provide the details of a secret already containing the OVH credentials.
-    # ovhAuthentication:
-
-    #   # the OVH OAuth 2 client ID. Leave empty if you are using an existing secret.
-    #   oauth2ClientID: ''
-    #   # the OVH OAuth 2 client secret. Leave empty if you are using an existing secret.
-    #   oauth2ClientSecret: ''
-
-    #   # the OVH application key. Leave emtpy if you are using an existing secret.
-    #   applicationKey: ''
-    #   # the OVH application secret. Leave emtpy if you are using an existing secret.
-    #   applicationSecret: ''
-    #   # Your OVH consumer key. Leave empty if you are using an existing secret.
-    #   applicationConsumerKey: ''
-
-    # If 'kind' is a ClusterIssuer, then the secret needs to be present
-    # in the same namespace as this deployment. If 'kind' is an Issuer,
-    # then the secret needs to be present in the same namespace as the Issuer.
-    # ovhAuthenticationRef:
-
-    #   # The secret reference to an existing OVH OAuth 2 client ID.
-    #   oauth2ClientIDRef:
-
-    #     # Name of the Kubernetes secret containing the OVH OAuth 2 client ID
-    #     name: ovh-credentials
-    #     # The key name in the secret above that holds the actual OVH OAuth 2 client IDvalue
-    #     key: oauth2ClientID
-
-    #   # The secret reference to an existing OVH Auth 2 client secret.
-    #   oauth2ClientSecretRef:
-    #     # Name of the Kubernetes secret containing the OVH Auth 2 client secret
-    #     name: ovh-credentials
-    #     # The key name in the secret above that holds the actual OVH Auth 2 client secret value
-    #     key: oauth2ClientSecret
-
-    #   # The secret reference to an existing OVH application key.
-    #   applicationKeyRef:
-    #     # Name of the Kubernetes secret containing the OVH Application Key
-    #     name: ovh-credentials
-    #     # The key name in the secret above that holds the actual OVH application key value
-    #     key: applicationKey
-
-    #   # The secret reference to an existing OVH application secret.
-    #   applicationSecretRef:
-    #     # Name of the Kubernetes secret containing the OVH Application Secret
-    #     name: ovh-credentials
-    #     # The key name in the secret above that holds the actual OVH application secret value
-    #     key: applicationSecret
-
-    #   # The secret reference to an existing OVH consumer key
-    #   applicationConsumerKeyRef:
-    #     # Name of the Kubernetes secret containing the OVH consumer Key
-    #     name: ovh-credentials
-    #     # The key name in the secret above that holds the actual OVH consumer key value
-    #     key: applicationConsumerKey
-
-  # Name of the second issuer
-  - name: le-staging
-
-    # When true this issuer is created.
-    # This is disabled by default
-    create: false
-
-    # Type of issuer. Can either be ClusterIssuer or Issuer.
-    # If issuer is specified, the the namespace is required.
-    # See for more information https://cert-manager.io/docs/concepts/issuer/
-    kind: ClusterIssuer
-
-    # If kind is issuer, then indicate the namespace in which this
-    # issuer should be deployed into.
-    namespace: default
-
-    # Follow CNAME records or not. 2 options:
-    # - None (default): Don't follow CNAME records
-    # - Follow: Follow CNAME records
-    # See https://cert-manager.io/docs/configuration/acme/dns01/#delegated-domains-for-dns01 for more information
+    # @schema
+    # required: false
+    # enum: [None, Follow]
+    # default: None
+    # @schema
+    # -- Follow CNAME records or not. 2 options:
+    # - `None` (default): Don't follow CNAME records
+    # - `Follow`: Follow CNAME records
+    # See https://cert-manager.io/docs/configuration/acme/dns01/#delegated-domains-for-dns01 for more information.
     cnameStrategy: None
 
-    # The acme server url. For Let's encrypt, you have 2 options:
-    # - for production (default): https://acme-v02.api.letsencrypt.org/directory
-    # - for staging: https://acme-staging-v02.api.letsencrypt.org/directory
-    acmeServerUrl: https://acme-staging-v02.api.letsencrypt.org/directory
+    # @schema
+    # required: false
+    # type: object
+    # @schema
+    # -- Define the EAB (external account binding) key using `secretRef`.
+    # This is optional and only required if you want to use it.
+    # See https://cert-manager.io/docs/configuration/acme/#external-account-bindings for more information.
+    externalAccountBinding:
 
-    # email to use when registering your account with Let's encrypt.
-    email: acme@example.net
+      # @schema
+      # required: false
+      # type: boolean
+      # default: false
+      # @schema
+      # -- When `enabled` is `true`, the external account binding configuration is applied.
+      enabled: false
 
-    # Enables or disables generating a new ACME account key.
-    # If true, the Issuer resource will not request a new account but will expect the account key to be supplied via an existing secret.
-    # If false, the cert-manager system will generate a new ACME account key for the Issuer.
-    # Defaults to false.
-    # See https://cert-manager.io/docs/reference/api-docs/#acme.cert-manager.io/v1.ACMEIssuer
-    # disableAccountKeyGeneration: true
+      # @schema
+      # required: true
+      # type: string
+      # @schema
+      # -- The key ID or account ID of which your external account binding is indexed by the external account manager
+      keyID: ''
 
-    # If the ACME server supports profiles, you can specify the profile name here.
-    # For more details, see https://cert-manager.io/docs/configuration/acme/#acme-certificate-profiles
-    # Run the command `curl -fsSL https://acme-v02.api.letsencrypt.org/directory` and inpsect the object `profiles`.
-    # Available as of Cert Manager 1.18.0
-    # Possible profiles are: classic, tlsserver, shortlived
-    # profile: classic
+      # @schema
+      # required: true
+      # type: object
+      # @schema
+      # -- The name and key of a secret containing a base 64 encoded URL string of your external account symmetric MAC key.
+      keySecretRef:
 
-    # Define the eab (external account binding) key using secretRef.
-    # This is optional and only required if you want to use.
-    # See https://cert-manager.io/docs/configuration/acme/#external-account-bindings for more information
-    # externalAccountBinding:
-    #   # eab key identifier.
-    #   keyID: keyID
-    #   # The secret reference to an existing eab key identifier.
-    #   keySecretRef:
-    #     # Name of the Kubernetes secret containing the eab hmac key
-    #     name: <secret-name>
-    #     # The key name in the secret above that holds the actual eab hmac key value
-    #     key: keySecret
+        # @schema
+        # required: true
+        # type: string
+        # @schema
+        # -- Name of the Kubernetes secret containing the EAB HMAC key.
+        name: ''
 
-    # The endpoint name of the OVH API. It must be one of the following:
-    # ovh-eu, ovh-ca, kimsufi-eu, kimsufi-ca, soyoustart-eu, soyoustart-ca, runabove-ca
-    # See https://docs.certifytheweb.com/docs/dns/providers/ovh/ for more information
+        # @schema
+        # required: true
+        # type: string
+        # @schema
+        # -- The key name in the secret above that holds the actual EAB HMAC key value.
+        key: ''
+
+    # @schema
+    # required: true
+    # enum: [ovh-eu, ovh-ca, kimsufi-eu, kimsufi-ca, soyoustart-eu, soyoustart-ca, runabove-ca]
+    # @schema
+    # -- The endpoint name of the OVH API. It must be one of the following:
+    # `ovh-eu`, `ovh-ca`, `kimsufi-eu`, `kimsufi-ca`, `soyoustart-eu`, `soyoustart-ca`, `runabove-ca`.
+    # See https://docs.certifytheweb.com/docs/dns/providers/ovh/ for more information.
     ovhEndpointName: ovh-eu
 
-    # Authentication method (possible values: application or oauth2)
+    # @schema
+    # required: true
+    # enum: [application, oauth2]
+    # @schema
+    # -- Define how the webhook should authenticate with the OVH API. It can be either `application` or `oauth2`.
+    # When `ovhAuthenticationMethod` is `application`, then use:
+    #   - `ovhAuthentication.applicationKey`, `ovhAuthentication.applicationSecret`, and `ovhAuthentication.applicationConsumerKey`
+    #   or
+    #   - `ovhAuthenticationRef.applicationKeyRef`, `ovhAuthenticationRef.applicationSecretRef` and `ovhAuthenticationRef.applicationConsumerKeyRef`.
+    #
+    # When `ovhAuthenticationMethod` is `oauth2`, then use:
+    #   - `ovhAuthentication.oauth2ClientID` and `ovhAuthentication.oauth2ClientSecret`
+    #   or
+    #   - `ovhAuthenticationRef.oauth2ClientIDRef` and `ovhAuthenticationRef.oauth2ClientSecretRef`.
     ovhAuthenticationMethod: application
 
-    # define how the webhook should authenticate with the OVH API.
-    # Either set your credentials and the chart will create the necessary secret for you.
-    # Or provide the details of a secret already containing the OVH credentials.
-    # ovhAuthentication:
+    # @schema
+    # required: false
+    # type: object
+    # @schema
+    # -- Define your credentials below and the chart will create the necessary secret for you.
+    # If `ovhAuthenticationMethod` is `application`, then provide:
+    #   - `applicationKey`, `applicationSecret`, and `applicationConsumerKey`
+    # If `ovhAuthenticationMethod` is `oauth2`, then provide:
+    #   - `oauth2ClientID` and `oauth2ClientSecret`
+    ovhAuthentication:
 
-    #   # the OVH OAuth 2 client ID. Leave empty if you are using an existing secret.
-    #   oauth2ClientID: ''
-    #   # the OVH OAuth 2 client secret. Leave empty if you are using an existing secret.
-    #   oauth2ClientSecret: ''
+      # @schema
+      # required: false
+      # type: string
+      # @schema
+      # -- The OVH OAuth 2 client ID. Leave empty if you are using an existing secret.
+      oauth2ClientID: ''
 
-    #   # the OVH application key. Leave emtpy if you are using an existing secret.
-    #   applicationKey: ''
-    #   # the OVH application secret. Leave emtpy if you are using an existing secret.
-    #   applicationSecret: ''
-    #   # Your OVH consumer key. Leave empty if you are using an existing secret.
-    #   applicationConsumerKey: ''
+      # @schema
+      # required: false
+      # type: string
+      # @schema
+      # -- The OVH OAuth 2 client secret. Leave empty if you are using an existing secret.
+      oauth2ClientSecret: ''
 
-    # If 'kind' is a ClusterIssuer, then the secret needs to be present
-    # in the same namespace as this deployment. If 'kind' is an Issuer,
-    # then the secret needs to be present in the same namespace as the Issuer.
-    # ovhAuthenticationRef:
+      # @schema
+      # required: false
+      # type: string
+      # @schema
+      # -- The OVH application key. Leave empty if you are using an existing secret.
+      applicationKey: ''
 
-    #   # The secret reference to an existing OVH OAuth 2 client ID.
-    #   oauth2ClientIDRef:
-    #     # Name of the Kubernetes secret containing the OVH OAuth 2 client ID
-    #     name: ovh-credentials
-    #     # The key name in the secret above that holds the actual OVH OAuth 2 client IDvalue
-    #     key: oauth2ClientID
+      # @schema
+      # required: false
+      # type: string
+      # @schema
+      # -- The OVH application secret. Leave empty if you are using an existing secret.
+      applicationSecret: ''
 
-    #   # The secret reference to an existing OVH Auth 2 client secret.
-    #   oauth2ClientSecretRef:
-    #     # Name of the Kubernetes secret containing the OVH Auth 2 client secret
-    #     name: ovh-credentials
-    #     # The key name in the secret above that holds the actual OVH Auth 2 client secret value
-    #     key: oauth2ClientSecret
+      # @schema
+      # required: false
+      # type: string
+      # @schema
+      # -- Your OVH consumer key. Leave empty if you are using an existing secret.
+      applicationConsumerKey: ''
 
-    #   # The secret reference to an existing OVH application key.
-    #   applicationKeyRef:
-    #     # Name of the Kubernetes secret containing the OVH Application Key
-    #     name: ovh-credentials
-    #     # The key name in the secret above that holds the actual OVH application key value
-    #     key: applicationKey
+    # -- Define the details of a secret already containing the OVH credentials.
+    # If `ovhAuthenticationMethod` is `application`, then provide:
+    #   - `applicationKeyRef`, `applicationSecretRef` and `applicationConsumerKeyRef`.
+    # If `ovhAuthenticationMethod` is `oauth2`, then provide:
+    #   - `oauth2ClientIDRef` and `oauth2ClientSecretRef`.
+    ovhAuthenticationRef:
 
-    #   # The secret reference to an existing OVH application secret.
-    #   applicationSecretRef:
-    #     # Name of the Kubernetes secret containing the OVH Application Secret
-    #     name: ovh-credentials
-    #     # The key name in the secret above that holds the actual OVH application secret value
-    #     key: applicationSecret
+      # @schema
+      # required: false
+      # type: object
+      # @schema
+      # -- The secret reference to an existing OVH OAuth 2 client ID.
+      oauth2ClientIDRef:
 
-    #   # The secret reference to an existing OVH consumer key
-    #   applicationConsumerKeyRef:
-    #     # Name of the Kubernetes secret containing the OVH consumer Key
-    #     name: ovh-credentials
-    #     # The key name in the secret above that holds the actual OVH consumer key value
-    #     key: applicationConsumerKey
+        # @schema
+        # required: true
+        # type: string
+        # @schema
+        # -- Name of the Kubernetes secret containing the OVH OAuth 2 client ID
+        name: ''
 
-# RBAC configuration for the webhook deployment
+        # @schema
+        # required: true
+        # type: string
+        # @schema
+        # -- The key name in the secret above that holds the actual OVH OAuth 2 client IDvalue
+        key: oauth2ClientID
+
+      # @schema
+      # required: false
+      # type: object
+      # @schema
+      # -- The secret reference to an existing OVH Auth 2 client secret.
+      oauth2ClientSecretRef:
+
+        # @schema
+        # required: true
+        # type: string
+        # @schema
+        # -- Name of the Kubernetes secret containing the OVH Auth 2 client secret
+        name: ''
+
+        # @schema
+        # required: true
+        # type: string
+        # @schema
+        # --The key name in the secret above that holds the actual OVH Auth 2 client secret value
+        key: oauth2ClientSecret
+
+      # @schema
+      # required: false
+      # type: object
+      # @schema
+      # -- The secret reference to an existing OVH application key.
+      applicationKeyRef:
+
+        # @schema
+        # required: true
+        # type: string
+        # @schema
+        # -- Name of the Kubernetes secret containing the OVH Application Key
+        name: ''
+
+        # @schema
+        # required: true
+        # type: string
+        # @schema
+        # -- The key name in the secret above that holds the actual OVH application key value
+        key: applicationKey
+
+      # @schema
+      # required: false
+      # type: object
+      # @schema
+      # -- The secret reference to an existing OVH application secret.
+      applicationSecretRef:
+
+        # @schema
+        # required: true
+        # type: string
+        # @schema
+        # -- Name of the Kubernetes secret containing the OVH Application Secret
+        name: ''
+
+        # @schema
+        # required: true
+        # type: string
+        # @schema
+        # -- The key name in the secret above that holds the actual OVH application secret value
+        key: applicationSecret
+
+      # @schema
+      # required: false
+      # type: object
+      # @schema
+      # -- The secret reference to an existing OVH consumer key
+      applicationConsumerKeyRef:
+
+        # @schema
+        # required: true
+        # type: string
+        # @schema
+        # -- Name of the Kubernetes secret containing the OVH consumer Key
+        name: ''
+
+        # @schema
+        # required: true
+        # type: string
+        # @schema
+        # -- The key name in the secret above that holds the actual OVH consumer key value
+        key: applicationConsumerKey
+
+# @schema
+# required: false
+# type: object
+# @schema
+# -- RBAC configuration for the webhook deployment
 rbac:
-  # If the secret of the issuer is in a different namespace, change `Role` (default)
+  # @schema
+  # required: false
+  # enum: [Role, ClusterRole]
+  # default: Role
+  # @schema
+  # -- If the secret of the issuer is in a different namespace, change `Role` (default)
   # to `ClusterRole` so the webhook is able to access this secret.
   roleType: Role
 
-# If enabled (default) the webhook will run as the specified user and group.
-# Furthermore, the specified allowPrivilegeEscalation and readOnlyRootFilesystem are applied to the container.
-# pod securityContext and container securityContext will be inserted as-is in their respective places so that
-# it is possible to edit any supported field (e.g. capabilities, seccompProfile, privileged)
-securityContext:
-  # Enable or disable the security context for the webhook deployment.
-  enabled: true
-  # Settings applied to the pod security context.
-  pod:
-    # The user ID to run the container process as.
-    runAsUser: 1000
-    # The group ID to run the container process as.
-    runAsGroup: 1000
-  # Settings applied to the container security context.
-  container:
-    # Whether the container is allowed to escalate privileges.
-    allowPrivilegeEscalation: false
-    # Whether the container's root filesystem is read-only.
-    readOnlyRootFilesystem: true
-
+# @schema
+# required: false
+# type: object
+# @schema
 image:
-  # The container image repository
-  repository: ghcr.io/aureq/cert-manager-webhook-ovh
-  # The container image tag. When unspecified, the chart `appVersion` is used.
-  # tag: ""
-  # The image pull policy as defined in the Kubernetes documentation.
-  pullPolicy: IfNotPresent
-  # Optional, provide one or more `imagePullSecrets` if your registry requires it.
-  pullSecrets: []
-    # - name: docker-registry-secret
-    # - name: internal-registry-secret
 
-# Override the name of the deployed resources
+  # @schema
+  # required: false
+  # type: string
+  # @schema
+  # -- The registry to use.
+  registry: 'ghcr.io'
+
+  # @schema
+  # required: false
+  # type: string
+  # @schema
+  # -- The repository location on the registry.
+  repository: aureq/cert-manager-webhook-ovh
+
+  # @schema
+  # required: false
+  # type: string
+  # @schema
+  # -- The tag to use from the registry.
+  tag: ''
+
+  # @schema
+  # required: false
+  # enum: [Always,IfNotPresent,Never]
+  # default: IfNotPresent
+  # @schema
+  # -- The image pull policy as defined in the Kubernetes documentation.
+  pullPolicy: IfNotPresent
+
+  # @schema
+  # required: false
+  # type: array
+  # @schema
+  # -- The image pull secrets to use if your registry requires it.
+  pullSecrets: []
+    # - docker-registry-secret
+    # - internal-registry-secret
+
+# @schema
+# required: true
+# type: object
+# @schema
+pod:
+
+  # @schema
+  # required: false
+  # additionalProperties: true
+  # @schema
+  # -- Extra annotations for the Pod spec. See https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/ for more information.
+  annotations: {}
+
+  # @schema
+  # type: object
+  # required: false
+  # additionalProperties: true
+  # @schema
+  # -- Labels to add to the Pod.
+  # See https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
+  podLabels: {}
+
+  # @schema
+  # type: object
+  # required: false
+  # additionalProperties: true
+  # @schema
+  # -- Annotations to add to the Pod.
+  # See https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
+  podAnnotations: {}
+
+  # @schema
+  # type: integer
+  # required: false
+  # minimum: 1
+  # default: 1
+  # @schema
+  # -- Number of replicas in this deployment.
+  replicas: 1
+
+  # @schema
+  # required: false
+  # type: object
+  # additionalProperties: true
+  # @schema
+  # -- Use this option to add environment variables relevant to your deployment.
+  # These fields will be passed on to the container when Chart is deployed.
+  environment: {}
+    # Use these variables to configure the HTTP_PROXY environment variables
+    # HTTP_PROXY: "http://proxy:8080"
+    # HTTPS_PROXY: "http://proxy:8080"
+    # NO_PROXY: "cluster.local,127.0.0.1,localhost,10.0.0.0/8"
+
+  # @schema
+  # required: false
+  # type: object
+  # @schema
+  # -- Define the security context for both the `Pod` and the `Container`.
+  # See the Kubernetes API [reference](https://kubernetes.io/docs/reference/generated/kubernetes-api/latest/#securitycontext-v1-core) and the Kubernetes
+  # [documentation](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/) for more information.
+  securityContext:
+
+    # @schema
+    # required: false
+    # type: object
+    # properties:
+    #   appArmorProfile:
+    #     type: object
+    #     required: false
+    #     properties:
+    #       localHostProfile:
+    #         type: string
+    #         required: false
+    #       type:
+    #         required: false
+    #         enum: [Localhost,RuntimeDefault,Unconfined]
+    #   fsGroup:
+    #     type: integer
+    #     required: false
+    #   fsGroupChangePolicy:
+    #     required: false
+    #     enum: [Always,OnRootMismatch]
+    #   runAsGroup:
+    #     type: integer
+    #     required: false
+    #   runAsNonRoot:
+    #     type: boolean
+    #     required: false
+    #   runAsUser:
+    #     type: integer
+    #     required: false
+    #   seLinuxChangePolicy:
+    #     required: false
+    #     enum: [MountOption,Recursive]
+    #   seLinuxOptions:
+    #     type: object
+    #     required: false
+    #     properties:
+    #       level:
+    #         type: string
+    #         required: false
+    #       role:
+    #         type: string
+    #         required: false
+    #       type:
+    #         type: string
+    #         required: false
+    #       user:
+    #         type: string
+    #         required: false
+    #   seccompProfile:
+    #     type: object
+    #     required: false
+    #     properties:
+    #       localhostProfile:
+    #         type: string
+    #         required: false
+    #       type:
+    #         required: false
+    #         enum: [Localhost,RuntimeDefault,Unconfined]
+    #   supplementalGroups:
+    #     type: array
+    #     items:
+    #       type: integer
+    #       required: false
+    #     required: false
+    #   supplementalGroupsPolicy:
+    #     required: false
+    #     enum: [Merge,Strict]
+    #   sysctls:
+    #     type: array
+    #     items:
+    #       type: object
+    #       required: false
+    #       properties:
+    #         name:
+    #           type: string
+    #           required: true
+    #         value:
+    #           type: string
+    #           required: true
+    # @schema
+    # -- Pod Security Context.
+    pod:
+      runAsUser: 1000
+      runAsGroup: 1000
+
+    # @schema
+    # required: false
+    # type: object
+    # properties:
+    #   allowPrivilegeEscalation:
+    #     type: boolean
+    #     required: false
+    #   appArmorProfile:
+    #     type: object
+    #     required: false
+    #     properties:
+    #       localHostProfile:
+    #         type: string
+    #         required: false
+    #       type:
+    #         required: false
+    #         enum: [Localhost,RuntimeDefault,Unconfined]
+    #   capabilities:
+    #     type: object
+    #     required: false
+    #     properties:
+    #       add:
+    #         type: array
+    #         required: false
+    #         items:
+    #           type: string
+    #           required: false
+    #       drop:
+    #         type: array
+    #         required: false
+    #         items:
+    #           type: string
+    #           required: false
+    #   privileged:
+    #     type: boolean
+    #     required: false
+    #   procMount:
+    #     type: string
+    #     required: false
+    #   readOnlyRootFilesystem:
+    #     type: boolean
+    #     required: false
+    #   runAsGroup:
+    #     type: integer
+    #     required: false
+    #   runAsNonRoot:
+    #     type: boolean
+    #     required: false
+    #   runAsUser:
+    #     type: integer
+    #     required: false
+    #   seLinuxOptions:
+    #     type: object
+    #     required: false
+    #     properties:
+    #       level:
+    #         type: string
+    #         required: false
+    #       role:
+    #         type: string
+    #         required: false
+    #       type:
+    #         type: string
+    #         required: false
+    #       user:
+    #         type: string
+    #         required: false
+    #   seccompProfile:
+    #     type: object
+    #     required: false
+    #     properties:
+    #       localhostProfile:
+    #         type: string
+    #         required: false
+    #       type:
+    #         required: false
+    #         enum: [Localhost,RuntimeDefault,Unconfined]
+    # @schema
+    # -- Container Security Context.
+    container:
+      readOnlyRootFilesystem: true
+      allowPrivilegeEscalation: false
+      privileged: false
+
+  # @schema
+  # required: false
+  # type: integer
+  # minimum: 1
+  # maximum: 65535
+  # default: 8443
+  # @schema
+  # -- The port used by the webhook to receive incoming traffic from the service.
+  # It may be useful to change it if the hostNetwork mode is activated to use an available port.
+  port: 8443
+
+  # @schema
+  # type: boolean
+  # required: false
+  # default: false
+  # @schema
+  # -- Specifies if the webhook should be started in `hostNetwork` mode.
+  # Required for use in some managed Kubernetes clusters (such as AWS EKS) with custom
+  # CNI (such as Calico), because control-plane managed by AWS cannot communicate
+  # with pods' IP CIDR and admission webhooks are not working.
+  hostNetwork: false
+
+  # @schema
+  # required: false
+  # type: string
+  # @schema
+  # -- The optional priority class to be used for the cert-manager-webhook-ovh pod.
+  priorityClassName: ''
+
+  # @schema
+  # required: false
+  # type: object
+  # @schema
+  # -- We usually recommend not to specify default resources and to leave this as a conscious choice for the user.
+  # This also increases chances charts run on environments with little resources, such as Minikube.
+  # If you do want to specify resources, adjust them as necessary as shown below.
+  resources:
+
+    # @schema
+    # required: false
+    # additionalProperties: true
+    # @schema
+    # -- Resource Requests.
+    requests: {}
+    # requests:
+    #   cpu: 100m
+    #   memory: 64Mi
+
+    # @schema
+    # required: false
+    # additionalProperties: true
+    # @schema
+    # -- Resource Limits.
+    limits: {}
+    # limits:
+    #   cpu: 200m
+    #   memory: 96Mi
+
+  # @schema
+  # required: false
+  # type: array
+  # items:
+  #   type: object
+  #   properties:
+  #     key:
+  #       type: string
+  #     operator:
+  #       type: string
+  #       required: false
+  #     value:
+  #       type: string
+  #       required: false
+  #     effect:
+  #       required: false
+  #       enum: [NoExecute,NoSchedule,PreferNoSchedule]
+  # @schema
+  # -- List of tolerations. See https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/ for more information.
+  tolerations: []
+  # tolerations:
+  # - key: 'key1'
+  #   operator: 'Equal'
+  #   value: 'value1'
+  #   effect: 'NoSchedule'
+  #   tolerationSeconds: 3600
+
+  # @schema
+  # required: false
+  # type: object
+  # @schema
+  selectors:
+
+    # @schema
+    # required: false
+    # additionalProperties: true
+    # @schema
+    # -- Node selector. See https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/ for more information.
+    nodeSelector: {}
+    # nodeSelector:
+    #   disktype: 'ssd'
+    #   kubernetes.io/hostname: 'worker-1'
+
+    # @schema
+    # required: false
+    # additionalProperties: true
+    # @schema
+    # -- Affinity selectors. See https://kubernetes.io/docs/tasks/configure-pod-container/assign-pods-nodes-using-node-affinity/ for more information.
+    affinity: {}
+    # affinity:
+    #   nodeAffinity:
+    #     requiredDuringSchedulingIgnoredDuringExecution:
+    #       nodeSelectorTerms:
+    #       - matchExpressions:
+    #         - key: 'kubernetes.io/hostname'
+    #           operator: 'In'
+    #           values:
+    #           - 'worker-1'
+    #           - 'worker-2'
+    #     preferredDuringSchedulingIgnoredDuringExecution:
+    #     - weight: 1
+    #       preference:
+    #         matchExpressions:
+    #         - key: 'node-label-key'
+    #           operator: 'NotIn'
+    #           values:
+    #           - 'not-this'
+    #   podAffinity:
+    #     requiredDuringSchedulingIgnoredDuringExecution:
+    #     - labelSelector:
+    #         matchExpressions:
+    #         - key: 'security'
+    #           operator: 'In'
+    #           values:
+    #           - S1
+    #       topologyKey: 'topology.kubernetes.io/zone'
+    #   podAntiAffinity:
+    #       preferredDuringSchedulingIgnoredDuringExecution:
+    #       - weight: 100
+    #         podAffinityTerm:
+    #           labelSelector:
+    #             matchExpressions:
+    #             - key: 'security'
+    #               operator: 'In'
+    #               values:
+    #               - S2
+    #           topologyKey: 'topology.kubernetes.io/zone'
+
+# @schema
+# required: false
+# type: string
+# @schema
+# -- Override the name of the deployed resources
 nameOverride: ""
-# Override the full name of the deployed resources
+
+# @schema
+# required: false
+# type: string
+# @schema
+# -- Override the full name of the deployed resources
 fullnameOverride: ""
 
-# Use this field to add environment variables relevant to this webhook.
-# These fields will be passed on to the container when Chart is deployed.
-environment:
-  # Use these variables to configure the HTTP_PROXY environment variables
-  # HTTP_PROXY: "http://proxy:8080"
-  # HTTPS_PROXY: "http://proxy:8080"
-  # NO_PROXY: "127.0.0.1,localhost,10.0.0.0/8"
 
-# number of replicas in this deployment
-replicas: 1
-
-# Service configuration for the webhook deployment
+# @schema
+# required: true
+# type: object
+# @schema
+# -- Service configuration for the webhook deployment.
 service:
-  # The service type to use.
+
+  # @schema
+  # required: true
+  # enum: [ClusterIP, NodePort, LoadBalancer]
+  # default: ClusterIP
+  # @schema
+  # -- The service type to use.
   type: ClusterIP
-  # The port used by the service to expose the webhook.
+
+  # @schema
+  # required: true
+  # type: integer
+  # minimum: 1
+  # maximum: 65535
+  # default: 443
+  # @schema
+  # -- The port used by the service.
   port: 443
 
-# Specifies if the webhook should be started in hostNetwork mode.
-#
-# Required for use in some managed kubernetes clusters (such as AWS EKS) with custom
-# CNI (such as calico), because control-plane managed by AWS cannot communicate
-# with pods' IP CIDR and admission webhooks are not working
-hostNetwork: false
+  # @schema
+  # required: false
+  # additionalProperties: true
+  # @schema
+  # -- Extra annotations for the service. See https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/ for more information.
+  annotations: {}
 
-# The port used by the application to expose the service.
-# It may be useful to change it if the hostNetwork mode is activated to use an available port.
-port: 8443
-
-# The optional priority class to be used for the cert-manager-webhook-ovh pod.
-priorityClassName: ""
-
-# Resource requests and limits used by the webhook deployment
-resources: {}
-  # We usually recommend not to specify default resources and to leave this as a conscious
-  # choice for the user. This also increases chances charts run on environments with little
-  # resources, such as Minikube. If you do want to specify resources, uncomment the following
-  # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
-  # requests:
-  #   cpu: 100m
-  #   memory: 64Mi
-  # limits:
-  #   cpu: 200m
-  #   memory: 96Mi
-
-# see https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
-nodeSelector: {}
-
-# see https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/
-tolerations: []
-
-# see https://kubernetes.io/docs/tasks/configure-pod-container/assign-pods-nodes-using-node-affinity/
-affinity: {}
-
-# see https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
-# add annotations to the Deployment
-annotations: {}
-
-# see https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
-# add annotations to the Pod
-podAnnotations: {}
-
-# see https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
-# add labels to the Pod
-podLabels: {}
-
-# Create dynamic manifests via values.
+# @schema
+# type: array
+# required: false
+# items:
+#   type: string
+# @schema
+# -- Create dynamic manifests via values.
 #
 # For example:
 # extraObjects:
