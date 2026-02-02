@@ -1,0 +1,860 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "additionalProperties": false,
+  "properties": {
+    "certManager": {
+      "additionalProperties": false,
+      "description": "The values below should match your cert-manager deployment.\nIf not, you will get permissions errors.",
+      "properties": {
+        "namespace": {
+          "default": "cert-manager",
+          "description": "namespace in which your cert-manager is deployed",
+          "title": "namespace",
+          "type": "string"
+        },
+        "serviceAccountName": {
+          "default": "cert-manager",
+          "description": "cert-manager serverAccount name (default: cert-manager)",
+          "title": "serviceAccountName",
+          "type": "string"
+        }
+      },
+      "required": [
+        "namespace",
+        "serviceAccountName"
+      ],
+      "title": "certManager",
+      "type": "object"
+    },
+    "extraObjects": {
+      "description": "Create dynamic manifests via values.\n\nFor example:\nextraObjects:\n  - |\n    apiVersion: v1\n    kind: ConfigMap\n    metadata:\n      name: '{{ template \"cert-manager.fullname\" . }}-extra-configmap'",
+      "items": {
+        "type": "string"
+      },
+      "title": "extraObjects",
+      "type": "array"
+    },
+    "fullnameOverride": {
+      "default": "",
+      "description": "Override the full name of the deployed resources",
+      "title": "fullnameOverride",
+      "type": "string"
+    },
+    "global": {
+      "description": "Global values are values that can be accessed from any chart or subchart by exactly the same name.",
+      "required": [],
+      "title": "global",
+      "type": "object"
+    },
+    "groupName": {
+      "default": "acme.mycompany.example",
+      "description": "The `groupName` here is used to identify your company or business unit that\ncreated this webhook.\nFor example, this may be `acme.mycompany.example`.\nThis name will need to be referenced in each Issuer's `webhook` stanza to\ninform cert-manager of where to send ChallengePayload resources in order to\nsolve the DNS01 challenge.\nThis group name should be **unique**, hence using your own company's domain\nhere is recommended.",
+      "title": "groupName",
+      "type": "string"
+    },
+    "image": {
+      "additionalProperties": false,
+      "properties": {
+        "pullPolicy": {
+          "default": "IfNotPresent",
+          "description": "The image pull policy as defined in the Kubernetes documentation.",
+          "enum": [
+            "Always",
+            "IfNotPresent",
+            "Never"
+          ],
+          "required": [],
+          "title": "pullPolicy"
+        },
+        "pullSecrets": {
+          "description": "The image pull secrets to use if your registry requires it.",
+          "items": {
+            "required": []
+          },
+          "title": "pullSecrets",
+          "type": "array"
+        },
+        "registry": {
+          "default": "ghcr.io",
+          "description": "The registry to use.",
+          "title": "registry",
+          "type": "string"
+        },
+        "repository": {
+          "default": "aureq/cert-manager-webhook-ovh",
+          "description": "The repository location on the registry.",
+          "title": "repository",
+          "type": "string"
+        },
+        "tag": {
+          "default": "",
+          "description": "The tag to use from the registry.",
+          "title": "tag",
+          "type": "string"
+        }
+      },
+      "required": [],
+      "title": "image",
+      "type": "object"
+    },
+    "issuers": {
+      "description": "One or more issuers to create",
+      "items": {
+        "anyOf": [
+          {
+            "additionalProperties": false,
+            "properties": {
+              "acmeServerUrl": {
+                "default": "https://acme-v02.api.letsencrypt.org/directory",
+                "description": "-– The ACME server URL. For Let's Encrypt, you have 2 options:\n- for production (default): `https://acme-v02.api.letsencrypt.org/directory`\n- for staging: `https://acme-staging-v02.api.letsencrypt.org/directory`",
+                "format": "uri",
+                "title": "acmeServerUrl",
+                "type": "string"
+              },
+              "cnameStrategy": {
+                "default": "None",
+                "description": "Follow CNAME records or not. 2 options:\n- `None` (default): Don't follow CNAME records\n- `Follow`: Follow CNAME records\nSee https://cert-manager.io/docs/configuration/acme/dns01/#delegated-domains-for-dns01 for more information.",
+                "enum": [
+                  "None",
+                  "Follow"
+                ],
+                "required": [],
+                "title": "cnameStrategy"
+              },
+              "create": {
+                "default": false,
+                "description": "When true this issuer is created.",
+                "title": "create",
+                "type": "boolean"
+              },
+              "disableAccountKeyGeneration": {
+                "default": false,
+                "description": "Enables or disables generating a new ACME account key.\nIf `true`, the Issuer resource will not request a new account but will expect the account key to be supplied via an existing secret.\nIf `false`, the cert-manager system will generate a new ACME account key for the Issuer.\nDefaults to `false` when unspecified.\nSee https://cert-manager.io/docs/reference/api-docs/#acme.cert-manager.io/v1.ACMEIssuer",
+                "title": "disableAccountKeyGeneration",
+                "type": "boolean"
+              },
+              "email": {
+                "default": "acme@example.net",
+                "description": "Email to use when registering your account with Let's Encrypt.",
+                "format": "idn-email",
+                "title": "email",
+                "type": "string"
+              },
+              "externalAccountBinding": {
+                "additionalProperties": false,
+                "description": "Define the EAB (external account binding) key using `secretRef`.\nThis is optional and only required if you want to use it.\nSee https://cert-manager.io/docs/configuration/acme/#external-account-bindings for more information.",
+                "properties": {
+                  "enabled": {
+                    "default": false,
+                    "description": "When `enabled` is `true`, the external account binding configuration is applied.",
+                    "title": "enabled",
+                    "type": "boolean"
+                  },
+                  "keyID": {
+                    "default": "",
+                    "description": "The key ID or account ID of which your external account binding is indexed by the external account manager",
+                    "title": "keyID",
+                    "type": "string"
+                  },
+                  "keySecretRef": {
+                    "additionalProperties": false,
+                    "description": "The name and key of a secret containing a base 64 encoded URL string of your external account symmetric MAC key.",
+                    "properties": {
+                      "key": {
+                        "default": "",
+                        "description": "The key name in the secret above that holds the actual EAB HMAC key value.",
+                        "title": "key",
+                        "type": "string"
+                      },
+                      "name": {
+                        "default": "",
+                        "description": "Name of the Kubernetes secret containing the EAB HMAC key.",
+                        "title": "name",
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "name",
+                      "key"
+                    ],
+                    "title": "keySecretRef",
+                    "type": "object"
+                  }
+                },
+                "required": [
+                  "keyID",
+                  "keySecretRef"
+                ],
+                "title": "externalAccountBinding",
+                "type": "object"
+              },
+              "kind": {
+                "default": "ClusterIssuer",
+                "description": "The type of issuer to create. It can either be `ClusterIssuer` or `Issuer`.\nIf `Issuer` is specified, then the `namespace` is also required.\nSee https://cert-manager.io/docs/concepts/issuer/ for more information.",
+                "enum": [
+                  "ClusterIssuer",
+                  "Issuer"
+                ],
+                "required": [],
+                "title": "kind"
+              },
+              "name": {
+                "default": "le-prod",
+                "title": "name",
+                "type": "string"
+              },
+              "namespace": {
+                "default": "default",
+                "description": "If `kind` is `Issuer`, then indicate the namespace in which this issuer should be deployed into.",
+                "title": "namespace",
+                "type": "string"
+              },
+              "ovhAuthentication": {
+                "additionalProperties": false,
+                "description": "Define your credentials below and the chart will create the necessary secret for you.\nIf `ovhAuthenticationMethod` is `application`, then provide:\n  - `applicationKey`, `applicationSecret`, and `applicationConsumerKey`\nIf `ovhAuthenticationMethod` is `oauth2`, then provide:\n  - `oauth2ClientID` and `oauth2ClientSecret`",
+                "properties": {
+                  "applicationConsumerKey": {
+                    "default": "",
+                    "description": "Your OVH consumer key. Leave empty if you are using an existing secret.",
+                    "title": "applicationConsumerKey",
+                    "type": "string"
+                  },
+                  "applicationKey": {
+                    "default": "",
+                    "description": "The OVH application key. Leave empty if you are using an existing secret.",
+                    "title": "applicationKey",
+                    "type": "string"
+                  },
+                  "applicationSecret": {
+                    "default": "",
+                    "description": "The OVH application secret. Leave empty if you are using an existing secret.",
+                    "title": "applicationSecret",
+                    "type": "string"
+                  },
+                  "oauth2ClientID": {
+                    "default": "",
+                    "description": "The OVH OAuth 2 client ID. Leave empty if you are using an existing secret.",
+                    "title": "oauth2ClientID",
+                    "type": "string"
+                  },
+                  "oauth2ClientSecret": {
+                    "default": "",
+                    "description": "The OVH OAuth 2 client secret. Leave empty if you are using an existing secret.",
+                    "title": "oauth2ClientSecret",
+                    "type": "string"
+                  }
+                },
+                "required": [],
+                "title": "ovhAuthentication",
+                "type": "object"
+              },
+              "ovhAuthenticationMethod": {
+                "default": "application",
+                "description": "Define how the webhook should authenticate with the OVH API. It can be either `application` or `oauth2`.\nWhen `ovhAuthenticationMethod` is `application`, then use:\n  - `ovhAuthentication.applicationKey`, `ovhAuthentication.applicationSecret`, and `ovhAuthentication.applicationConsumerKey`\n  or\n  - `ovhAuthenticationRef.applicationKeyRef`, `ovhAuthenticationRef.applicationSecretRef` and `ovhAuthenticationRef.applicationConsumerKeyRef`.\n\nWhen `ovhAuthenticationMethod` is `oauth2`, then use:\n  - `ovhAuthentication.oauth2ClientID` and `ovhAuthentication.oauth2ClientSecret`\n  or\n  - `ovhAuthenticationRef.oauth2ClientIDRef` and `ovhAuthenticationRef.oauth2ClientSecretRef`.",
+                "enum": [
+                  "application",
+                  "oauth2"
+                ],
+                "required": [],
+                "title": "ovhAuthenticationMethod"
+              },
+              "ovhAuthenticationRef": {
+                "additionalProperties": false,
+                "description": "Define the details of a secret already containing the OVH credentials.\nIf `ovhAuthenticationMethod` is `application`, then provide:\n  - `applicationKeyRef`, `applicationSecretRef` and `applicationConsumerKeyRef`.\nIf `ovhAuthenticationMethod` is `oauth2`, then provide:\n  - `oauth2ClientIDRef` and `oauth2ClientSecretRef`.",
+                "properties": {
+                  "applicationConsumerKeyRef": {
+                    "additionalProperties": false,
+                    "description": "The secret reference to an existing OVH consumer key",
+                    "properties": {
+                      "key": {
+                        "default": "applicationConsumerKey",
+                        "description": "The key name in the secret above that holds the actual OVH consumer key value",
+                        "title": "key",
+                        "type": "string"
+                      },
+                      "name": {
+                        "default": "",
+                        "description": "Name of the Kubernetes secret containing the OVH consumer Key",
+                        "title": "name",
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "name",
+                      "key"
+                    ],
+                    "title": "applicationConsumerKeyRef",
+                    "type": "object"
+                  },
+                  "applicationKeyRef": {
+                    "additionalProperties": false,
+                    "description": "The secret reference to an existing OVH application key.",
+                    "properties": {
+                      "key": {
+                        "default": "applicationKey",
+                        "description": "The key name in the secret above that holds the actual OVH application key value",
+                        "title": "key",
+                        "type": "string"
+                      },
+                      "name": {
+                        "default": "",
+                        "description": "Name of the Kubernetes secret containing the OVH Application Key",
+                        "title": "name",
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "name",
+                      "key"
+                    ],
+                    "title": "applicationKeyRef",
+                    "type": "object"
+                  },
+                  "applicationSecretRef": {
+                    "additionalProperties": false,
+                    "description": "The secret reference to an existing OVH application secret.",
+                    "properties": {
+                      "key": {
+                        "default": "applicationSecret",
+                        "description": "The key name in the secret above that holds the actual OVH application secret value",
+                        "title": "key",
+                        "type": "string"
+                      },
+                      "name": {
+                        "default": "",
+                        "description": "Name of the Kubernetes secret containing the OVH Application Secret",
+                        "title": "name",
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "name",
+                      "key"
+                    ],
+                    "title": "applicationSecretRef",
+                    "type": "object"
+                  },
+                  "oauth2ClientIDRef": {
+                    "additionalProperties": false,
+                    "description": "The secret reference to an existing OVH OAuth 2 client ID.",
+                    "properties": {
+                      "key": {
+                        "default": "oauth2ClientID",
+                        "description": "The key name in the secret above that holds the actual OVH OAuth 2 client IDvalue",
+                        "title": "key",
+                        "type": "string"
+                      },
+                      "name": {
+                        "default": "",
+                        "description": "Name of the Kubernetes secret containing the OVH OAuth 2 client ID",
+                        "title": "name",
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "name",
+                      "key"
+                    ],
+                    "title": "oauth2ClientIDRef",
+                    "type": "object"
+                  },
+                  "oauth2ClientSecretRef": {
+                    "additionalProperties": false,
+                    "description": "The secret reference to an existing OVH Auth 2 client secret.",
+                    "properties": {
+                      "key": {
+                        "default": "oauth2ClientSecret",
+                        "description": "The key name in the secret above that holds the actual OVH Auth 2 client secret value",
+                        "title": "key",
+                        "type": "string"
+                      },
+                      "name": {
+                        "default": "",
+                        "description": "Name of the Kubernetes secret containing the OVH Auth 2 client secret",
+                        "title": "name",
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "name",
+                      "key"
+                    ],
+                    "title": "oauth2ClientSecretRef",
+                    "type": "object"
+                  }
+                },
+                "required": [],
+                "title": "ovhAuthenticationRef",
+                "type": "object"
+              },
+              "ovhEndpointName": {
+                "default": "ovh-eu",
+                "description": "The endpoint name of the OVH API. It must be one of the following:\n`ovh-eu`, `ovh-ca`, `kimsufi-eu`, `kimsufi-ca`, `soyoustart-eu`, `soyoustart-ca`, `runabove-ca`.\nSee https://docs.certifytheweb.com/docs/dns/providers/ovh/ for more information.",
+                "enum": [
+                  "ovh-eu",
+                  "ovh-ca",
+                  "kimsufi-eu",
+                  "kimsufi-ca",
+                  "soyoustart-eu",
+                  "soyoustart-ca",
+                  "runabove-ca"
+                ],
+                "required": [],
+                "title": "ovhEndpointName"
+              },
+              "profile": {
+                "default": "classic",
+                "description": "If the ACME server supports profiles, you can specify the profile name here.\nFor more details, see https://cert-manager.io/docs/configuration/acme/#acme-certificate-profiles\nPossible profiles are: `classic`, `tlsserver`, `shortlived`.",
+                "enum": [
+                  "classic",
+                  "tlsserver",
+                  "shortlived"
+                ],
+                "required": [],
+                "title": "profile"
+              }
+            },
+            "required": [
+              "name",
+              "create",
+              "kind",
+              "acmeServerUrl",
+              "email",
+              "ovhEndpointName",
+              "ovhAuthenticationMethod",
+              "ovhAuthenticationRef"
+            ],
+            "type": "object"
+          }
+        ],
+        "required": []
+      },
+      "title": "issuers",
+      "type": "array"
+    },
+    "nameOverride": {
+      "default": "",
+      "description": "Override the name of the deployed resources",
+      "title": "nameOverride",
+      "type": "string"
+    },
+    "pod": {
+      "additionalProperties": false,
+      "properties": {
+        "annotations": {
+          "additionalProperties": true,
+          "description": "Extra annotations for the Pod spec. See https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/ for more information.",
+          "required": [],
+          "title": "annotations"
+        },
+        "environment": {
+          "additionalProperties": true,
+          "description": "Use this option to add environment variables relevant to your deployment.\nThese fields will be passed on to the container when Chart is deployed.",
+          "required": [],
+          "title": "environment",
+          "type": "object"
+        },
+        "hostNetwork": {
+          "default": false,
+          "description": "Specifies if the webhook should be started in `hostNetwork` mode.\nRequired for use in some managed Kubernetes clusters (such as AWS EKS) with custom\nCNI (such as Calico), because control-plane managed by AWS cannot communicate\nwith pods' IP CIDR and admission webhooks are not working.",
+          "title": "hostNetwork",
+          "type": "boolean"
+        },
+        "podAnnotations": {
+          "additionalProperties": true,
+          "description": "Annotations to add to the Pod.\nSee https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/",
+          "required": [],
+          "title": "podAnnotations",
+          "type": "object"
+        },
+        "podLabels": {
+          "additionalProperties": true,
+          "description": "Labels to add to the Pod.\nSee https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/",
+          "required": [],
+          "title": "podLabels",
+          "type": "object"
+        },
+        "port": {
+          "default": 8443,
+          "description": "The port used by the webhook to receive incoming traffic from the service.\nIt may be useful to change it if the hostNetwork mode is activated to use an available port.",
+          "maximum": 65535,
+          "minimum": 1,
+          "title": "port",
+          "type": "integer"
+        },
+        "priorityClassName": {
+          "default": "",
+          "description": "The optional priority class to be used for the cert-manager-webhook-ovh pod.",
+          "title": "priorityClassName",
+          "type": "string"
+        },
+        "replicas": {
+          "default": 1,
+          "description": "Number of replicas in this deployment.",
+          "minimum": 1,
+          "title": "replicas",
+          "type": "integer"
+        },
+        "resources": {
+          "additionalProperties": false,
+          "description": "We usually recommend not to specify default resources and to leave this as a conscious choice for the user.\nThis also increases chances charts run on environments with little resources, such as Minikube.\nIf you do want to specify resources, adjust them as necessary as shown below.",
+          "properties": {
+            "limits": {
+              "additionalProperties": true,
+              "description": "Resource Limits.",
+              "required": [],
+              "title": "limits"
+            },
+            "requests": {
+              "additionalProperties": true,
+              "description": "Resource Requests.",
+              "required": [],
+              "title": "requests"
+            }
+          },
+          "required": [],
+          "title": "resources",
+          "type": "object"
+        },
+        "securityContext": {
+          "additionalProperties": false,
+          "description": "Define the security context for both the `Pod` and the `Container`.\nSee the Kubernetes API [reference](https://kubernetes.io/docs/reference/generated/kubernetes-api/latest/#securitycontext-v1-core) and the Kubernetes\n[documentation](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/) for more information.",
+          "properties": {
+            "container": {
+              "additionalProperties": false,
+              "description": "Container Security Context.",
+              "properties": {
+                "allowPrivilegeEscalation": {
+                  "type": "boolean"
+                },
+                "appArmorProfile": {
+                  "properties": {
+                    "localHostProfile": {
+                      "type": "string"
+                    },
+                    "type": {
+                      "enum": [
+                        "Localhost",
+                        "RuntimeDefault",
+                        "Unconfined"
+                      ],
+                      "required": []
+                    }
+                  },
+                  "required": [],
+                  "type": "object"
+                },
+                "capabilities": {
+                  "properties": {
+                    "add": {
+                      "items": {
+                        "type": "string"
+                      },
+                      "type": "array"
+                    },
+                    "drop": {
+                      "items": {
+                        "type": "string"
+                      },
+                      "type": "array"
+                    }
+                  },
+                  "required": [],
+                  "type": "object"
+                },
+                "privileged": {
+                  "type": "boolean"
+                },
+                "procMount": {
+                  "type": "string"
+                },
+                "readOnlyRootFilesystem": {
+                  "type": "boolean"
+                },
+                "runAsGroup": {
+                  "type": "integer"
+                },
+                "runAsNonRoot": {
+                  "type": "boolean"
+                },
+                "runAsUser": {
+                  "type": "integer"
+                },
+                "seLinuxOptions": {
+                  "properties": {
+                    "level": {
+                      "type": "string"
+                    },
+                    "role": {
+                      "type": "string"
+                    },
+                    "type": {
+                      "type": "string"
+                    },
+                    "user": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [],
+                  "type": "object"
+                },
+                "seccompProfile": {
+                  "properties": {
+                    "localhostProfile": {
+                      "type": "string"
+                    },
+                    "type": {
+                      "enum": [
+                        "Localhost",
+                        "RuntimeDefault",
+                        "Unconfined"
+                      ],
+                      "required": []
+                    }
+                  },
+                  "required": [],
+                  "type": "object"
+                }
+              },
+              "required": [],
+              "title": "container",
+              "type": "object"
+            },
+            "pod": {
+              "additionalProperties": false,
+              "description": "Pod Security Context.",
+              "properties": {
+                "appArmorProfile": {
+                  "properties": {
+                    "localHostProfile": {
+                      "type": "string"
+                    },
+                    "type": {
+                      "enum": [
+                        "Localhost",
+                        "RuntimeDefault",
+                        "Unconfined"
+                      ],
+                      "required": []
+                    }
+                  },
+                  "required": [],
+                  "type": "object"
+                },
+                "fsGroup": {
+                  "type": "integer"
+                },
+                "fsGroupChangePolicy": {
+                  "enum": [
+                    "Always",
+                    "OnRootMismatch"
+                  ],
+                  "required": []
+                },
+                "runAsGroup": {
+                  "type": "integer"
+                },
+                "runAsNonRoot": {
+                  "type": "boolean"
+                },
+                "runAsUser": {
+                  "type": "integer"
+                },
+                "seLinuxChangePolicy": {
+                  "enum": [
+                    "MountOption",
+                    "Recursive"
+                  ],
+                  "required": []
+                },
+                "seLinuxOptions": {
+                  "properties": {
+                    "level": {
+                      "type": "string"
+                    },
+                    "role": {
+                      "type": "string"
+                    },
+                    "type": {
+                      "type": "string"
+                    },
+                    "user": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [],
+                  "type": "object"
+                },
+                "seccompProfile": {
+                  "properties": {
+                    "localhostProfile": {
+                      "type": "string"
+                    },
+                    "type": {
+                      "enum": [
+                        "Localhost",
+                        "RuntimeDefault",
+                        "Unconfined"
+                      ],
+                      "required": []
+                    }
+                  },
+                  "required": [],
+                  "type": "object"
+                },
+                "supplementalGroups": {
+                  "items": {
+                    "type": "integer"
+                  },
+                  "type": "array"
+                },
+                "supplementalGroupsPolicy": {
+                  "enum": [
+                    "Merge",
+                    "Strict"
+                  ],
+                  "required": []
+                },
+                "sysctls": {
+                  "items": {
+                    "properties": {
+                      "name": {
+                        "type": "string"
+                      },
+                      "value": {
+                        "type": "string"
+                      }
+                    },
+                    "required": [],
+                    "type": "object"
+                  },
+                  "type": "array"
+                }
+              },
+              "required": [],
+              "title": "pod",
+              "type": "object"
+            }
+          },
+          "required": [],
+          "title": "securityContext",
+          "type": "object"
+        },
+        "selectors": {
+          "additionalProperties": false,
+          "properties": {
+            "affinity": {
+              "additionalProperties": true,
+              "description": "Affinity selectors. See https://kubernetes.io/docs/tasks/configure-pod-container/assign-pods-nodes-using-node-affinity/ for more information.",
+              "required": [],
+              "title": "affinity"
+            },
+            "nodeSelector": {
+              "additionalProperties": true,
+              "description": "Node selector. See https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/ for more information.",
+              "required": [],
+              "title": "nodeSelector"
+            }
+          },
+          "required": [],
+          "title": "selectors",
+          "type": "object"
+        },
+        "tolerations": {
+          "description": "List of tolerations. See https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/ for more information.",
+          "items": {
+            "properties": {
+              "effect": {
+                "enum": [
+                  "NoExecute",
+                  "NoSchedule",
+                  "PreferNoSchedule"
+                ],
+                "required": []
+              },
+              "key": {
+                "type": "string"
+              },
+              "operator": {
+                "type": "string"
+              },
+              "value": {
+                "type": "string"
+              }
+            },
+            "required": [],
+            "type": "object"
+          },
+          "title": "tolerations",
+          "type": "array"
+        }
+      },
+      "required": [],
+      "title": "pod",
+      "type": "object"
+    },
+    "rbac": {
+      "additionalProperties": false,
+      "description": "RBAC configuration for the webhook deployment",
+      "properties": {
+        "roleType": {
+          "default": "Role",
+          "description": "If the secret of the issuer is in a different namespace, change `Role` (default)\nto `ClusterRole` so the webhook is able to access this secret.",
+          "enum": [
+            "Role",
+            "ClusterRole"
+          ],
+          "required": [],
+          "title": "roleType"
+        }
+      },
+      "required": [],
+      "title": "rbac",
+      "type": "object"
+    },
+    "service": {
+      "additionalProperties": false,
+      "description": "Service configuration for the webhook deployment.",
+      "properties": {
+        "annotations": {
+          "additionalProperties": true,
+          "description": "Extra annotations for the service. See https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/ for more information.",
+          "required": [],
+          "title": "annotations"
+        },
+        "port": {
+          "default": 443,
+          "description": "The port used by the service.",
+          "maximum": 65535,
+          "minimum": 1,
+          "title": "port",
+          "type": "integer"
+        },
+        "type": {
+          "default": "ClusterIP",
+          "description": "The service type to use.",
+          "enum": [
+            "ClusterIP",
+            "NodePort",
+            "LoadBalancer"
+          ],
+          "required": [],
+          "title": "type"
+        }
+      },
+      "required": [
+        "type",
+        "port"
+      ],
+      "title": "service",
+      "type": "object"
+    }
+  },
+  "required": [
+    "groupName",
+    "certManager",
+    "pod",
+    "service"
+  ],
+  "type": "object"
+}
