@@ -268,7 +268,7 @@ issuers:
         # required: true
         # type: string
         # @schema
-        # -- The key name in the secret above that holds the actual OVH OAuth 2 client IDvalue
+        # -- The key name in the secret above that holds the actual OVH OAuth 2 client ID value
         key: oauth2ClientID
 
       # @schema
