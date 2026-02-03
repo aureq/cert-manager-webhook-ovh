@@ -1,0 +1,19 @@
+---
+suite: Testing `root.certManager` option in `rbac.yaml`
+templates:
+  - rbac.yaml
+values:
+  - values/valid/values.yaml
+tests:
+  - it: Validate use of `certManager` option in `ClusterRoleBinding`
+    documentSelector:
+      path: $[?(@.kind == "ClusterRoleBinding")].metadata.name
+      value: RELEASE-NAME-cert-manager-webhook-ovh:domain-solver
+      documentIndex: 0
+    asserts:
+      - equal:
+          path: subjects[0].name
+          value: cert-manager
+      - equal:
+          path: subjects[0].namespace
+          value: cert-system
