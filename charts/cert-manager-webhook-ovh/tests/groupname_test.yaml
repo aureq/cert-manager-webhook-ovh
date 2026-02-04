@@ -1,5 +1,5 @@
 ---
-suite: Testing `root.groupName` option in `apiservice.yaml`
+suite: Testing `root.groupName` option in `apiservice.yaml` 1/1
 templates:
   - apiservice.yaml
 values:
@@ -17,7 +17,7 @@ tests:
           path: spec.group
           value: acme.helm.unittest.example
 ---
-suite: Testing `root.groupName` option in `deployment.yaml`
+suite: Testing `root.groupName` option in `deployment.yaml` 1/1
 templates:
   - deployment.yaml
 values:
@@ -32,7 +32,7 @@ tests:
           path: spec.template.spec.containers[0].env[0].value
           value: acme.helm.unittest.example
 ---
-suite: Testing `root.groupName` option in `issuer.yaml`
+suite: Testing `root.groupName` option in `issuer.yaml` 1/1
 templates:
   - issuer.yaml
 values:
@@ -47,7 +47,7 @@ tests:
           path: spec.acme.solvers[0].dns01.webhook.groupName
           value: acme.helm.unittest.example
 ---
-suite: Testing `root.groupName` option in `rbac.yaml`
+suite: Testing `root.groupName` option in `rbac.yaml` 1/1
 templates:
   - rbac.yaml
 values:

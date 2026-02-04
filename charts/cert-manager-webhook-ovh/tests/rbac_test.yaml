@@ -1,0 +1,53 @@
+---
+suite: Testing `root.rbac` option in `rbac.yaml` 1/1
+templates:
+  - rbac.yaml
+values:
+  - values/valid/values.yaml
+tests:
+  - it: Validate use of `rbac` option in `Role`/`ClusterRole`
+    documentSelector:
+      path: $[?(@.kind == "Role")].metadata.name
+      value: RELEASE-NAME-cert-manager-webhook-ovh:secret-reader
+    asserts:
+      - equal:
+          path: kind
+          value: Role
+      - equal:
+          path: metadata.name
+          value: RELEASE-NAME-cert-manager-webhook-ovh:secret-reader
+      - equal:
+          path: rules[0].resourceNames
+          value:
+            - "le-staging-app-dir-ovh-credentials"
+            - "le-staging-app-ref-ovh-credentials"
+            - "le-staging-oidc-dir-ovh-credentials"
+            - "letsencrypt-prod-ovh-credentials"
+---
+suite: Testing `root.rbac` option in `rbac.yaml` 1/2
+templates:
+  - rbac.yaml
+values:
+  - values/valid/values.yaml
+set:
+  rbac:
+    roleType: ClusterRole
+tests:
+  - it: Validate use of `rbac` option in `Role`/`ClusterRole`
+    documentSelector:
+      path: $[?(@.kind == "ClusterRole")].metadata.name
+      value: RELEASE-NAME-cert-manager-webhook-ovh:secret-reader
+    asserts:
+      - equal:
+          path: kind
+          value: ClusterRole
+      - equal:
+          path: metadata.name
+          value: RELEASE-NAME-cert-manager-webhook-ovh:secret-reader
+      - equal:
+          path: rules[0].resourceNames
+          value:
+            - "le-staging-app-dir-ovh-credentials"
+            - "le-staging-app-ref-ovh-credentials"
+            - "le-staging-oidc-dir-ovh-credentials"
+            - "letsencrypt-prod-ovh-credentials"
