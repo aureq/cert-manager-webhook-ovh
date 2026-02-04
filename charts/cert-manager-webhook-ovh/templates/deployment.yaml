@@ -37,7 +37,7 @@ spec:
       {{- with $context := .Values.pod.hostNetwork }}
       hostNetwork: {{ $context }}
       {{- end }}
-      {{- with $context := .Values.priorityClassName }}
+      {{- with $context := .Values.pod.priorityClassName }}
       priorityClassName: {{ $context | quote }}
       {{- end }}
       containers:
