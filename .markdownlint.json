@@ -8,6 +8,9 @@
         "lines_above": 1,
         "lines_below": 0
     },
+    "MD024": {
+        "siblings_only": true
+    },
     "MD029": false,
     "MD031": false,
     "MD032": false
