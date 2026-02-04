@@ -1,5 +1,40 @@
 # Changelog
 
+## 0.9.0-alpha.0
+
+### Major features
+
+- 🎉 refactor/reorganize Helm chart `values.yaml` structure
+- 🎉 add JSON schema annotations to all options in `values.yaml`
+- 🚀 add JSON schema for Helm chart `values.yaml` validation
+- 📄 add Helm chart `README.md` with values documentation
+- 🌿 rewrite unit tests to fully unit test the Helm Chart
+
+### Breaking changes
+
+⚠️ Due to the refactor of the Helm chart structure, the `values.yaml`
+file has been reorganized and some configuration keys have been moved.
+Please refer to the updated [`values.yaml`](/aureq/cert-manager-webhook-ovh/blob/main/charts/cert-manager-webhook-ovh/values.yaml)
+and the new [`README.md`](/aureq/cert-manager-webhook-ovh/blob/main/charts/cert-manager-webhook-ovh/README.md)
+for details on the new structure and configuration options.
+
+### Noteworthy changes
+
+- 🌿 add unit tests for `groupName`, `certManager`, `rbac`, `image` and `service` options
+- 🌱 add YAML language server schema annotation to `values.yaml`
+- 🌿 add `annotations` support for `service`
+- 📄 add inline documentation to `values.yaml`, including JSON schema for schema generation
+- 📄 improve `profile` option comments in `values.yaml`
+- 📄 update release workflow with `helm-docs` and `helm-schema` steps in `README.md`
+- 📄 update feature list in `README.md`
+- 📄 clarify image.tag accepts version numbers or digests
+- ⚙ add `helm-docs`, `helm-schema`, and `helm-unittest` targets in `Makefile`
+- 🔥 remove legacy test files and test value fixtures
+
+### Dependencies
+
+- ⏩ upgrade github.com/cert-manager/cert-manager to v1.19.3
+
 ## 0.8.1-alpha.1
 
 ### Noteworthy changes
