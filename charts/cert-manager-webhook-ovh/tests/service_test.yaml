@@ -1,0 +1,44 @@
+---
+suite: Testing `root.service` option in `service.yaml` 1/1
+templates:
+  - service.yaml
+values:
+  - values/valid/values.yaml
+chart:
+  version: 1.0.0
+  appVersion: 1.0.0
+set:
+  service:
+    annotations:
+      annotation-1: annotation-value-1
+      annotation-2: annotation-value-2
+tests:
+  - it: Validate use of `service` option in `Service`
+    documentSelector:
+      path: $[?(@.kind == "Service")].metadata.name
+      value: RELEASE-NAME-cert-manager-webhook-ovh
+    asserts:
+      - equal:
+          path: kind
+          value: Service
+      - equal:
+          path: metadata.name
+          value: RELEASE-NAME-cert-manager-webhook-ovh
+      - equal:
+          path: spec.type
+          value: ClusterIP
+      - equal:
+          path: spec.ports[0].port
+          value: 443
+      - equal:
+          path: spec.selector["app.kubernetes.io/name"]
+          value: cert-manager-webhook-ovh
+      - equal:
+          path: spec.selector["app.kubernetes.io/instance"]
+          value: RELEASE-NAME
+      - equal:
+          path: metadata.annotations["annotation-1"]
+          value: annotation-value-1
+      - equal:
+          path: metadata.annotations["annotation-2"]
+          value: annotation-value-2
