@@ -88,7 +88,7 @@
         },
         "tag": {
           "default": "",
-          "description": "The tag to use from the registry.",
+          "description": "The tag to use from the registry. It can either be a version number like `1.0.0`\nor a digest like `sha256:abcdef0123456789abcdef0123456789abcdef0123456789abcdef0123456789`.",
           "title": "tag",
           "type": "string"
         }
@@ -340,7 +340,7 @@
                     "properties": {
                       "key": {
                         "default": "oauth2ClientID",
-                        "description": "The key name in the secret above that holds the actual OVH OAuth 2 client IDvalue",
+                        "description": "The key name in the secret above that holds the actual OVH OAuth 2 client ID value",
                         "title": "key",
                         "type": "string"
                       },

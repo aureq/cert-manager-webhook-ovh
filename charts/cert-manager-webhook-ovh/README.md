@@ -50,7 +50,7 @@ OVH DNS cert-manager ACME webhook
 | issuers[0].ovhAuthenticationRef | object | `{"applicationConsumerKeyRef":{"key":"applicationConsumerKey","name":""},"applicationKeyRef":{"key":"applicationKey","name":""},"applicationSecretRef":{"key":"applicationSecret","name":""},"oauth2ClientIDRef":{"key":"oauth2ClientID","name":""},"oauth2ClientSecretRef":{"key":"oauth2ClientSecret","name":""}}` | Define the details of a secret already containing the OVH credentials. If `ovhAuthenticationMethod` is `application`, then provide:   - `applicationKeyRef`, `applicationSecretRef` and `applicationConsumerKeyRef`. If `ovhAuthenticationMethod` is `oauth2`, then provide:   - `oauth2ClientIDRef` and `oauth2ClientSecretRef`. |
 | issuers[0].ovhAuthenticationRef.oauth2ClientIDRef | object | `{"key":"oauth2ClientID","name":""}` | The secret reference to an existing OVH OAuth 2 client ID. |
 | issuers[0].ovhAuthenticationRef.oauth2ClientIDRef.name | string | `""` | Name of the Kubernetes secret containing the OVH OAuth 2 client ID |
-| issuers[0].ovhAuthenticationRef.oauth2ClientIDRef.key | string | `"oauth2ClientID"` | The key name in the secret above that holds the actual OVH OAuth 2 client IDvalue |
+| issuers[0].ovhAuthenticationRef.oauth2ClientIDRef.key | string | `"oauth2ClientID"` | The key name in the secret above that holds the actual OVH OAuth 2 client ID value |
 | issuers[0].ovhAuthenticationRef.oauth2ClientSecretRef | object | `{"key":"oauth2ClientSecret","name":""}` | The secret reference to an existing OVH Auth 2 client secret. |
 | issuers[0].ovhAuthenticationRef.oauth2ClientSecretRef.name | string | `""` | Name of the Kubernetes secret containing the OVH Auth 2 client secret |
 | issuers[0].ovhAuthenticationRef.oauth2ClientSecretRef.key | string | `"oauth2ClientSecret"` | The key name in the secret above that holds the actual OVH Auth 2 client secret value |
@@ -67,7 +67,7 @@ OVH DNS cert-manager ACME webhook
 | rbac.roleType | string | `"Role"` | If the secret of the issuer is in a different namespace, change `Role` (default) to `ClusterRole` so the webhook is able to access this secret. |
 | image.registry | string | `"ghcr.io"` | The registry to use. |
 | image.repository | string | `"aureq/cert-manager-webhook-ovh"` | The repository location on the registry. |
-| image.tag | string | `""` | The tag to use from the registry. |
+| image.tag | string | `""` | The tag to use from the registry. It can either be a version number like `1.0.0` or a digest like `sha256:abcdef0123456789abcdef0123456789abcdef0123456789abcdef0123456789`. |
 | image.pullPolicy | string | `"IfNotPresent"` | The image pull policy as defined in the Kubernetes documentation. |
 | image.pullSecrets | list | `[]` | The image pull secrets to use if your registry requires it. |
 | pod.annotations | object | `{}` | Extra annotations for the Pod spec. See https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/ for more information. |
