@@ -394,7 +394,8 @@ image:
   # required: false
   # type: string
   # @schema
-  # -- The tag to use from the registry.
+  # -- The tag to use from the registry. It can either be a version number like `1.0.0`
+  # or a digest like `sha256:abcdef0123456789abcdef0123456789abcdef0123456789abcdef0123456789`.
   tag: ''
 
   # @schema
