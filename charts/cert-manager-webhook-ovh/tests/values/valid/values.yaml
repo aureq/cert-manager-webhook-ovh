@@ -243,8 +243,8 @@ pod:
   podAnnotations: {}
   replicas: 1
   environment:
-    HTTP_PROXY: "http://proxy.local.menfin.net:3129"
-    HTTPS_PROXY: "http://proxy.local.menfin.net:3129"
+    HTTP_PROXY: "http://proxy.example.net:3129"
+    HTTPS_PROXY: "http://proxy.example.net:3129"
     NO_PROXY: "10.0.0.0/8,127.0.0.0/8,172.16.0.0/12,192.168.0.0/16,*.svc,*.cluster.local,*.svc.cluster.local,169.254.169.254,127.0.0.1,localhost,localhost.localdomain"
 
   securityContext:
