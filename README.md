@@ -15,6 +15,8 @@ Please star this repository to help others find it.
 - Helm chart repository for ease and simplicity.
 - Role based access control, across namespace.
 - Support for optional External Account Binding (EAB).
+- JSON schema for `values.yaml` automatic validation.
+- Full [documentation](tree/main/charts/cert-manager-webhook-ovh) of `values.yaml`.
 
 ## Documentation
 
