@@ -26,11 +26,6 @@ jobs:
         # with:
         #   version: v3.19.5
 
-      - name: Install chart unittest
-        run: |
-          helm env
-          helm plugin install https://github.com/helm-unittest/helm-unittest
-
       - name: Run unitests
         run: |
           make helm-unittest
