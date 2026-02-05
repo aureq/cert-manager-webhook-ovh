@@ -237,6 +237,7 @@ image:
   pullPolicy: IfNotPresent
   pullSecrets: []
 
+# ✅ (missing selectors)
 pod:
   annotations: {}
   podLabels: {}
@@ -273,9 +274,12 @@ pod:
     nodeSelector: {}
     affinity: {}
 
+# ✅
 nameOverride: ""
+# ✅
 fullnameOverride: ""
 
+# ✅
 service:
   type: ClusterIP
   port: 443
