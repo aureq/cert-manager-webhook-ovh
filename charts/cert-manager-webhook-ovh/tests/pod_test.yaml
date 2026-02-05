@@ -1,0 +1,101 @@
+---
+suite: Testing `root.pod` option in `deployment.yaml` 1/1
+templates:
+  - deployment.yaml
+values:
+  - values/valid/values.yaml
+chart:
+  version: 1.0.0
+  appVersion: 1.0.0
+set:
+  pod:
+    annotations:
+      annotation-1: annotation-value-1
+      annotation-2: annotation-value-2
+    podAnnotations:
+      pod-annotation-1: pod-annotation-value-1
+      pod-annotation-2: pod-annotation-value-2
+    podLabels:
+      pod-label-1: pod-label-value-1
+      pod-label-2: pod-label-value-2
+    hostNetwork: true
+    priorityClassName: priority-class-1
+tests:
+  - it: Validate use of `pod` option in `Deployment`
+    documentSelector:
+      path: $[?(@.kind == "Deployment")].metadata.name
+      value: RELEASE-NAME-cert-manager-webhook-ovh
+    asserts:
+      - equal:
+          path: kind
+          value: Deployment
+      - equal:
+          path: metadata.name
+          value: RELEASE-NAME-cert-manager-webhook-ovh
+      - equal:
+          path: metadata.annotations["annotation-1"]
+          value: annotation-value-1
+      - equal:
+          path: metadata.annotations["annotation-2"]
+          value: annotation-value-2
+      - equal:
+          path: spec.template.metadata.annotations["pod-annotation-1"]
+          value: pod-annotation-value-1
+      - equal:
+          path: spec.template.metadata.annotations["pod-annotation-2"]
+          value: pod-annotation-value-2
+      - equal:
+          path: spec.template.metadata.labels["pod-label-1"]
+          value: pod-label-value-1
+      - equal:
+          path: spec.template.metadata.labels["pod-label-2"]
+          value: pod-label-value-2
+      - equal:
+          path: spec.replicas
+          value: 1
+      - equal:
+          path: spec.template.spec.containers[0].name
+          value: cert-manager-webhook-ovh
+      - equal:
+          path: spec.template.spec.containers[0].env
+          value:
+            - name: GROUP_NAME
+              value: acme.helm.unittest.example
+            - name: HTTPS_PROXY
+              value: http://proxy.example.net:3129
+            - name: HTTP_PROXY
+              value: http://proxy.example.net:3129
+            - name: NO_PROXY
+              value: 10.0.0.0/8,127.0.0.0/8,172.16.0.0/12,192.168.0.0/16,*.svc,*.cluster.local,*.svc.cluster.local,169.254.169.254,127.0.0.1,localhost,localhost.localdomain
+      - equal:
+          path: spec.template.spec.securityContext
+          value:
+            runAsUser: 1000
+            runAsGroup: 1000
+      - equal:
+          path: spec.template.spec.containers[0].securityContext
+          value:
+            readOnlyRootFilesystem: true
+            allowPrivilegeEscalation: false
+            privileged: false
+      - equal:
+          path: spec.template.spec.containers[0].ports[0].containerPort
+          value: 8443
+      - equal:
+          path: spec.template.spec.containers[0].args[0]
+          value: "--secure-port=8443"
+      - equal:
+          path: spec.template.spec.hostNetwork
+          value: true
+      - equal:
+          path: spec.template.spec.priorityClassName
+          value: priority-class-1
+      - equal:
+          path: spec.template.spec.containers[0].resources
+          value:
+            requests:
+              cpu: 100m
+              memory: 64Mi
+            limits:
+              cpu: 200m
+              memory: 96Mi
