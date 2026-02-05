@@ -23,7 +23,7 @@ Helm template rendering.
 
 ### Noteworthy changes
 
-- 🌿 add unit tests for `groupName`, `certManager`, `rbac`, `image` and `service` options
+- 🌿 add unit tests for `groupName`, `certManager`, `rbac`, `image`, `service` and `pod` options
 - 🌱 add YAML language server schema annotation to `values.yaml`
 - 🌿 add `annotations` support for `service`
 - 📄 add inline documentation to `values.yaml`, including JSON schema for schema generation
