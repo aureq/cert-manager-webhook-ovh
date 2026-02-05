@@ -18,6 +18,9 @@ Please refer to the updated [`values.yaml`](/aureq/cert-manager-webhook-ovh/blob
 and the new [`README.md`](/aureq/cert-manager-webhook-ovh/blob/main/charts/cert-manager-webhook-ovh/README.md)
 for details on the new structure and configuration options.
 
+⚠️ ️Remove support for deployment `tolerations` due to a problem with the
+Helm template rendering.
+
 ### Noteworthy changes
 
 - 🌿 add unit tests for `groupName`, `certManager`, `rbac`, `image` and `service` options
@@ -29,6 +32,7 @@ for details on the new structure and configuration options.
 - 📄 update feature list in `README.md`
 - 📄 clarify image.tag accepts version numbers or digests
 - ⚙ add `helm-docs`, `helm-schema`, and `helm-unittest` targets in `Makefile`
+- 🔥 remove deployment `tolerations` due to a problem with the Helm template rendering.
 - 🔥 remove legacy test files and test value fixtures
 
 ### Dependencies
