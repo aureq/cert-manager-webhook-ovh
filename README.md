@@ -4,7 +4,7 @@
 
 This is a webhook solver for [OVH](http://www.ovh.com) DNS. In short, if your domain has its DNS servers hosted with OVH, you can solve DNS challenges using Cert Manager and OVH Webhook for Cert Manager.
 
-Please star this repository to help others find it.
+⭐ If you are using this project, please consider supporting it by starring the repository. It helps us a lot to keep maintaining and improving this project. Thank you!
 
 ## Features
 

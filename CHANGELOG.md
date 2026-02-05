@@ -2,6 +2,8 @@
 
 ## 0.9.0-alpha.0
 
+⭐ If you are using this project, please consider supporting it by starring the repository. It helps us a lot to keep maintaining and improving this project. Thank you!
+
 ### Major features
 
 - 🎉 refactor/reorganize Helm chart `values.yaml` structure
