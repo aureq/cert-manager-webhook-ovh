@@ -26,9 +26,9 @@ fi
 if [ -d "$CHART_DIR" ]; then
     echo -n "Linting Chart $CHART_DIR: "
     # check for helm syntax problems
-    helm lint "$CHART_DIR" --set "configVersion=${CONFIG_VERSION}" >/dev/null 2>&1 || exit 1
+    helm lint "$CHART_DIR" >/dev/null 2>&1 || exit 1
     # check for any error returned by the chart itself
-    helm lint "$CHART_DIR" --set "configVersion=${CONFIG_VERSION}" 2>&1 >/dev/null | grep -i 'error' >/dev/null && exit 1
+    helm lint "$CHART_DIR" 2>&1 >/dev/null | grep -i 'error' >/dev/null && exit 1
     echo "passed."
 else
     echo "Missing '$CHART_DIR'"
