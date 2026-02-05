@@ -26,7 +26,11 @@ jobs:
         # with:
         #   version: v3.19.5
 
-      - name: Run unitests
+      - name: Install Helm unittest plugin
+        run: |
+          make install-helm-unittest
+
+      - name: Run the Chart unit tests
         run: |
           make helm-unittest
 
