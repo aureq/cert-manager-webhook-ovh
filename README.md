@@ -16,7 +16,7 @@ This is a webhook solver for [OVH](http://www.ovh.com) DNS. In short, if your do
 - Role based access control, across namespace.
 - Support for optional External Account Binding (EAB).
 - JSON schema for `values.yaml` automatic validation.
-- Full [documentation](tree/main/charts/cert-manager-webhook-ovh) of `values.yaml`.
+- Full [documentation](/charts/cert-manager-webhook-ovh) of `values.yaml`.
 
 ## Documentation
 

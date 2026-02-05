@@ -14,14 +14,9 @@
 
 ### Breaking changes
 
-⚠️ Due to the refactor of the Helm chart structure, the `values.yaml`
-file has been reorganized and some configuration keys have been moved.
-Please refer to the updated [`values.yaml`](/aureq/cert-manager-webhook-ovh/blob/main/charts/cert-manager-webhook-ovh/values.yaml)
-and the new [`README.md`](/aureq/cert-manager-webhook-ovh/blob/main/charts/cert-manager-webhook-ovh/README.md)
-for details on the new structure and configuration options.
+⚠️ Due to the refactor of the Helm chart structure, the `values.yaml` file has been reorganized and some configuration keys have been moved. Please refer to the updated [`values.yaml`](/charts/cert-manager-webhook-ovh/values.yaml) and the new [`README.md`](/charts/cert-manager-webhook-ovh/README.md) for details on the new structure and configuration options.
 
-⚠️ ️Remove support for deployment `tolerations` due to a problem with the
-Helm template rendering.
+⚠️ ️Remove support for deployment `tolerations` due to a problem with the Helm template rendering.
 
 ### Noteworthy changes
 
