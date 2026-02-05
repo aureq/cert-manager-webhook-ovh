@@ -706,33 +706,6 @@ pod:
 
   # @schema
   # required: false
-  # type: array
-  # items:
-  #   type: object
-  #   properties:
-  #     key:
-  #       type: string
-  #     operator:
-  #       type: string
-  #       required: false
-  #     value:
-  #       type: string
-  #       required: false
-  #     effect:
-  #       required: false
-  #       enum: [NoExecute,NoSchedule,PreferNoSchedule]
-  # @schema
-  # -- List of tolerations. See https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/ for more information.
-  tolerations: []
-  # tolerations:
-  # - key: 'key1'
-  #   operator: 'Equal'
-  #   value: 'value1'
-  #   effect: 'NoSchedule'
-  #   tolerationSeconds: 3600
-
-  # @schema
-  # required: false
   # type: object
   # @schema
   selectors:
