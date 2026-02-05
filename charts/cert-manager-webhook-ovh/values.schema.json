@@ -759,34 +759,6 @@
           "required": [],
           "title": "selectors",
           "type": "object"
-        },
-        "tolerations": {
-          "description": "List of tolerations. See https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/ for more information.",
-          "items": {
-            "properties": {
-              "effect": {
-                "enum": [
-                  "NoExecute",
-                  "NoSchedule",
-                  "PreferNoSchedule"
-                ],
-                "required": []
-              },
-              "key": {
-                "type": "string"
-              },
-              "operator": {
-                "type": "string"
-              },
-              "value": {
-                "type": "string"
-              }
-            },
-            "required": [],
-            "type": "object"
-          },
-          "title": "tolerations",
-          "type": "array"
         }
       },
       "required": [],
