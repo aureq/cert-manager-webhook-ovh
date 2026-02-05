@@ -267,7 +267,7 @@ pod:
       cpu: 200m
       memory: 96Mi
 
-  tolerations: []
+  # tolerations: []
 
   selectors:
     nodeSelector: {}
