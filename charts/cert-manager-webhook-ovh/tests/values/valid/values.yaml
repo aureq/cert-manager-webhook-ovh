@@ -11,6 +11,7 @@ certManager:
 
 issuers:
 
+    # ✅
   - name: letsencrypt-prod
     create: true
     kind: ClusterIssuer
@@ -57,6 +58,7 @@ issuers:
         name: ''
         key: applicationConsumerKey
 
+    # ✅
   - name: le-staging-oidc-dir
     create: true
     kind: ClusterIssuer
