@@ -1,0 +1,37 @@
+{{- /* 📄 This template is used to validate the chart values. It will fail if the validation fails. */ -}}
+
+{{- /* 📄 Validate each issuer authentication details if the issuer is to be created.
+
+The code below checks for each issuer to be created that only one authentication method is defined
+among "application" and "oauth2", and that the required fields for the defined authentication method
+are set either in ovhAuthentication or ovhAuthenticationRef. If the validation fails, the template will
+`fail` with a clear error message indicating the reason of the failure.
+
+In short, it's a 2x2 matrix validation depending on the authentication method where only one check should
+return true.
+
+This reduces complexity in the issuer and rbac templates as we can assume that the values are correct and
+we don't have to check for each field if it's set or not, and it also provides a better user experience
+as the error messages are clearer and specific to the issue in the values file.
+*/ -}}
+{{- range $.Values.issuers }}
+  {{- if .create -}}
+    {{- if eq (include "cert-manager-webhook-ovh.applicationOvhAuthenticationAvail" .) "true" -}}
+      {{- if or (eq (include "cert-manager-webhook-ovh.oauth2OvhAuthenticationAvail" .) "true") (eq (include "cert-manager-webhook-ovh.applicationOvhAuthenticationRefAvail" .) "true") (eq (include "cert-manager-webhook-ovh.oauth2OvhAuthenticationRefAvail" .) "true") -}}
+        {{- fail (printf "Invalid issuer '%s': You cannot define multiple authentication methods for '%s' authentication method. applicationCredentials=%s, oauth2Credentials=%s, applicationRef=%s, oauth2Ref=%s" .name .ovhAuthenticationMethod (include "cert-manager-webhook-ovh.applicationOvhAuthenticationAvail" .) (include "cert-manager-webhook-ovh.oauth2OvhAuthenticationAvail" .) (include "cert-manager-webhook-ovh.applicationOvhAuthenticationRefAvail" .) (include "cert-manager-webhook-ovh.oauth2OvhAuthenticationRefAvail" .)) -}}
+      {{- end -}}
+    {{- else if eq (include "cert-manager-webhook-ovh.oauth2OvhAuthenticationAvail" .) "true" -}}
+      {{- if or (eq (include "cert-manager-webhook-ovh.applicationOvhAuthenticationAvail" .) "true") (eq (include "cert-manager-webhook-ovh.applicationOvhAuthenticationRefAvail" .) "true") (eq (include "cert-manager-webhook-ovh.oauth2OvhAuthenticationRefAvail" .) "true") -}}
+        {{- fail (printf "Invalid issuer '%s': You cannot define multiple authentication methods for '%s' authentication method. applicationCredentials=%s, oauth2Credentials=%s, applicationRef=%s, oauth2Ref=%s" .name .ovhAuthenticationMethod (include "cert-manager-webhook-ovh.applicationOvhAuthenticationAvail" .) (include "cert-manager-webhook-ovh.oauth2OvhAuthenticationAvail" .) (include "cert-manager-webhook-ovh.applicationOvhAuthenticationRefAvail" .) (include "cert-manager-webhook-ovh.oauth2OvhAuthenticationRefAvail" .)) -}}
+      {{- end -}}
+    {{- else if eq (include "cert-manager-webhook-ovh.applicationOvhAuthenticationRefAvail" .) "true" -}}
+      {{- if or (eq (include "cert-manager-webhook-ovh.applicationOvhAuthenticationAvail" .) "true") (eq (include "cert-manager-webhook-ovh.oauth2OvhAuthenticationAvail" .) "true") (eq (include "cert-manager-webhook-ovh.oauth2OvhAuthenticationRefAvail" .) "true") -}}
+        {{- fail (printf "Invalid issuer '%s': You cannot define multiple authentication methods for '%s' authentication method. applicationCredentials=%s, oauth2Credentials=%s, applicationRef=%s, oauth2Ref=%s" .name .ovhAuthenticationMethod (include "cert-manager-webhook-ovh.applicationOvhAuthenticationAvail" .) (include "cert-manager-webhook-ovh.oauth2OvhAuthenticationAvail" .) (include "cert-manager-webhook-ovh.applicationOvhAuthenticationRefAvail" .) (include "cert-manager-webhook-ovh.oauth2OvhAuthenticationRefAvail" .)) -}}
+      {{- end -}}
+    {{- else if eq (include "cert-manager-webhook-ovh.oauth2OvhAuthenticationRefAvail" .) "true" -}}
+      {{- if or (eq (include "cert-manager-webhook-ovh.applicationOvhAuthenticationAvail" .) "true") (eq (include "cert-manager-webhook-ovh.oauth2OvhAuthenticationAvail" .) "true") (eq (include "cert-manager-webhook-ovh.applicationOvhAuthenticationRefAvail" .) "true") -}}
+        {{- fail (printf "Invalid issuer '%s': You cannot define multiple authentication methods for '%s' authentication method. applicationCredentials=%s, oauth2Credentials=%s, applicationRef=%s, oauth2Ref=%s" .name .ovhAuthenticationMethod (include "cert-manager-webhook-ovh.applicationOvhAuthenticationAvail" .) (include "cert-manager-webhook-ovh.oauth2OvhAuthenticationAvail" .) (include "cert-manager-webhook-ovh.applicationOvhAuthenticationRefAvail" .) (include "cert-manager-webhook-ovh.oauth2OvhAuthenticationRefAvail" .)) -}}
+      {{- end -}}
+    {{- end -}}
+  {{- end -}}{{- /* end if .create */}}
+{{- end -}}{{- /* end range $.Values.issuers */ -}}
