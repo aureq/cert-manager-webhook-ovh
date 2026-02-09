@@ -288,6 +288,7 @@ issuers:
         # @schema
         # required: true
         # type: string
+        # default: oauth2ClientSecret
         # @schema
         # --The key name in the secret above that holds the actual OVH Auth 2 client secret value
         key: oauth2ClientSecret
@@ -309,6 +310,7 @@ issuers:
         # @schema
         # required: true
         # type: string
+        # default: applicationKey
         # @schema
         # -- The key name in the secret above that holds the actual OVH application key value
         key: applicationKey
@@ -330,6 +332,7 @@ issuers:
         # @schema
         # required: true
         # type: string
+        # default: applicationSecret
         # @schema
         # -- The key name in the secret above that holds the actual OVH application secret value
         key: applicationSecret
@@ -351,6 +354,7 @@ issuers:
         # @schema
         # required: true
         # type: string
+        # default: applicationConsumerKey
         # @schema
         # -- The key name in the secret above that holds the actual OVH consumer key value
         key: applicationConsumerKey
