@@ -1,4 +1,7 @@
 {{/* vim: set filetype=mustache: */}}
+
+{{- /* 🔥 function should NOT `fail` */ -}}
+
 {{/*
 Expand the name of the chart.
 */}}
@@ -47,104 +50,104 @@ Create chart name and version as used by the chart label.
 {{ printf "%s-webhook-tls" (include "cert-manager-webhook-ovh.fullname" .) }}
 {{- end -}}
 
+{{/* --------------------------------------------------------------------- */}}
+{{/* ----------------------- Direct Authentication  ---------------------- */}}
+{{/* --------------------------------------------------------------------- */}}
+
 {{/*
 Returns true if ovhAuthentication is correctly set when ovhAuthenticationMethod is "application".
+$arg1: The issuer values
 */}}
 {{- define "cert-manager-webhook-ovh.applicationOvhAuthenticationAvail" -}}
-  {{- if . -}}
-    {{- with .ovhAuthentication -}}
-      {{- if and (.applicationConsumerKey) (.applicationKey) (.applicationSecret) -}}
-        {{- eq "true" "true" -}}
-      {{- end -}}
+  {{- $result := "false" -}}
+  {{- if eq .ovhAuthenticationMethod "application" -}}
+    {{- if and .ovhAuthentication.applicationKey .ovhAuthentication.applicationSecret .ovhAuthentication.applicationConsumerKey -}}
+      {{- $result = "true" -}}
     {{- end -}}
-  {{- end -}}
+  {{- end -}}{{/* end if ovhAuthenticationMethod */}}
+  {{- eq $result "true" -}}
 {{- end -}}
 
 {{/*
 Returns true if ovhAuthentication is correctly set when ovhAuthenticationMethod is "oauth2".
+$arg1: The issuer values
 */}}
 {{- define "cert-manager-webhook-ovh.oauth2OvhAuthenticationAvail" -}}
-  {{- if . -}}
-    {{- with .ovhAuthentication -}}
-      {{- if and (.oauth2ClientID) (.oauth2ClientSecret) -}}
-        {{- eq "true" "true" -}}
-      {{- end -}}
+  {{- $result := "false" -}}
+  {{- if eq .ovhAuthenticationMethod "oauth2" -}}
+    {{- if and .ovhAuthentication.oauth2ClientID .ovhAuthentication.oauth2ClientSecret -}}
+      {{- $result = "true" -}}
     {{- end -}}
-  {{- end -}}
+  {{- end -}}{{/* end if ovhAuthenticationMethod */}}
+  {{- eq $result "true" -}}
 {{- end -}}
 
 {{/*
-Returns true if ovhAuthentication is correctly set.
+Returns true if ovhAuthentication is correctly set depending on the ovhAuthenticationMethod.
+$arg1: The issuer values
 */}}
 {{- define "cert-manager-webhook-ovh.isOvhAuthenticationAvail" -}}
-  {{- if . -}}
-    {{- if eq .ovhAuthenticationMethod "application" -}}
-      {{ include "cert-manager-webhook-ovh.applicationOvhAuthenticationAvail" . }}
-    {{- else if eq .ovhAuthenticationMethod "oauth2" -}}
-      {{ include "cert-manager-webhook-ovh.oauth2OvhAuthenticationAvail" . }}
+  {{- $result := "false" -}}
+  {{- if eq .ovhAuthenticationMethod "application" -}}
+    {{- if and (eq (include "cert-manager-webhook-ovh.applicationOvhAuthenticationAvail" .) "true") (not (eq (include "cert-manager-webhook-ovh.oauth2OvhAuthenticationAvail" .) "true")) }}
+      {{- $result = "true" -}}
+    {{- end -}}
+  {{- else if eq .ovhAuthenticationMethod "oauth2" -}}
+    {{- if and (eq (include "cert-manager-webhook-ovh.oauth2OvhAuthenticationAvail" .) "true") (not (eq (include "cert-manager-webhook-ovh.applicationOvhAuthenticationAvail" .) "true")) }}
+      {{- $result = "true" -}}
     {{- end -}}
   {{- end -}}
+  {{- eq $result "true" -}}
 {{- end -}}
+
+{{/* --------------------------------------------------------------------- */}}
+{{/* -------------------- Authentication by reference -------------------- */}}
+{{/* --------------------------------------------------------------------- */}}
 
 {{/*
 Returns true if ovhAuthenticationRef is correctly set when ovhAuthenticationMethod is "application".
+$arg1: The issuer values
 */}}
 {{- define "cert-manager-webhook-ovh.applicationOvhAuthenticationRefAvail" -}}
-  {{- if .ovhAuthenticationRef -}}
-    {{- if eq .ovhAuthenticationMethod "application" -}}
-      {{- with .ovhAuthenticationRef -}}
-        {{- if or (not .applicationConsumerKeyRef) (not .applicationKeyRef) (not .applicationSecretRef) }}
-          {{- fail "Error: When 'ovhAuthenticationRef' is used, 'applicationConsumerKeyRef', 'applicationKeyRef' and 'applicationSecretRef' need to be provided." }}
-        {{- end }}
-        {{- if or (not .applicationConsumerKeyRef.name) (not .applicationConsumerKeyRef.key) }}
-          {{- eq "true" "false" -}}
-        {{- end }}
-        {{- if or (not .applicationKeyRef.name) (not .applicationKeyRef.key) }}
-          {{- eq "true" "false" -}}
-        {{- end }}
-        {{- if or (not .applicationSecretRef.name) (not .applicationSecretRef.key) }}
-          {{- eq "true" "false" -}}
-        {{- end }}
-      {{- end -}}
-    {{- end -}}{{/* end if ovhAuthenticationMethod */}}
-    {{- eq "true" "true" -}}
-  {{- end -}}{{/* end if ovhAuthenticationRef */}}
+  {{- $result := "false" -}}
+  {{- if eq .ovhAuthenticationMethod "application" -}}
+    {{- if and .ovhAuthenticationRef.applicationKeyRef.name .ovhAuthenticationRef.applicationKeyRef.key .ovhAuthenticationRef.applicationSecretRef.name .ovhAuthenticationRef.applicationSecretRef.key .ovhAuthenticationRef.applicationConsumerKeyRef.name .ovhAuthenticationRef.applicationConsumerKeyRef.key -}}
+      {{- $result = "true" -}}
+    {{- end -}}
+  {{- end -}}{{/* end if ovhAuthenticationMethod */}}
+  {{- eq $result "true" -}}
 {{- end -}}
 
 {{/*
 Returns true if ovhAuthenticationRef is correctly set when ovhAuthenticationMethod is "oauth2".
+$arg1: The issuer values
 */}}
 {{- define "cert-manager-webhook-ovh.oauth2OvhAuthenticationRefAvail" -}}
-  {{- if .ovhAuthenticationRef -}}
-    {{- if eq .ovhAuthenticationMethod "oauth2" -}}
-      {{- with .ovhAuthenticationRef -}}
-        {{- if or (not .oauth2ClientIDRef) (not .oauth2ClientSecretRef) }}
-          {{- eq "true" "false" -}}
-        {{- end }}
-        {{- if or (not .oauth2ClientIDRef.name) (not .oauth2ClientIDRef.key) }}
-          {{- eq "true" "false" -}}
-        {{- end }}
-        {{- if or (not .oauth2ClientSecretRef.name) (not .oauth2ClientSecretRef.key) }}
-          {{- eq "true" "false" -}}
-        {{- end }}
-      {{- end -}}
-    {{- end -}}{{/* end if ovhAuthenticationMethod */}}
-    {{- eq "true" "true" -}}
-  {{- end -}}{{/* end if ovhAuthenticationRef */}}
+  {{- $result := "false" -}}
+  {{- if eq .ovhAuthenticationMethod "oauth2" -}}
+    {{- if and .ovhAuthenticationRef.oauth2ClientIDRef.name .ovhAuthenticationRef.oauth2ClientIDRef.key .ovhAuthenticationRef.oauth2ClientSecretRef.name .ovhAuthenticationRef.oauth2ClientSecretRef.key -}}
+      {{- $result = "true" -}}
+    {{- end -}}
+  {{- end -}}{{/* end if ovhAuthenticationMethod */}}
+  {{- eq $result "true" -}}
 {{- end -}}
 
 {{/*
-Returns true if ovhAuthenticationRef is correctly set.
+Returns true if ovhAuthenticationRef is correctly set depending on the ovhAuthenticationMethod.
+$arg1: The issuer values
 */}}
 {{- define "cert-manager-webhook-ovh.isOvhAuthenticationRefAvail" -}}
-  {{- if .ovhAuthenticationRef -}}
-    {{- if eq .ovhAuthenticationMethod "application" -}}
-      {{ include "cert-manager-webhook-ovh.applicationOvhAuthenticationRefAvail" . }}
-    {{- else if eq .ovhAuthenticationMethod "oauth2" -}}
-      {{ include "cert-manager-webhook-ovh.oauth2OvhAuthenticationRefAvail" . }}
-    {{- end -}}{{/* end if ovhAuthenticationMethod */}}
-    {{- eq "true" "true" -}}
-  {{- end -}}{{/* end if ovhAuthenticationRef */}}
+  {{- $result := "false" -}}
+  {{- if eq .ovhAuthenticationMethod "application" -}}
+    {{- if and (eq (include "cert-manager-webhook-ovh.applicationOvhAuthenticationRefAvail" .) "true") (not (eq (include "cert-manager-webhook-ovh.oauth2OvhAuthenticationRefAvail" .) "true")) }}
+      {{- $result = "true" -}}
+    {{- end -}}
+  {{- else if eq .ovhAuthenticationMethod "oauth2" -}}
+    {{- if and (eq (include "cert-manager-webhook-ovh.oauth2OvhAuthenticationRefAvail" .) "true") (not (eq (include "cert-manager-webhook-ovh.applicationOvhAuthenticationRefAvail" .) "true")) }}
+      {{- $result = "true" -}}
+    {{- end -}}
+  {{- end -}}
+  {{- eq $result "true" -}}
 {{- end -}}
 
 {{/*
