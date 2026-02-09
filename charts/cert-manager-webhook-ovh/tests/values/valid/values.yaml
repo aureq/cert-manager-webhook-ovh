@@ -14,7 +14,7 @@ issuers:
     kind: ClusterIssuer
     namespace: default
     acmeServerUrl: https://acme-v02.api.letsencrypt.org/directory
-    email: aurelien@menfin.net
+    email: tls-manager@example.net
     disableAccountKeyGeneration: false
     profile: classic
     cnameStrategy: None
@@ -60,7 +60,7 @@ issuers:
     kind: ClusterIssuer
     namespace: cert-system
     acmeServerUrl: https://acme-staging-v02.api.letsencrypt.org/directory
-    email: aurelien@menfin.net
+    email: tls-manager@example.net
     disableAccountKeyGeneration: true
     profile: classic
     cnameStrategy: Follow
@@ -102,7 +102,7 @@ issuers:
     kind: ClusterIssuer
     namespace: default
     acmeServerUrl: https://acme-staging-v02.api.letsencrypt.org/directory
-    email: aurelien@menfin.et
+    email: tls-manager@example.net
     disableAccountKeyGeneration: false
     profile: classic
     cnameStrategy: None
@@ -144,7 +144,7 @@ issuers:
     kind: ClusterIssuer
     namespace: default
     acmeServerUrl: https://acme-staging-v02.api.letsencrypt.org/directory
-    email: aurelien@menfin.et
+    email: tls-manager@example.net
     disableAccountKeyGeneration: false
     profile: classic
     cnameStrategy: None
@@ -186,7 +186,7 @@ issuers:
     kind: ClusterIssuer
     namespace: default
     acmeServerUrl: https://acme-staging-v02.api.letsencrypt.org/directory
-    email: aurelien@menfin.et
+    email: tls-manager@example.net
     disableAccountKeyGeneration: false
     profile: classic
     cnameStrategy: None
@@ -228,7 +228,7 @@ issuers:
     kind: ClusterIssuer
     namespace: default
     acmeServerUrl: https://acme-v02.api.letsencrypt.org/directory
-    email: aurelien@menfin.net
+    email: tls-manager@example.net
     disableAccountKeyGeneration: false
     profile: classic
     cnameStrategy: None
@@ -274,7 +274,7 @@ issuers:
     kind: ClusterIssuer
     namespace: default
     acmeServerUrl: https://acme-staging-v02.api.letsencrypt.org/directory
-    email: aurelien@menfin.et
+    email: tls-manager@example.net
     disableAccountKeyGeneration: false
     profile: classic
     cnameStrategy: None

@@ -8,7 +8,7 @@ chart:
   version: 1.0.0
   appVersion: 1.0.0
 tests:
-  - it: Validate use of `issuers` option in `ClusterIssuer` 1/x
+  - it: Validate use of `issuers` option in `ClusterIssuer` 1/5
     documentSelector:
       path: kind
       value: ClusterIssuer
@@ -18,7 +18,7 @@ tests:
           count: 5
           filterAware: true
 
-  - it: Validate use of `issuers` option in `ClusterIssuer` 2/x
+  - it: Validate use of `issuers` option in `ClusterIssuer` 2/5
     documentSelector:
       path: $[?(@.kind == "ClusterIssuer")].metadata.name
       value: letsencrypt-prod
@@ -38,7 +38,7 @@ tests:
           value: https://acme-v02.api.letsencrypt.org/directory
       - equal:
           path: spec.acme.email
-          value: aurelien@menfin.net
+          value: tls-manager@example.net
       - notExists:
           path: spec.acme.disableAccountKeyGeneration
       - notExists:
@@ -93,7 +93,7 @@ tests:
           path: spec.acme.solvers[0].dns01.webhook.config.applicationConsumerKeyRef.key
           value: applicationConsumerKey
 
-  - it: Validate use of `issuers` option in `ClusterIssuer` 3/x
+  - it: Validate use of `issuers` option in `ClusterIssuer` 3/5
     documentSelector:
       path: $[?(@.kind == "ClusterIssuer")].metadata.name
       value: le-staging-oidc-dir
@@ -113,10 +113,9 @@ tests:
           value: https://acme-staging-v02.api.letsencrypt.org/directory
       - equal:
           path: spec.acme.email
-          value: aurelien@menfin.net
-      - equal:
+          value: tls-manager@example.net
+      - exists:
           path: spec.acme.disableAccountKeyGeneration
-          value: true
       - notExists:
           path: spec.acme.externalAccountBinding
         not: true
@@ -175,6 +174,151 @@ tests:
           path: spec.acme.solvers[0].dns01.webhook.config.oauth2ClientSecretRef.key
           value: oauth2ClientSecret
 
+  - it: Validate use of `issuers` option in `ClusterIssuer` 4/5
+    documentSelector:
+      path: $[?(@.kind == "ClusterIssuer")].metadata.name
+      value: le-staging-oidc-ref
+    asserts:
+      - equal:
+          path: kind
+          value: ClusterIssuer
+      - equal:
+          path: metadata.name
+          value: le-staging-oidc-ref
+      - equal:
+          path: metadata.namespace
+          value: default
+        not: true
+      - equal:
+          path: spec.acme.server
+          value: https://acme-staging-v02.api.letsencrypt.org/directory
+      - equal:
+          path: spec.acme.email
+          value: tls-manager@example.net
+      - notExists:
+          path: spec.acme.disableAccountKeyGeneration
+      - notExists:
+          path: spec.acme.externalAccountBinding
+      - equal:
+          path: spec.acme.profile
+          value: classic
+      - lengthEqual:
+          path: spec.acme.solvers
+          count: 1
+      - equal:
+          path: spec.acme.solvers[0].dns01.cnameStrategy
+          value: None
+      - equal:
+          path: spec.acme.solvers[0].dns01.webhook.solverName
+          value: ovh
+      - equal:
+          path: spec.acme.solvers[0].dns01.webhook.config.endpoint
+          value: ovh-eu
+      - equal:
+          path: spec.acme.solvers[0].dns01.webhook.config.authenticationMethod
+          value: oauth2
+      - notExists:
+          path: spec.acme.solvers[0].dns01.webhook.config.applicationKeyRef
+      - notExists:
+          path: spec.acme.solvers[0].dns01.webhook.config.applicationSecretRef
+      - notExists:
+          path: spec.acme.solvers[0].dns01.webhook.config.applicationConsumerKeyRef
+      - notExists:
+          path: spec.acme.solvers[0].dns01.webhook.config.oauth2ClientID
+      - notExists:
+          path: spec.acme.solvers[0].dns01.webhook.config.oauth2ClientSecret
+      - exists:
+          path: spec.acme.solvers[0].dns01.webhook.config.oauth2ClientIDRef
+      - exists:
+          path: spec.acme.solvers[0].dns01.webhook.config.oauth2ClientSecretRef
+      - equal:
+          path: spec.acme.solvers[0].dns01.webhook.config.oauth2ClientIDRef.name
+          value: ovh-credentials
+      - equal:
+          path: spec.acme.solvers[0].dns01.webhook.config.oauth2ClientIDRef.key
+          value: oauth2ClientID
+      - equal:
+          path: spec.acme.solvers[0].dns01.webhook.config.oauth2ClientSecretRef.name
+          value: ovh-credentials
+      - equal:
+          path: spec.acme.solvers[0].dns01.webhook.config.oauth2ClientSecretRef.key
+          value: oauth2ClientSecret
+
+  - it: Validate use of `issuers` option in `ClusterIssuer` 4/5
+    documentSelector:
+      path: $[?(@.kind == "ClusterIssuer")].metadata.name
+      value: le-staging-app-ref
+    asserts:
+      - equal:
+          path: kind
+          value: ClusterIssuer
+      - equal:
+          path: metadata.name
+          value: le-staging-app-ref
+      - equal:
+          path: metadata.namespace
+          value: default
+        not: true
+      - equal:
+          path: spec.acme.server
+          value: https://acme-staging-v02.api.letsencrypt.org/directory
+      - equal:
+          path: spec.acme.email
+          value: tls-manager@example.net
+      - notExists:
+          path: spec.acme.disableAccountKeyGeneration
+      - notExists:
+          path: spec.acme.externalAccountBinding
+      - equal:
+          path: spec.acme.profile
+          value: classic
+      - lengthEqual:
+          path: spec.acme.solvers
+          count: 1
+      - equal:
+          path: spec.acme.solvers[0].dns01.cnameStrategy
+          value: None
+      - equal:
+          path: spec.acme.solvers[0].dns01.webhook.solverName
+          value: ovh
+      - equal:
+          path: spec.acme.solvers[0].dns01.webhook.config.endpoint
+          value: ovh-eu
+      - equal:
+          path: spec.acme.solvers[0].dns01.webhook.config.authenticationMethod
+          value: application
+      - exists:
+          path: spec.acme.solvers[0].dns01.webhook.config.applicationKeyRef
+      - exists:
+          path: spec.acme.solvers[0].dns01.webhook.config.applicationSecretRef
+      - exists:
+          path: spec.acme.solvers[0].dns01.webhook.config.applicationConsumerKeyRef
+      - equal:
+          path: spec.acme.solvers[0].dns01.webhook.config.applicationKeyRef.name
+          value: ovh-credentials
+      - equal:
+          path: spec.acme.solvers[0].dns01.webhook.config.applicationKeyRef.key
+          value: applicationKey
+      - equal:
+          path: spec.acme.solvers[0].dns01.webhook.config.applicationSecretRef.name
+          value: ovh-credentials
+      - equal:
+          path: spec.acme.solvers[0].dns01.webhook.config.applicationSecretRef.key
+          value: applicationSecret
+      - equal:
+          path: spec.acme.solvers[0].dns01.webhook.config.applicationConsumerKeyRef.name
+          value: ovh-credentials
+      - equal:
+          path: spec.acme.solvers[0].dns01.webhook.config.applicationConsumerKeyRef.key
+          value: applicationConsumerKey
+      - notExists:
+          path: spec.acme.solvers[0].dns01.webhook.config.oauth2ClientID
+      - notExists:
+          path: spec.acme.solvers[0].dns01.webhook.config.oauth2ClientSecret
+      - notExists:
+          path: spec.acme.solvers[0].dns01.webhook.config.oauth2ClientIDRef
+      - notExists:
+          path: spec.acme.solvers[0].dns01.webhook.config.oauth2ClientSecretRef
 ---
 suite: Testing `root.issuers` option in `secret.yaml` 2/2
 templates:
