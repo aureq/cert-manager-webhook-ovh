@@ -1,17 +1,14 @@
 # vim: set ft=yaml
-# yaml-language-server: $schema=values.schema.json
+# yaml-language-server: $schema=../../../values.schema.json
 
-# ✅
 groupName: acme.helm.unittest.example
 
-# ✅
 certManager:
   namespace: cert-system
   serviceAccountName: cert-manager
 
 issuers:
 
-    # ✅
   - name: letsencrypt-prod
     create: true
     kind: ClusterIssuer
@@ -22,7 +19,7 @@ issuers:
     profile: classic
     cnameStrategy: None
 
-    externalAccountBinding: # ❌
+    externalAccountBinding:
       enabled: false
       keyID: ''
 
@@ -58,7 +55,6 @@ issuers:
         name: ''
         key: applicationConsumerKey
 
-    # ✅
   - name: le-staging-oidc-dir
     create: true
     kind: ClusterIssuer
@@ -122,9 +118,9 @@ issuers:
     ovhAuthentication:
       oauth2ClientID: ''
       oauth2ClientSecret: ''
-      applicationKey: 'appkey-0123456789abcdef'
-      applicationSecret: 'appsecret-0123456789abcdef'
-      applicationConsumerKey: 'appconsumerkey-0123456789abcdef'
+      applicationKey: ''
+      applicationSecret: ''
+      applicationConsumerKey: ''
 
     ovhAuthenticationRef:
       oauth2ClientIDRef:
@@ -206,9 +202,9 @@ issuers:
     ovhAuthentication:
       oauth2ClientID: ''
       oauth2ClientSecret: ''
-      applicationKey: 'appkey-0123456789abcdef'
-      applicationSecret: 'appsecret-0123456789abcdef'
-      applicationConsumerKey: 'appconsumerkey-0123456789abcdef'
+      applicationKey: ''
+      applicationSecret: ''
+      applicationConsumerKey: ''
 
     ovhAuthenticationRef:
       oauth2ClientIDRef:
@@ -237,7 +233,7 @@ issuers:
     profile: classic
     cnameStrategy: None
 
-    externalAccountBinding: # ❌
+    externalAccountBinding:
       enabled: false
       keyID: ''
 
@@ -273,11 +269,51 @@ issuers:
         name: ''
         key: applicationConsumerKey
 
-# ✅
+  - name: not-le-staging-app-ref
+    create: false
+    kind: ClusterIssuer
+    namespace: default
+    acmeServerUrl: https://acme-staging-v02.api.letsencrypt.org/directory
+    email: aurelien@menfin.et
+    disableAccountKeyGeneration: false
+    profile: classic
+    cnameStrategy: None
+    externalAccountBinding:
+      enabled: false
+      keyID: my-keyid-1
+      keySecretRef:
+        name: eab-key-secret
+        key: eabKey
+    ovhEndpointName: ovh-eu
+    ovhAuthenticationMethod: application
+
+    ovhAuthentication:
+      oauth2ClientID: ''
+      oauth2ClientSecret: ''
+      applicationKey: ''
+      applicationSecret: ''
+      applicationConsumerKey: ''
+
+    ovhAuthenticationRef:
+      oauth2ClientIDRef:
+        name: ''
+        key: oauth2ClientID
+      oauth2ClientSecretRef:
+        name: ''
+        key: oauth2ClientSecret
+      applicationKeyRef:
+        name: 'ovh-credentials'
+        key: applicationKey
+      applicationSecretRef:
+        name: 'ovh-credentials'
+        key: applicationSecret
+      applicationConsumerKeyRef:
+        name: 'ovh-credentials'
+        key: applicationConsumerKey
+
 rbac:
   roleType: Role
 
-# ✅
 image:
   registry: 'ghcr.io'
   repository: aureq/cert-manager-webhook-ovh
@@ -322,12 +358,9 @@ pod:
     nodeSelector: {}
     affinity: {}
 
-# ✅
 nameOverride: ""
-# ✅
 fullnameOverride: ""
 
-# ✅
 service:
   type: ClusterIP
   port: 443
