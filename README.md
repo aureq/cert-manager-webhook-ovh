@@ -12,10 +12,11 @@ This is a webhook solver for [OVH](http://www.ovh.com) DNS. In short, if your do
 - Support both multiple Cert Manager `ClusterIssuer` and `Issuer`.
 - Support both application based and OAuth2 based authentication.
 - Store OVH credentials in a secret per issuer, or use secret references.
-- Helm chart repository for ease and simplicity.
-- Role based access control, across namespace.
+- Helm chart repository for ease and simplicity of deployment.
+- Role based access control, across namespaces.
 - Support for optional External Account Binding (EAB).
 - JSON schema for `values.yaml` automatic validation.
+- Unit tests for `values.yaml` for code quality and reliability.
 - Full [documentation](/charts/cert-manager-webhook-ovh) of `values.yaml`.
 
 ## Documentation
