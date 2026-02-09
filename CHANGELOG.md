@@ -1,5 +1,17 @@
 # Changelog
 
+## 0.9.0-alpha.1
+
+### Noteworthy changes
+
+- 🎉 add dedicated validator template for issuer authentication
+- 🌿 refactor authentication helper functions in _helpers.tpl
+- 🌿 update helm unit tests for refactored authentication helpers
+- 🌿 update test values for refactored authentication validation
+- 🌱 remove redundant fail check and add inline comments in issuer.yaml
+- 🌱 remove redundant fail check in secret.yaml
+- 🌱 add default value schema annotations for ovhAuthenticationRef key fields
+
 ## 0.9.0-alpha.0
 
 ⭐ If you are using this project, please consider supporting it by starring the repository. It helps us a lot to keep maintaining and improving this project. Thank you!
