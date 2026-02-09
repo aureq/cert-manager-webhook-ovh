@@ -1,8 +1,5 @@
 {{- range $.Values.issuers }}
   {{- if .create }}
-    {{- if and (eq (include "cert-manager-webhook-ovh.isOvhAuthenticationAvail" .) "true") (eq (include "cert-manager-webhook-ovh.isOvhAuthenticationRefAvail" .) "true") }}
-        {{ fail (printf "Invalid issuer %s: You cannot define both 'ovhAuthentication' and 'ovhAuthenticationRef' for '%s' authentication method" .name .ovhAuthenticationMethod) }}
-    {{- end }}
 apiVersion: cert-manager.io/v1
 kind: {{ .kind }}
 metadata:
@@ -42,7 +39,7 @@ spec:
           config:
             endpoint: {{ .ovhEndpointName | quote }}
             authenticationMethod: {{ .ovhAuthenticationMethod | quote }}
-            {{- if eq (include "cert-manager-webhook-ovh.isOvhAuthenticationAvail" .) "true" }}
+            {{- if eq (include "cert-manager-webhook-ovh.isOvhAuthenticationAvail" .) "true" }}{{- /* direct authentication */ -}}
             {{- if eq .ovhAuthenticationMethod "application" }}
             applicationKeyRef:
               name: {{ printf "%s-ovh-credentials" .name }}
@@ -62,7 +59,7 @@ spec:
               key: "oauth2ClientSecret"
             {{- end }}
             {{- end }}
-            {{- if eq (include "cert-manager-webhook-ovh.isOvhAuthenticationRefAvail" .) "true" }}
+            {{- if eq (include "cert-manager-webhook-ovh.isOvhAuthenticationRefAvail" .) "true" }}{{- /* reference authentication */ -}}
             {{- if eq .ovhAuthenticationMethod "application" }}
             applicationKeyRef:
               name: {{ .ovhAuthenticationRef.applicationKeyRef.name }}
