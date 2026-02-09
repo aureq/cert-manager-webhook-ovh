@@ -20,9 +20,9 @@ tests:
           path: rules[0].resourceNames
           value:
             - "le-staging-app-dir-ovh-credentials"
-            - "le-staging-app-ref-ovh-credentials"
             - "le-staging-oidc-dir-ovh-credentials"
             - "letsencrypt-prod-ovh-credentials"
+            - "ovh-credentials"
 ---
 suite: Testing `root.rbac` option in `rbac.yaml` 1/2
 templates:
@@ -48,6 +48,6 @@ tests:
           path: rules[0].resourceNames
           value:
             - "le-staging-app-dir-ovh-credentials"
-            - "le-staging-app-ref-ovh-credentials"
             - "le-staging-oidc-dir-ovh-credentials"
             - "letsencrypt-prod-ovh-credentials"
+            - "ovh-credentials"
