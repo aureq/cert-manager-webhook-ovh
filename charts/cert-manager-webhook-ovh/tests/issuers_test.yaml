@@ -7,8 +7,6 @@ values:
 chart:
   version: 1.0.0
   appVersion: 1.0.0
-set:
-  unused: value
 tests:
   - it: Validate use of `issuers` option in `ClusterIssuer` 1/x
     documentSelector:
@@ -186,8 +184,6 @@ values:
 chart:
   version: 1.0.0
   appVersion: 1.0.0
-set:
-  unused: value
 tests:
   - it: Validate use of `issuers` option in `ClusterIssuer` 1/x
     documentSelector:
