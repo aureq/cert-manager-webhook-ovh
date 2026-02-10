@@ -99,6 +99,17 @@ Return the proper image name
     {{- end -}}
 {{- end -}}
 
+{{/*
+Returns true if externalAccountBinding is correctly set.
+*/}}
+{{- define "cert-manager-webhook-ovh.isExternalAccountBindingAvail" -}}
+  {{- if .externalAccountBinding.enabled -}}
+    {{- if and (.externalAccountBinding.keyID) (.externalAccountBinding.keySecretRef.name) (.externalAccountBinding.keySecretRef.key) -}}
+      {{- eq "true" "true" -}}
+    {{- end -}}
+  {{- end -}}
+{{- end -}}
+
 {{/* --------------------------------------------------------------------- */}}
 {{/* ----------------------- Direct Authentication  ---------------------- */}}
 {{/* --------------------------------------------------------------------- */}}
@@ -197,15 +208,4 @@ $arg1: The issuer values
     {{- end -}}
   {{- end -}}
   {{- eq $result "true" -}}
-{{- end -}}
-
-{{/*
-Returns true if externalAccountBinding is correctly set.
-*/}}
-{{- define "cert-manager-webhook-ovh.isExternalAccountBindingAvail" -}}
-  {{- if .externalAccountBinding.enabled -}}
-    {{- if and (.externalAccountBinding.keyID) (.externalAccountBinding.keySecretRef.name) (.externalAccountBinding.keySecretRef.key) -}}
-      {{- eq "true" "true" -}}
-    {{- end -}}
-  {{- end -}}
 {{- end -}}
