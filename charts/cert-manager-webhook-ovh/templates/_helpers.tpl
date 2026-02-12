@@ -115,18 +115,45 @@ Returns true if externalAccountBinding is correctly set.
 {{/* --------------------------------------------------------------------- */}}
 
 {{/*
+Returns true if ovhAuthentication.application* is correctly set.
+No checks done on ovhAuthenticationMethod, this function only checks if the required fields for application authentication are set in ovhAuthentication.
+$arg1: The issuer values
+*/}}
+{{- define "cert-manager-webhook-ovh._applicationOvhAuthenticationAvail" -}}
+  {{- $result := "false" -}}
+  {{- if and .ovhAuthentication.applicationKey .ovhAuthentication.applicationSecret .ovhAuthentication.applicationConsumerKey -}}
+    {{- $result = "true" -}}
+  {{- end -}}
+  {{- eq $result "true" -}}
+{{- end -}}
+
+{{/*
 Returns true if ovhAuthentication is correctly set when ovhAuthenticationMethod is "application".
 $arg1: The issuer values
 */}}
 {{- define "cert-manager-webhook-ovh.applicationOvhAuthenticationAvail" -}}
   {{- $result := "false" -}}
   {{- if eq .ovhAuthenticationMethod "application" -}}
-    {{- if and .ovhAuthentication.applicationKey .ovhAuthentication.applicationSecret .ovhAuthentication.applicationConsumerKey -}}
+    {{- if eq (include "cert-manager-webhook-ovh._applicationOvhAuthenticationAvail" .) "true" -}}
       {{- $result = "true" -}}
     {{- end -}}
   {{- end -}}{{/* end if ovhAuthenticationMethod */}}
   {{- eq $result "true" -}}
 {{- end -}}
+
+{{/*
+Returns true if ovhAuthentication.oauth2* is correctly set.
+No checks done on ovhAuthenticationMethod, this function only checks if the required fields for oauth2 authentication are set in ovhAuthentication.
+$arg1: The issuer values
+*/}}
+{{- define "cert-manager-webhook-ovh._oauth2OvhAuthenticationAvail" -}}
+  {{- $result := "false" -}}
+  {{- if and .ovhAuthentication.oauth2ClientID .ovhAuthentication.oauth2ClientSecret -}}
+    {{- $result = "true" -}}
+  {{- end -}}
+  {{- eq $result "true" -}}
+{{- end -}}
+
 
 {{/*
 Returns true if ovhAuthentication is correctly set when ovhAuthenticationMethod is "oauth2".
@@ -135,7 +162,7 @@ $arg1: The issuer values
 {{- define "cert-manager-webhook-ovh.oauth2OvhAuthenticationAvail" -}}
   {{- $result := "false" -}}
   {{- if eq .ovhAuthenticationMethod "oauth2" -}}
-    {{- if and .ovhAuthentication.oauth2ClientID .ovhAuthentication.oauth2ClientSecret -}}
+    {{- if eq (include "cert-manager-webhook-ovh._oauth2OvhAuthenticationAvail" .) "true" -}}
       {{- $result = "true" -}}
     {{- end -}}
   {{- end -}}{{/* end if ovhAuthenticationMethod */}}
@@ -165,16 +192,42 @@ $arg1: The issuer values
 {{/* --------------------------------------------------------------------- */}}
 
 {{/*
+Returns true if ovhAuthenticationRef.application* is correctly set.
+No checks done on ovhAuthenticationMethod, this function only checks if the required fields for application authentication are set in ovhAuthenticationRef.
+$arg1: The issuer values
+*/}}
+{{- define "cert-manager-webhook-ovh._applicationOvhAuthenticationRefAvail" -}}
+  {{- $result := "false" -}}
+  {{- if and .ovhAuthenticationRef.applicationKeyRef.name .ovhAuthenticationRef.applicationKeyRef.key .ovhAuthenticationRef.applicationSecretRef.name .ovhAuthenticationRef.applicationSecretRef.key .ovhAuthenticationRef.applicationConsumerKeyRef.name .ovhAuthenticationRef.applicationConsumerKeyRef.key -}}
+    {{- $result = "true" -}}
+  {{- end -}}
+  {{- eq $result "true" -}}
+{{- end -}}
+
+{{/*
 Returns true if ovhAuthenticationRef is correctly set when ovhAuthenticationMethod is "application".
 $arg1: The issuer values
 */}}
 {{- define "cert-manager-webhook-ovh.applicationOvhAuthenticationRefAvail" -}}
   {{- $result := "false" -}}
   {{- if eq .ovhAuthenticationMethod "application" -}}
-    {{- if and .ovhAuthenticationRef.applicationKeyRef.name .ovhAuthenticationRef.applicationKeyRef.key .ovhAuthenticationRef.applicationSecretRef.name .ovhAuthenticationRef.applicationSecretRef.key .ovhAuthenticationRef.applicationConsumerKeyRef.name .ovhAuthenticationRef.applicationConsumerKeyRef.key -}}
+    {{- if eq (include "cert-manager-webhook-ovh._applicationOvhAuthenticationRefAvail" .) "true" -}}
       {{- $result = "true" -}}
     {{- end -}}
   {{- end -}}{{/* end if ovhAuthenticationMethod */}}
+  {{- eq $result "true" -}}
+{{- end -}}
+
+{{/*
+Returns true if ovhAuthenticationRef.oauth2* is correctly set.
+No checks done on ovhAuthenticationMethod, this function only checks if the required fields for oauth2 authentication are set in ovhAuthenticationRef.
+$arg1: The issuer values
+*/}}
+{{- define "cert-manager-webhook-ovh._oauth2OvhAuthenticationRefAvail" -}}
+  {{- $result := "false" -}}
+  {{- if and .ovhAuthenticationRef.oauth2ClientIDRef.name .ovhAuthenticationRef.oauth2ClientIDRef.key .ovhAuthenticationRef.oauth2ClientSecretRef.name .ovhAuthenticationRef.oauth2ClientSecretRef.key -}}
+    {{- $result = "true" -}}
+  {{- end -}}
   {{- eq $result "true" -}}
 {{- end -}}
 
@@ -185,7 +238,7 @@ $arg1: The issuer values
 {{- define "cert-manager-webhook-ovh.oauth2OvhAuthenticationRefAvail" -}}
   {{- $result := "false" -}}
   {{- if eq .ovhAuthenticationMethod "oauth2" -}}
-    {{- if and .ovhAuthenticationRef.oauth2ClientIDRef.name .ovhAuthenticationRef.oauth2ClientIDRef.key .ovhAuthenticationRef.oauth2ClientSecretRef.name .ovhAuthenticationRef.oauth2ClientSecretRef.key -}}
+    {{- if eq (include "cert-manager-webhook-ovh._oauth2OvhAuthenticationRefAvail" .) "true" -}}
       {{- $result = "true" -}}
     {{- end -}}
   {{- end -}}{{/* end if ovhAuthenticationMethod */}}
@@ -207,5 +260,48 @@ $arg1: The issuer values
       {{- $result = "true" -}}
     {{- end -}}
   {{- end -}}
+  {{- eq $result "true" -}}
+{{- end -}}
+
+{{/* --------------------------------------------------------------------- */}}
+{{/* ----------------- Single authentication per issuer ------------------ */}}
+{{/* --------------------------------------------------------------------- */}}
+
+{{/* Returns true if only one authentication method is set, regardless of the method. */}}
+{{- define "cert-manager-webhook-ovh.isMultipleAuthenticationMethodSet" -}}
+  {{- $result := "false" -}}
+    {{/* Check if direct authentication is set for application */}}
+    {{- if and .ovhAuthentication.applicationKey .ovhAuthentication.applicationSecret .ovhAuthentication.applicationConsumerKey -}}
+      {{- if or
+        (and .ovhAuthentication.oauth2ClientID .ovhAuthentication.oauth2ClientSecret)
+        (and .ovhAuthenticationRef.applicationKeyRef.name .ovhAuthenticationRef.applicationKeyRef.key .ovhAuthenticationRef.applicationSecretRef.name .ovhAuthenticationRef.applicationSecretRef.key .ovhAuthenticationRef.applicationConsumerKeyRef.name .ovhAuthenticationRef.applicationConsumerKeyRef.key)
+        (and .ovhAuthenticationRef.oauth2ClientIDRef.name .ovhAuthenticationRef.oauth2ClientIDRef.key .ovhAuthenticationRef.oauth2ClientSecretRef.name .ovhAuthenticationRef.oauth2ClientSecretRef.key) -}}
+        {{- $result = "true" -}}
+      {{- end -}}
+    {{/* Check if direct authentication is set for oauth2 */}}
+    {{- else if and .ovhAuthentication.oauth2ClientID .ovhAuthentication.oauth2ClientSecret -}}
+      {{- if or
+        (and .ovhAuthentication.applicationKey .ovhAuthentication.applicationSecret .ovhAuthentication.applicationConsumerKey)
+        (and .ovhAuthenticationRef.applicationKeyRef.name .ovhAuthenticationRef.applicationKeyRef.key .ovhAuthenticationRef.applicationSecretRef.name .ovhAuthenticationRef.applicationSecretRef.key .ovhAuthenticationRef.applicationConsumerKeyRef.name .ovhAuthenticationRef.applicationConsumerKeyRef.key)
+        (and .ovhAuthenticationRef.oauth2ClientIDRef.name .ovhAuthenticationRef.oauth2ClientIDRef.key .ovhAuthenticationRef.oauth2ClientSecretRef.name .ovhAuthenticationRef.oauth2ClientSecretRef.key) -}}
+        {{- $result = "true" -}}
+      {{- end -}}
+    {{/* Check if authentication by reference is set for application */}}
+    {{- else if and .ovhAuthenticationRef.applicationKeyRef.name .ovhAuthenticationRef.applicationKeyRef.key .ovhAuthenticationRef.applicationSecretRef.name .ovhAuthenticationRef.applicationSecretRef.key .ovhAuthenticationRef.applicationConsumerKeyRef.name .ovhAuthenticationRef.applicationConsumerKeyRef.key -}}
+      {{- if or
+        (and .ovhAuthentication.applicationKey .ovhAuthentication.applicationSecret .ovhAuthentication.applicationConsumerKey)
+        (and .ovhAuthentication.oauth2ClientID .ovhAuthentication.oauth2ClientSecret)
+        (and .ovhAuthenticationRef.oauth2ClientIDRef.name .ovhAuthenticationRef.oauth2ClientIDRef.key .ovhAuthenticationRef.oauth2ClientSecretRef.name .ovhAuthenticationRef.oauth2ClientSecretRef.key) -}}
+        {{- $result = "true" -}}
+      {{- end -}}
+    {{/* Check if authentication by reference is set for oauth2 */}}
+    {{- else if and .ovhAuthenticationRef.oauth2ClientIDRef.name .ovhAuthenticationRef.oauth2ClientIDRef.key .ovhAuthenticationRef.oauth2ClientSecretRef.name .ovhAuthenticationRef.oauth2ClientSecretRef.key -}}
+      {{- if or
+        (and .ovhAuthentication.applicationKey .ovhAuthentication.applicationSecret .ovhAuthentication.applicationConsumerKey)
+        (and .ovhAuthentication.oauth2ClientID .ovhAuthentication.oauth2ClientSecret)
+        (and .ovhAuthenticationRef.applicationKeyRef.name .ovhAuthenticationRef.applicationKeyRef.key .ovhAuthenticationRef.applicationSecretRef.name .ovhAuthenticationRef.applicationSecretRef.key .ovhAuthenticationRef.applicationConsumerKeyRef.name .ovhAuthenticationRef.applicationConsumerKeyRef.key) -}}
+        {{- $result = "true" -}}
+      {{- end -}}
+    {{- end -}}
   {{- eq $result "true" -}}
 {{- end -}}

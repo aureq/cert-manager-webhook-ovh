@@ -35,3 +35,20 @@ as the error messages are clearer and specific to the issue in the values file.
     {{- end -}}
   {{- end -}}{{- /* end if .create */}}
 {{- end -}}{{- /* end range $.Values.issuers */ -}}
+
+{{- /* 📄 validate each issuer authentication details according to the selected method.
+
+The code below checks for each issuer to be created that the required fields for the defined authentication
+method are set either in ovhAuthentication or ovhAuthenticationRef. If the validation fails, the template
+will `fail` with a clear error message indicating the reason of the failure.
+
+
+*/ -}}
+{{- range $.Values.issuers }}
+  {{- if .create -}}
+    {{- if eq (include "cert-manager-webhook-ovh.isMultipleAuthenticationMethodSet" .) "true" -}}
+      {{- fail (printf "Invalid issuer '%s': You must define exactly one authentication method. \n * applicationCredentials=%s, \n * oauth2Credentials=%s, \n * applicationRef=%s, \n * oauth2Ref=%s" .name (include "cert-manager-webhook-ovh._applicationOvhAuthenticationAvail" .) (include "cert-manager-webhook-ovh._oauth2OvhAuthenticationAvail" .) (include "cert-manager-webhook-ovh._applicationOvhAuthenticationRefAvail" .) (include "cert-manager-webhook-ovh._oauth2OvhAuthenticationRefAvail" .)) -}}
+      {{- $context := "true" -}}
+    {{- end -}}
+  {{- end -}}{{- /* end if .create */}}
+{{- end -}}{{- /* end range $.Values.issuers */ -}}
