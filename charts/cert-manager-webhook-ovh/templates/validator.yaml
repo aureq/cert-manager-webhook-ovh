@@ -42,13 +42,11 @@ The code below checks for each issuer to be created that the required fields for
 method are set either in ovhAuthentication or ovhAuthenticationRef. If the validation fails, the template
 will `fail` with a clear error message indicating the reason of the failure.
 
-
 */ -}}
 {{- range $.Values.issuers }}
   {{- if .create -}}
     {{- if eq (include "cert-manager-webhook-ovh.isMultipleAuthenticationMethodSet" .) "true" -}}
-      {{- fail (printf "Invalid issuer '%s': You must define exactly one authentication method. \n * applicationCredentials=%s, \n * oauth2Credentials=%s, \n * applicationRef=%s, \n * oauth2Ref=%s" .name (include "cert-manager-webhook-ovh._applicationOvhAuthenticationAvail" .) (include "cert-manager-webhook-ovh._oauth2OvhAuthenticationAvail" .) (include "cert-manager-webhook-ovh._applicationOvhAuthenticationRefAvail" .) (include "cert-manager-webhook-ovh._oauth2OvhAuthenticationRefAvail" .)) -}}
-      {{- $context := "true" -}}
+      {{- fail (printf "Invalid issuer '%s': You must define exactly one authentication method. ovhAuthentication.application*=%s, ovhAuthentication.oauth2*=%s, ovhAuthenticationRef.application*=%s, ovhAuthenticationRef.oauth2*=%s" .name (include "cert-manager-webhook-ovh._applicationOvhAuthenticationAvail" .) (include "cert-manager-webhook-ovh._oauth2OvhAuthenticationAvail" .) (include "cert-manager-webhook-ovh._applicationOvhAuthenticationRefAvail" .) (include "cert-manager-webhook-ovh._oauth2OvhAuthenticationRefAvail" .)) -}}
     {{- end -}}
   {{- end -}}{{- /* end if .create */}}
 {{- end -}}{{- /* end range $.Values.issuers */ -}}
