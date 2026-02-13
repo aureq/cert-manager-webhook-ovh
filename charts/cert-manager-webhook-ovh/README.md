@@ -1,6 +1,6 @@
 # cert-manager-webhook-ovh
 
-![Version: 0.9.0-alpha.1](https://img.shields.io/badge/Version-0.9.0--alpha.1-informational?style=flat-square) ![AppVersion: 0.9.0-alpha.1](https://img.shields.io/badge/AppVersion-0.9.0--alpha.1-informational?style=flat-square)
+![Version: 0.9.0-alpha.2](https://img.shields.io/badge/Version-0.9.0--alpha.2-informational?style=flat-square) ![AppVersion: 0.9.0-alpha.2](https://img.shields.io/badge/AppVersion-0.9.0--alpha.2-informational?style=flat-square)
 
 OVH DNS cert-manager ACME webhook
 
