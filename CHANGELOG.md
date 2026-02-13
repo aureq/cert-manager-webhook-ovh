@@ -1,5 +1,15 @@
 # Changelog
 
+## 0.9.0-alpha.2
+
+### Noteworthy changes
+
+- 🌿 expand issuer test suite with oauth2 and application ref test cases
+- 📝 update README feature list with unit tests entry and wording fixes
+- 🌿 add validation to enforce single authentication method per issuer
+- 🌿 add unit tests for validator template with dual authentication rejection
+- ⚙️ add `-trimpath` flag to go build in `Dockerfile` to support reproducible builds
+
 ## 0.9.0-alpha.1
 
 ### Noteworthy changes
