@@ -1,0 +1,55 @@
+suite: Testing `validator.yaml` 1/x
+templates:
+  - validator.yaml
+values:
+  - values/invalid/values-2-authentications-dir.yaml
+chart:
+  version: 1.0.0
+  appVersion: 1.0.0
+tests:
+  - it: Validate failed rendering in `validator.yaml` 1/x
+    asserts:
+      - failedTemplate:
+          errorMessage: ""
+---
+suite: Testing `validator.yaml` 2/x
+templates:
+  - validator.yaml
+values:
+  - values/invalid/values-2-authentications-ref.yaml
+chart:
+  version: 1.0.0
+  appVersion: 1.0.0
+tests:
+  - it: Validate failed rendering in `validator.yaml` 1/x
+    asserts:
+      - failedTemplate:
+          errorMessage: ""
+---
+suite: Testing `validator.yaml` 3/x
+templates:
+  - validator.yaml
+values:
+  - values/invalid/values-2-application-authentications.yaml
+chart:
+  version: 1.0.0
+  appVersion: 1.0.0
+tests:
+  - it: Validate failed rendering in `validator.yaml` 1/x
+    asserts:
+      - failedTemplate:
+          errorMessage: ""
+---
+suite: Testing `validator.yaml` 4/x
+templates:
+  - validator.yaml
+values:
+  - values/invalid/values-2-oauth2-authentications.yaml
+chart:
+  version: 1.0.0
+  appVersion: 1.0.0
+tests:
+  - it: Validate failed rendering in `validator.yaml` 1/x
+    asserts:
+      - failedTemplate:
+          errorMessage: ""

@@ -1,0 +1,113 @@
+# vim: set ft=yaml
+# yaml-language-server: $schema=../../../values.schema.json
+
+groupName: acme.helm.unittest.example
+
+certManager:
+  namespace: cert-system
+  serviceAccountName: cert-manager
+
+issuers:
+
+  - name: letsencrypt-prod
+    create: true
+    kind: ClusterIssuer
+    namespace: default
+    acmeServerUrl: https://acme-v02.api.letsencrypt.org/directory
+    email: tls-manager@example.net
+    disableAccountKeyGeneration: false
+    profile: classic
+    cnameStrategy: None
+
+    externalAccountBinding:
+      enabled: false
+      keyID: ''
+
+      keySecretRef:
+        name: ''
+        key: ''
+
+    ovhEndpointName: ovh-eu
+
+    ovhAuthenticationMethod: application
+
+    ovhAuthentication:
+      oauth2ClientID: ''
+      oauth2ClientSecret: ''
+      applicationKey: 'appkey-0123456789abcdef'
+      applicationSecret: 'appsecret-0123456789abcdef'
+      applicationConsumerKey: 'appconsumerkey-0123456789abcdef'
+
+    ovhAuthenticationRef:
+      oauth2ClientIDRef:
+        name: ''
+        key: oauth2ClientID
+      oauth2ClientSecretRef:
+        name: ''
+        key: oauth2ClientSecret
+      applicationKeyRef:
+        name: 'ovh-credentials'
+        key: applicationKey
+      applicationSecretRef:
+        name: 'ovh-credentials'
+        key: applicationSecret
+      applicationConsumerKeyRef:
+        name: 'ovh-credentials'
+        key: applicationConsumerKey
+
+rbac:
+  roleType: Role
+
+image:
+  registry: 'ghcr.io'
+  repository: aureq/cert-manager-webhook-ovh
+  tag: ''
+  pullPolicy: IfNotPresent
+  pullSecrets: []
+
+# ✅ (missing selectors)
+pod:
+  annotations: {}
+  podLabels: {}
+  podAnnotations: {}
+  replicas: 1
+  environment:
+    HTTP_PROXY: "http://proxy.example.net:3129"
+    HTTPS_PROXY: "http://proxy.example.net:3129"
+    NO_PROXY: "10.0.0.0/8,127.0.0.0/8,172.16.0.0/12,192.168.0.0/16,*.svc,*.cluster.local,*.svc.cluster.local,169.254.169.254,127.0.0.1,localhost,localhost.localdomain"
+
+  securityContext:
+    pod:
+      runAsUser: 1000
+      runAsGroup: 1000
+    container:
+      readOnlyRootFilesystem: true
+      allowPrivilegeEscalation: false
+      privileged: false
+
+  port: 8443
+  hostNetwork: false
+  priorityClassName: ''
+  resources:
+    requests:
+      cpu: 100m
+      memory: 64Mi
+    limits:
+      cpu: 200m
+      memory: 96Mi
+
+  # tolerations: []
+
+  selectors:
+    nodeSelector: {}
+    affinity: {}
+
+nameOverride: ""
+fullnameOverride: ""
+
+service:
+  type: ClusterIP
+  port: 443
+  annotations: {}
+
+extraObjects: []
