@@ -1,5 +1,58 @@
 # Changelog
 
+## 0.9.0
+
+⭐ If you are using this project, please consider supporting it by starring the repository. It helps me a lot to keep maintaining and improving this project. Thank you!
+
+### Breaking changes and important notes
+
+🚀 Overall, this release gets us closer to a more robust, polished and user-friendly Helm chart. The time and quality invested in this release aim to bring it close to what you'd expect from a commercial product.
+
+🚀 The `values.yaml` is now fully documented and it now supports JSON schema validation. A lot of time has gone into rewriting unit tests to catch potential issues and ensure the stability of this Helm chart. The new validator template and the JSON schema validation helps catch configuration errors early and provides much better feedback to users.
+
+⚠️ Due to the refactor of the Helm chart structure, the `values.yaml` file has been reorganized and some configuration keys have been moved. Please refer to the updated [`values.yaml`](/charts/cert-manager-webhook-ovh/values.yaml) and the new [`README.md`](/charts/cert-manager-webhook-ovh/README.md) for details on the new structure and configuration options.
+
+⚠️ ️Temporarily remove support for deployment `tolerations` due to a problem with the Helm Chart template rendering.
+
+### Major features
+
+- 🚀 add JSON schema for Helm chart `values.yaml` validation when deploying the Chart
+- 🚀 rewrite the Chart unit tests to validate the Chart rendering and error handling
+- 🎉 add JSON schema annotations to all options in `values.yaml`
+- 🎉 refactor/reorganize the Helm chart `values.yaml` structure (⚠️ see breaking changes above)
+- 🎉 add dedicated `validator.yaml` template for issuer authentication
+- 📄 add inline documentation to `values.yaml`, including JSON schema for schema generation
+- 📄 add Helm chart [`README.md`](/charts/cert-manager-webhook-ovh/README.md) with values documentation
+
+### Noteworthy changes
+
+- 🌿 add unit tests for `groupName`, `certManager`, `rbac`, `image`, `service` and `pod` options
+- 🌿 refactor authentication helper functions in _helpers.tpl
+- 🌿 update helm unit tests for refactored authentication helpers
+- 🌿 update test values for refactored authentication validation
+- 🌿 add `annotations` support for `service`
+- 🌿 add validation to enforce single authentication method per issuer
+- 🌿 add unit tests for validator template with dual authentication rejection
+- 🌿 add issuer authentication method field validation
+- 🌿 add unit tests for issuer authentication method validation
+- 🌱 add YAML language server schema annotation to `values.yaml`
+- 🌱 remove redundant fail check and add inline comments in issuer.yaml
+- 🌱 remove redundant fail check in secret.yaml
+- 🌱 add default value schema annotations for ovhAuthenticationRef key fields
+- 📄 improve `profile` option comments in `values.yaml`
+- 📄 update release workflow with `helm-docs` and `helm-schema` steps in `README.md`
+- 📄 update feature list in `README.md`
+- 📄 clarify image.tag accepts version numbers or digests
+- ⚙️ add `-trimpath` flag to go build in `Dockerfile` to support reproducible builds
+- ⚙️ add `helm-docs`, `helm-schema`, and `helm-unittest` targets in `Makefile`
+- 🔥 temporarily remove deployment `tolerations` due to a problem with the Helm template rendering.
+- 🔥 remove legacy test files and test value fixtures
+- 📝 update README feature list with unit tests entry and wording fixes
+
+### Dependencies
+
+- ⏩ upgrade github.com/cert-manager/cert-manager to v1.19.3
+
 ## 0.9.0-alpha.3
 
 ### Noteworthy changes
@@ -57,7 +110,7 @@
 - 📄 update release workflow with `helm-docs` and `helm-schema` steps in `README.md`
 - 📄 update feature list in `README.md`
 - 📄 clarify image.tag accepts version numbers or digests
-- ⚙ add `helm-docs`, `helm-schema`, and `helm-unittest` targets in `Makefile`
+- ⚙️ add `helm-docs`, `helm-schema`, and `helm-unittest` targets in `Makefile`
 - 🔥 remove deployment `tolerations` due to a problem with the Helm template rendering.
 - 🔥 remove legacy test files and test value fixtures
 
