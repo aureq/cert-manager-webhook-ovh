@@ -53,3 +53,18 @@ tests:
     asserts:
       - failedTemplate:
           errorMessage: ""
+---
+suite: Testing `validator.yaml` 5/x
+templates:
+  - validator.yaml
+values:
+  - values/invalid/values-crossed-authentication-method.yaml
+chart:
+  version: 1.0.0
+  appVersion: 1.0.0
+tests:
+  - it: Validate failed rendering in `validator.yaml` 1/x
+    asserts:
+      - failedTemplate:
+          errorMessage: "Invalid issuer configuration 'letsencrypt-prod': Missing required fields for 'application' authentication method. applicationCredentials=false, applicationRef=false"
+
