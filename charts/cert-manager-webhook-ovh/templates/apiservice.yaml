@@ -12,5 +12,5 @@ spec:
   versionPriority: 15
   service:
     name: {{ include "cert-manager-webhook-ovh.fullname" . }}
-    namespace: {{ .Release.Namespace }}
+    namespace: {{ .Release.Namespace | quote }}
   version: v1alpha1
