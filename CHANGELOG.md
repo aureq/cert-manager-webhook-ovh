@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.9.0-alpha.3
+
+### Noteworthy changes
+
+- 🌿 add issuer authentication method field validation
+- 🌿 add unit tests for issuer authentication method validation
+
 ## 0.9.0-alpha.2
 
 ### Noteworthy changes
