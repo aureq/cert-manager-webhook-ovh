@@ -103,7 +103,7 @@ Return the proper image name
 Returns true if externalAccountBinding is correctly set.
 */}}
 {{- define "cert-manager-webhook-ovh.isExternalAccountBindingAvail" -}}
-  {{- if .externalAccountBinding.enabled -}}
+  {{- if (.externalAccountBinding).enabled -}}
     {{- if and (.externalAccountBinding.keyID) (.externalAccountBinding.keySecretRef.name) (.externalAccountBinding.keySecretRef.key) -}}
       {{- eq "true" "true" -}}
     {{- end -}}

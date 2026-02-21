@@ -181,9 +181,20 @@
                     "type": "object"
                   }
                 },
-                "required": [
-                  "keyID",
-                  "keySecretRef"
+                "anyOf": [
+                  {
+                    "not": {
+                      "properties": {
+                        "enabled": { "enum": [true] }
+                      },
+                      "required": []
+                    }
+                  },
+                  { "required": [
+                      "keyID",
+                      "keySecretRef"
+                    ]
+                  }
                 ],
                 "title": "externalAccountBinding",
                 "type": "object"
