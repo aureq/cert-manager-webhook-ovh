@@ -75,11 +75,18 @@ trap "rm -f $RELEASE_CHANGELOG" EXIT
 
 echo -e "## Changes for cert-manager-webhook-ovh $CURRENT_VERSION\n" > "$RELEASE_CHANGELOG"
 
-cat CHANGELOG.md | sed -n "/## $CURRENT_VERSION/,/## $PREVIOUS_VERSION/p;" | sed 'N;$!P;$!D;$d' | awk 'NR>2' | sed '/^$/d' >> "$RELEASE_CHANGELOG"
-echo -n "- Released on " >> "$RELEASE_CHANGELOG"
-TZ=UTC date >> "$RELEASE_CHANGELOG"
+cat CHANGELOG.md | sed -n "/## $CURRENT_VERSION/,/## $PREVIOUS_VERSION/p;" | sed 'N;$!P;$!D;$d' | awk 'NR>2' >> "$RELEASE_CHANGELOG"
+RELEASE_DATE="$(TZ=UTC date)"
+echo -e "\n**Released on ${RELEASE_DATE}**" >> "$RELEASE_CHANGELOG"
 
-# we want to detect is a release name wasn't released but is now pulled into
+RELEAE_HEADING_COUNT=$(cat $RELEASE_CHANGELOG | grep '^## ' | wc -l)
+
+if [ "$RELEAE_HEADING_COUNT" -ne 1 ]; then
+    echo "Unexpected number of release headings in the release changelog. (RELEAE_HEADING_COUNT='$RELEAE_HEADING_COUNT')"
+    exit 1
+fi
+
+# we want to detect if a release name wasn't released but is now pulled into
 # the release notes. If so, we should stop and request that unpublished release
 # to be merge with the one we want to actually publish
 cat "$RELEASE_CHANGELOG" | grep '^## ' | sed 's/^## //g;' | sed '1d' | while read R; do
