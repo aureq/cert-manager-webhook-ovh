@@ -14,6 +14,8 @@
 
 ⚠️ ️Temporarily remove support for deployment `tolerations` due to a problem with the Helm Chart template rendering.
 
+❤️ In loving memory of my mom. She was my biggest supporter. This release is dedicated to her memory. I miss you mom, and I love you. April 27th, 1948 ~ February 19th, 2026.
+
 ### Major features
 
 - 🚀 add JSON schema for Helm chart `values.yaml` validation when deploying the Chart
