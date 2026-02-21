@@ -1,5 +1,17 @@
 # Changelog
 
+## 0.9.1
+
+⭐ If you are using this project, please consider supporting it by starring the repository. It helps me a lot to keep maintaining and improving this project. Thank you!
+
+❤️ In loving memory of my mom. She was my biggest supporter. This release is dedicated to her memory. I miss you mom, and I love you. April 27th, 1948 ~ February 19th, 2026.
+
+### Noteworthy changes
+
+- 🐛 explicitly declare `ovhAuthenticationRef` as optional in issuer schema
+- 🐛 add `nil` guards for authentication objects in Helm template helpers (fixes [#79](https://github.com/aureq/cert-manager-webhook-ovh/issues/79))
+- 🌱 add new unit tests to cover nil guards in Helm template helpers
+
 ## 0.9.0
 
 ⭐ If you are using this project, please consider supporting it by starring the repository. It helps me a lot to keep maintaining and improving this project. Thank you!
