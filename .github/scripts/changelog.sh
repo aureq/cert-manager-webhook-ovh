@@ -102,7 +102,7 @@ if [ ! -z "$(echo $CURRENT_VERSION | sed  '/-\(alpha\|beta\|rc\)/!d')" ]; then
     GH_OPTS="--prerelease"
 fi
 
-gh release create "$CURRENT_VERSION" --notes-file "$RELEASE_CHANGELOG" $GH_OPTS
+gh release create "$CURRENT_VERSION" --title "$CURRENT_VERSION" --notes-file "$RELEASE_CHANGELOG" $GH_OPTS
 
 sleep 2
 
