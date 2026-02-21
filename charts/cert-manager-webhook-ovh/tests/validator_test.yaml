@@ -67,4 +67,17 @@ tests:
     asserts:
       - failedTemplate:
           errorMessage: "Invalid issuer configuration 'letsencrypt-prod': Missing required fields for 'application' authentication method. applicationCredentials=false, applicationRef=false"
+---
+suite: Testing `validator.yaml` 6/x
+templates:
+  - validator.yaml
+values:
+  - values/valid/values-issuer-partial.yaml
+chart:
+  version: 1.0.0
+  appVersion: 1.0.0
+tests:
+  - it: Validate successful rendering in `validator.yaml` 1/x
+    asserts:
+      - notFailedTemplate: {}
 

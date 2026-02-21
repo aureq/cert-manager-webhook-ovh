@@ -121,8 +121,10 @@ $arg1: The issuer values
 */}}
 {{- define "cert-manager-webhook-ovh._applicationOvhAuthenticationAvail" -}}
   {{- $result := "false" -}}
-  {{- if and .ovhAuthentication.applicationKey .ovhAuthentication.applicationSecret .ovhAuthentication.applicationConsumerKey -}}
-    {{- $result = "true" -}}
+  {{- if .ovhAuthentication -}}
+    {{- if and .ovhAuthentication.applicationKey .ovhAuthentication.applicationSecret .ovhAuthentication.applicationConsumerKey -}}
+      {{- $result = "true" -}}
+    {{- end -}}
   {{- end -}}
   {{- eq $result "true" -}}
 {{- end -}}
@@ -148,8 +150,10 @@ $arg1: The issuer values
 */}}
 {{- define "cert-manager-webhook-ovh._oauth2OvhAuthenticationAvail" -}}
   {{- $result := "false" -}}
-  {{- if and .ovhAuthentication.oauth2ClientID .ovhAuthentication.oauth2ClientSecret -}}
-    {{- $result = "true" -}}
+  {{- if .ovhAuthentication -}}
+    {{- if and .ovhAuthentication.oauth2ClientID .ovhAuthentication.oauth2ClientSecret -}}
+      {{- $result = "true" -}}
+    {{- end -}}
   {{- end -}}
   {{- eq $result "true" -}}
 {{- end -}}
@@ -198,8 +202,12 @@ $arg1: The issuer values
 */}}
 {{- define "cert-manager-webhook-ovh._applicationOvhAuthenticationRefAvail" -}}
   {{- $result := "false" -}}
-  {{- if and .ovhAuthenticationRef.applicationKeyRef.name .ovhAuthenticationRef.applicationKeyRef.key .ovhAuthenticationRef.applicationSecretRef.name .ovhAuthenticationRef.applicationSecretRef.key .ovhAuthenticationRef.applicationConsumerKeyRef.name .ovhAuthenticationRef.applicationConsumerKeyRef.key -}}
-    {{- $result = "true" -}}
+  {{- if .ovhAuthenticationRef -}}
+    {{- if and .ovhAuthenticationRef.applicationKeyRef .ovhAuthenticationRef.applicationSecretRef .ovhAuthenticationRef.applicationConsumerKeyRef -}}
+      {{- if and .ovhAuthenticationRef.applicationKeyRef.name .ovhAuthenticationRef.applicationKeyRef.key .ovhAuthenticationRef.applicationSecretRef.name .ovhAuthenticationRef.applicationSecretRef.key .ovhAuthenticationRef.applicationConsumerKeyRef.name .ovhAuthenticationRef.applicationConsumerKeyRef.key -}}
+        {{- $result = "true" -}}
+      {{- end -}}
+    {{- end -}}
   {{- end -}}
   {{- eq $result "true" -}}
 {{- end -}}
@@ -225,8 +233,12 @@ $arg1: The issuer values
 */}}
 {{- define "cert-manager-webhook-ovh._oauth2OvhAuthenticationRefAvail" -}}
   {{- $result := "false" -}}
-  {{- if and .ovhAuthenticationRef.oauth2ClientIDRef.name .ovhAuthenticationRef.oauth2ClientIDRef.key .ovhAuthenticationRef.oauth2ClientSecretRef.name .ovhAuthenticationRef.oauth2ClientSecretRef.key -}}
-    {{- $result = "true" -}}
+  {{- if .ovhAuthenticationRef -}}
+    {{- if and .ovhAuthenticationRef.oauth2ClientIDRef .ovhAuthenticationRef.oauth2ClientSecretRef -}}
+      {{- if and .ovhAuthenticationRef.oauth2ClientIDRef.name .ovhAuthenticationRef.oauth2ClientIDRef.key .ovhAuthenticationRef.oauth2ClientSecretRef.name .ovhAuthenticationRef.oauth2ClientSecretRef.key -}}
+        {{- $result = "true" -}}
+      {{- end -}}
+    {{- end -}}
   {{- end -}}
   {{- eq $result "true" -}}
 {{- end -}}
@@ -271,35 +283,35 @@ $arg1: The issuer values
 {{- define "cert-manager-webhook-ovh.isMultipleAuthenticationMethodSet" -}}
   {{- $result := "false" -}}
     {{/* Check if direct authentication is set for application */}}
-    {{- if and .ovhAuthentication.applicationKey .ovhAuthentication.applicationSecret .ovhAuthentication.applicationConsumerKey -}}
+    {{- if and .ovhAuthentication .ovhAuthentication.applicationKey .ovhAuthentication.applicationSecret .ovhAuthentication.applicationConsumerKey -}}
       {{- if or
         (and .ovhAuthentication.oauth2ClientID .ovhAuthentication.oauth2ClientSecret)
-        (and .ovhAuthenticationRef.applicationKeyRef.name .ovhAuthenticationRef.applicationKeyRef.key .ovhAuthenticationRef.applicationSecretRef.name .ovhAuthenticationRef.applicationSecretRef.key .ovhAuthenticationRef.applicationConsumerKeyRef.name .ovhAuthenticationRef.applicationConsumerKeyRef.key)
-        (and .ovhAuthenticationRef.oauth2ClientIDRef.name .ovhAuthenticationRef.oauth2ClientIDRef.key .ovhAuthenticationRef.oauth2ClientSecretRef.name .ovhAuthenticationRef.oauth2ClientSecretRef.key) -}}
+        (and .ovhAuthenticationRef .ovhAuthenticationRef.applicationKeyRef .ovhAuthenticationRef.applicationKeyRef.name .ovhAuthenticationRef.applicationKeyRef.key .ovhAuthenticationRef.applicationSecretRef .ovhAuthenticationRef.applicationSecretRef.name .ovhAuthenticationRef.applicationSecretRef.key .ovhAuthenticationRef.applicationConsumerKeyRef .ovhAuthenticationRef.applicationConsumerKeyRef.name .ovhAuthenticationRef.applicationConsumerKeyRef.key)
+        (and .ovhAuthenticationRef .ovhAuthenticationRef.oauth2ClientIDRef .ovhAuthenticationRef.oauth2ClientIDRef.name .ovhAuthenticationRef.oauth2ClientIDRef.key .ovhAuthenticationRef.oauth2ClientSecretRef .ovhAuthenticationRef.oauth2ClientSecretRef.name .ovhAuthenticationRef.oauth2ClientSecretRef.key) -}}
         {{- $result = "true" -}}
       {{- end -}}
     {{/* Check if direct authentication is set for oauth2 */}}
-    {{- else if and .ovhAuthentication.oauth2ClientID .ovhAuthentication.oauth2ClientSecret -}}
+    {{- else if and .ovhAuthentication .ovhAuthentication.oauth2ClientID .ovhAuthentication.oauth2ClientSecret -}}
       {{- if or
         (and .ovhAuthentication.applicationKey .ovhAuthentication.applicationSecret .ovhAuthentication.applicationConsumerKey)
-        (and .ovhAuthenticationRef.applicationKeyRef.name .ovhAuthenticationRef.applicationKeyRef.key .ovhAuthenticationRef.applicationSecretRef.name .ovhAuthenticationRef.applicationSecretRef.key .ovhAuthenticationRef.applicationConsumerKeyRef.name .ovhAuthenticationRef.applicationConsumerKeyRef.key)
-        (and .ovhAuthenticationRef.oauth2ClientIDRef.name .ovhAuthenticationRef.oauth2ClientIDRef.key .ovhAuthenticationRef.oauth2ClientSecretRef.name .ovhAuthenticationRef.oauth2ClientSecretRef.key) -}}
+        (and .ovhAuthenticationRef .ovhAuthenticationRef.applicationKeyRef .ovhAuthenticationRef.applicationKeyRef.name .ovhAuthenticationRef.applicationKeyRef.key .ovhAuthenticationRef.applicationSecretRef .ovhAuthenticationRef.applicationSecretRef.name .ovhAuthenticationRef.applicationSecretRef.key .ovhAuthenticationRef.applicationConsumerKeyRef .ovhAuthenticationRef.applicationConsumerKeyRef.name .ovhAuthenticationRef.applicationConsumerKeyRef.key)
+        (and .ovhAuthenticationRef .ovhAuthenticationRef.oauth2ClientIDRef .ovhAuthenticationRef.oauth2ClientIDRef.name .ovhAuthenticationRef.oauth2ClientIDRef.key .ovhAuthenticationRef.oauth2ClientSecretRef .ovhAuthenticationRef.oauth2ClientSecretRef.name .ovhAuthenticationRef.oauth2ClientSecretRef.key) -}}
         {{- $result = "true" -}}
       {{- end -}}
     {{/* Check if authentication by reference is set for application */}}
-    {{- else if and .ovhAuthenticationRef.applicationKeyRef.name .ovhAuthenticationRef.applicationKeyRef.key .ovhAuthenticationRef.applicationSecretRef.name .ovhAuthenticationRef.applicationSecretRef.key .ovhAuthenticationRef.applicationConsumerKeyRef.name .ovhAuthenticationRef.applicationConsumerKeyRef.key -}}
+    {{- else if and .ovhAuthenticationRef .ovhAuthenticationRef.applicationKeyRef .ovhAuthenticationRef.applicationKeyRef.name .ovhAuthenticationRef.applicationKeyRef.key .ovhAuthenticationRef.applicationSecretRef .ovhAuthenticationRef.applicationSecretRef.name .ovhAuthenticationRef.applicationSecretRef.key .ovhAuthenticationRef.applicationConsumerKeyRef .ovhAuthenticationRef.applicationConsumerKeyRef.name .ovhAuthenticationRef.applicationConsumerKeyRef.key -}}
       {{- if or
-        (and .ovhAuthentication.applicationKey .ovhAuthentication.applicationSecret .ovhAuthentication.applicationConsumerKey)
-        (and .ovhAuthentication.oauth2ClientID .ovhAuthentication.oauth2ClientSecret)
-        (and .ovhAuthenticationRef.oauth2ClientIDRef.name .ovhAuthenticationRef.oauth2ClientIDRef.key .ovhAuthenticationRef.oauth2ClientSecretRef.name .ovhAuthenticationRef.oauth2ClientSecretRef.key) -}}
+        (and .ovhAuthentication .ovhAuthentication.applicationKey .ovhAuthentication.applicationSecret .ovhAuthentication.applicationConsumerKey)
+        (and .ovhAuthentication .ovhAuthentication.oauth2ClientID .ovhAuthentication.oauth2ClientSecret)
+        (and .ovhAuthenticationRef.oauth2ClientIDRef .ovhAuthenticationRef.oauth2ClientIDRef.name .ovhAuthenticationRef.oauth2ClientIDRef.key .ovhAuthenticationRef.oauth2ClientSecretRef .ovhAuthenticationRef.oauth2ClientSecretRef.name .ovhAuthenticationRef.oauth2ClientSecretRef.key) -}}
         {{- $result = "true" -}}
       {{- end -}}
     {{/* Check if authentication by reference is set for oauth2 */}}
-    {{- else if and .ovhAuthenticationRef.oauth2ClientIDRef.name .ovhAuthenticationRef.oauth2ClientIDRef.key .ovhAuthenticationRef.oauth2ClientSecretRef.name .ovhAuthenticationRef.oauth2ClientSecretRef.key -}}
+    {{- else if and .ovhAuthenticationRef .ovhAuthenticationRef.oauth2ClientIDRef .ovhAuthenticationRef.oauth2ClientIDRef.name .ovhAuthenticationRef.oauth2ClientIDRef.key .ovhAuthenticationRef.oauth2ClientSecretRef .ovhAuthenticationRef.oauth2ClientSecretRef.name .ovhAuthenticationRef.oauth2ClientSecretRef.key -}}
       {{- if or
-        (and .ovhAuthentication.applicationKey .ovhAuthentication.applicationSecret .ovhAuthentication.applicationConsumerKey)
-        (and .ovhAuthentication.oauth2ClientID .ovhAuthentication.oauth2ClientSecret)
-        (and .ovhAuthenticationRef.applicationKeyRef.name .ovhAuthenticationRef.applicationKeyRef.key .ovhAuthenticationRef.applicationSecretRef.name .ovhAuthenticationRef.applicationSecretRef.key .ovhAuthenticationRef.applicationConsumerKeyRef.name .ovhAuthenticationRef.applicationConsumerKeyRef.key) -}}
+        (and .ovhAuthentication .ovhAuthentication.applicationKey .ovhAuthentication.applicationSecret .ovhAuthentication.applicationConsumerKey)
+        (and .ovhAuthentication .ovhAuthentication.oauth2ClientID .ovhAuthentication.oauth2ClientSecret)
+        (and .ovhAuthenticationRef.applicationKeyRef .ovhAuthenticationRef.applicationKeyRef.name .ovhAuthenticationRef.applicationKeyRef.key .ovhAuthenticationRef.applicationSecretRef .ovhAuthenticationRef.applicationSecretRef.name .ovhAuthenticationRef.applicationSecretRef.key .ovhAuthenticationRef.applicationConsumerKeyRef .ovhAuthenticationRef.applicationConsumerKeyRef.name .ovhAuthenticationRef.applicationConsumerKeyRef.key) -}}
         {{- $result = "true" -}}
       {{- end -}}
     {{- end -}}
