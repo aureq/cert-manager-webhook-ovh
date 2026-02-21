@@ -3,7 +3,7 @@ suite: Testing `root.groupName` option in `apiservice.yaml` 1/1
 templates:
   - apiservice.yaml
 values:
-  - values/valid/values.yaml
+  - values/valid/values-full.yaml
 tests:
   - it: Validate use of `groupName` field in APIService
     documentSelector:
@@ -21,7 +21,7 @@ suite: Testing `root.groupName` option in `deployment.yaml` 1/1
 templates:
   - deployment.yaml
 values:
-  - values/valid/values.yaml
+  - values/valid/values-full.yaml
 tests:
   - it: Validate use of `groupName` field in Deployment
     documentSelector:
@@ -36,7 +36,7 @@ suite: Testing `root.groupName` option in `issuer.yaml` 1/1
 templates:
   - issuer.yaml
 values:
-  - values/valid/values.yaml
+  - values/valid/values-full.yaml
 tests:
   - it: Validate use of `groupName` field in ClusterIssuer
     documentSelector:
@@ -51,7 +51,7 @@ suite: Testing `root.groupName` option in `rbac.yaml` 1/1
 templates:
   - rbac.yaml
 values:
-  - values/valid/values.yaml
+  - values/valid/values-full.yaml
 tests:
   - it: Validate use of `groupName` field in ClusterRole
     documentSelector:

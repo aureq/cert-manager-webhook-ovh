@@ -3,7 +3,7 @@ suite: Testing `root.image` option in `deployment.yaml` 1/3
 templates:
   - deployment.yaml
 values:
-  - values/valid/values.yaml
+  - values/valid/values-full.yaml
 chart:
   version: 1.0.0
   appVersion: 1.0.0
@@ -35,7 +35,7 @@ suite: Testing `root.image` option in `deployment.yaml` 2/3
 templates:
   - deployment.yaml
 values:
-  - values/valid/values.yaml
+  - values/valid/values-full.yaml
 chart:
   version: 1.0.0
   appVersion: 1.0.0
@@ -56,7 +56,7 @@ suite: Testing `root.image` option in `deployment.yaml` 3/3
 templates:
   - deployment.yaml
 values:
-  - values/valid/values.yaml
+  - values/valid/values-full.yaml
 chart:
   version: 1.0.0
   appVersion: 1.0.0

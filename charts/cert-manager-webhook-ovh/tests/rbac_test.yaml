@@ -3,7 +3,7 @@ suite: Testing `root.rbac` option in `rbac.yaml` 1/1
 templates:
   - rbac.yaml
 values:
-  - values/valid/values.yaml
+  - values/valid/values-full.yaml
 tests:
   - it: Validate use of `rbac` option in `Role`/`ClusterRole`
     documentSelector:
@@ -28,7 +28,7 @@ suite: Testing `root.rbac` option in `rbac.yaml` 1/2
 templates:
   - rbac.yaml
 values:
-  - values/valid/values.yaml
+  - values/valid/values-full.yaml
 set:
   rbac:
     roleType: ClusterRole

@@ -3,7 +3,7 @@ suite: Testing `root.pod` option in `deployment.yaml` 1/1
 templates:
   - deployment.yaml
 values:
-  - values/valid/values.yaml
+  - values/valid/values-full.yaml
 chart:
   version: 1.0.0
   appVersion: 1.0.0

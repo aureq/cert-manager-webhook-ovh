@@ -3,7 +3,7 @@ suite: Testing `root.issuers` option in `issuer.yaml` 1/2
 templates:
   - issuer.yaml
 values:
-  - values/valid/values.yaml
+  - values/valid/values-full.yaml
 chart:
   version: 1.0.0
   appVersion: 1.0.0
@@ -324,7 +324,7 @@ suite: Testing `root.issuers` option in `secret.yaml` 2/2
 templates:
   - secret.yaml
 values:
-  - values/valid/values.yaml
+  - values/valid/values-full.yaml
 chart:
   version: 1.0.0
   appVersion: 1.0.0

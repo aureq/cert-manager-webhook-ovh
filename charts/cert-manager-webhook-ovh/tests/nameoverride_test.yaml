@@ -3,7 +3,7 @@ suite: Testing `root.nameOverride` option in `service.yaml` 1/1
 templates:
   - service.yaml
 values:
-  - values/valid/values.yaml
+  - values/valid/values-full.yaml
 set:
   nameOverride: some-other-name
 tests:
@@ -26,7 +26,7 @@ suite: Testing `root.fullnameOverride` option in `service.yaml` 1/1
 templates:
   - service.yaml
 values:
-  - values/valid/values.yaml
+  - values/valid/values-full.yaml
 set:
   fullnameOverride: some-other-full-name
 tests:
