@@ -421,8 +421,7 @@
               "acmeServerUrl",
               "email",
               "ovhEndpointName",
-              "ovhAuthenticationMethod",
-              "ovhAuthenticationRef"
+              "ovhAuthenticationMethod"
             ],
             "type": "object"
           }

@@ -243,6 +243,9 @@ issuers:
       # -- Your OVH consumer key. Leave empty if you are using an existing secret.
       applicationConsumerKey: ''
 
+    # @schema
+    # required: false
+    # @schema
     # -- Define the details of a secret already containing the OVH credentials.
     # If `ovhAuthenticationMethod` is `application`, then provide:
     #   - `applicationKeyRef`, `applicationSecretRef` and `applicationConsumerKeyRef`.
