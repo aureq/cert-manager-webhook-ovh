@@ -73,7 +73,7 @@ subjects:
   - apiGroup: ""
     kind: ServiceAccount
     name: {{ .Values.certManager.serviceAccountName | default "cert-manager" }}
-    namespace: {{ .Values.certManager.namespace | quote }}
+    namespace: {{ .Values.certManager.namespace | quote | default "cert-manager" }}
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole

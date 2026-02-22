@@ -27,7 +27,7 @@ certManager:
   # required: true
   # type: string
   # @schema
-  # -- namespace in which your cert-manager is deployed
+  # -- namespace in which your cert-manager is deployed (default: cert-manager)
   namespace: cert-manager
 
   # @schema
