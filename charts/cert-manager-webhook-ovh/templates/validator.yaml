@@ -75,6 +75,9 @@ will `fail` with a clear error message indicating the reason of the failure.
 
 {{- /* 📄 validate each issuer external account binding details.
 
+This code checks for each issuer to be created that if external account binding is enabled, the required fields
+are set in the externalAccountBinding configuration. If the validation fails, the template will `fail` with a clear
+error message indicating the reason of the failure.
 */ -}}
 {{- range $.Values.issuers }}
   {{- if .create -}}
@@ -91,3 +94,12 @@ will `fail` with a clear error message indicating the reason of the failure.
     {{- end -}}
   {{- end -}}{{- /* end if .create */}}
 {{- end -}}{{- /* end range $.Values.issuers */ -}}
+
+{{- /* 📄 validate `groupName` is not empty.
+
+The code below checks that the `groupName` value is not empty. If the validation fails,
+the template will `fail` with a clear error message indicating the reason of the failure.
+*/ -}}
+{{- if eq ($.Values.groupName | trim) "" -}}
+  {{- fail "Invalid configuration: Missing value for required field 'groupName'." -}}
+{{- end -}}

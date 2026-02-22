@@ -94,6 +94,7 @@ tests:
   - it: Validate successful rendering in `validator.yaml` 1/x
     asserts:
       - notFailedTemplate: {}
+      # fixme: should also check eab keys are not present in rendered yaml
 
 ---
 suite: Testing `validator.yaml` 8/x
@@ -139,3 +140,18 @@ tests:
     asserts:
       - failedTemplate:
           errorMessage: "Invalid issuer 'eab-1': Missing value for required field 'externalAccountBinding.keySecretRef.key' for external account binding configuration."
+
+---
+suite: Testing `validator.yaml` 11/x
+templates:
+  - validator.yaml
+values:
+  - values/invalid/values-empty-groupname.yaml
+chart:
+  version: 1.0.0
+  appVersion: 1.0.0
+tests:
+  - it: Validate failed rendering in `validator.yaml` 1/x
+    asserts:
+      - failedTemplate:
+          errorMessage: "Invalid configuration: Missing value for required field 'groupName'."
