@@ -100,14 +100,17 @@ Return the proper image name
 {{- end -}}
 
 {{/*
-Returns true if externalAccountBinding is correctly set.
+Returns true if externalAccountBinding is enabled.
+This function doesn't perform data validation.
 */}}
 {{- define "cert-manager-webhook-ovh.isExternalAccountBindingAvail" -}}
-  {{- if .externalAccountBinding.enabled -}}
-    {{- if and (.externalAccountBinding.keyID) (.externalAccountBinding.keySecretRef.name) (.externalAccountBinding.keySecretRef.key) -}}
-      {{- eq "true" "true" -}}
+  {{- $result := "false" -}}
+  {{- if .externalAccountBinding -}}
+    {{- if .externalAccountBinding.enabled -}}
+      {{- $result = "true" -}}
     {{- end -}}
   {{- end -}}
+  {{- eq $result "true" -}}
 {{- end -}}
 
 {{/* --------------------------------------------------------------------- */}}

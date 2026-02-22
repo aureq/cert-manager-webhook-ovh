@@ -72,3 +72,22 @@ will `fail` with a clear error message indicating the reason of the failure.
     {{- end -}}
   {{- end -}}{{- /* end if .create */}}
 {{- end -}}{{- /* end range $.Values.issuers */ -}}
+
+{{- /* 📄 validate each issuer external account binding details.
+
+*/ -}}
+{{- range $.Values.issuers }}
+  {{- if .create -}}
+    {{- if and .externalAccountBinding .externalAccountBinding.enabled  -}}
+      {{- if not .externalAccountBinding.keyID -}}
+        {{- fail (printf "Invalid issuer '%s': Missing value for required field 'externalAccountBinding.keyID' for external account binding configuration." .name) -}}
+      {{- end -}}
+      {{- if not .externalAccountBinding.keySecretRef.name -}}
+        {{- fail (printf "Invalid issuer '%s': Missing value for required field 'externalAccountBinding.keySecretRef.name' for external account binding configuration." .name) -}}
+      {{- end -}}
+      {{- if not .externalAccountBinding.keySecretRef.key -}}
+        {{- fail (printf "Invalid issuer '%s': Missing value for required field 'externalAccountBinding.keySecretRef.key' for external account binding configuration." .name) -}}
+      {{- end -}}
+    {{- end -}}
+  {{- end -}}{{- /* end if .create */}}
+{{- end -}}{{- /* end range $.Values.issuers */ -}}

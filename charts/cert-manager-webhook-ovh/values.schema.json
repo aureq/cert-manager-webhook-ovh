@@ -182,6 +182,7 @@
                   }
                 },
                 "required": [
+                  "enabled",
                   "keyID",
                   "keySecretRef"
                 ],
