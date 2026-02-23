@@ -12,6 +12,15 @@
 - 🌿 add unit tests to validate external account binding validation
 - 🌿 add `groupName` empty value validation in Helm templates
 - 🌿 add default value for cert-manager namespace in RBAC binding
+- 📝 add helm-docs template and generate comprehensive README
+
+### Dependencies
+
+- ⏩ update to alpine 3.23 for main container, and make it consistent with build container
+- ⏩ update k8s.io/api to v0.34.4
+- ⏩ update k8s.io/apiextensions-apiserver to v0.34.4
+- ⏩ update k8s.io/apimachinery to v0.34.4
+- ⏩ update k8s.io/client-go to v0.34.4
 
 ## 0.9.1
 
