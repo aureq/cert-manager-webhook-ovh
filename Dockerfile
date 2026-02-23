@@ -11,7 +11,7 @@ COPY . .
 RUN go mod download
 RUN CGO_ENABLED=0 go build -trimpath -o /go/bin/app -ldflags '-s -w -extldflags "-static"' .
 
-FROM alpine:3.22
+FROM alpine:3.23
 
 COPY --from=build /go/bin/app /
 
