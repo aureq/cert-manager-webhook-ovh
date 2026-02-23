@@ -10,6 +10,8 @@
 
 - 🌿 add external account binding validation in Helm templates (fixes [#79](https://github.com/aureq/cert-manager-webhook-ovh/issues/79))
 - 🌿 add unit tests to validate external account binding validation
+- 🌿 add `groupName` empty value validation in Helm templates
+- 🌿 add default value for cert-manager namespace in RBAC binding
 
 ## 0.9.1
 

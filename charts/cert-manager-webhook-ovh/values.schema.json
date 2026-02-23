@@ -8,7 +8,7 @@
       "properties": {
         "namespace": {
           "default": "cert-manager",
-          "description": "namespace in which your cert-manager is deployed",
+          "description": "namespace in which your cert-manager is deployed (default: cert-manager)",
           "title": "namespace",
           "type": "string"
         },
