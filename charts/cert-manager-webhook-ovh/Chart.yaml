@@ -4,6 +4,7 @@ deprecated: false
 description: OVH DNS cert-manager ACME webhook
 home: https://github.com/aureq/cert-manager-webhook-ovh
 icon: https://raw.githubusercontent.com/aureq/cert-manager-webhook-ovh/main/assets/images/cert-manager-webhook-ovh.svg
+type: webhook
 keywords:
   - cert-manager
   - ovh
