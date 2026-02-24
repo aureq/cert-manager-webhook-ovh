@@ -13,6 +13,7 @@
 - 🌿 add `groupName` empty value validation in Helm templates
 - 🌿 add default value for cert-manager namespace in RBAC binding
 - 📝 add helm-docs template and generate comprehensive README
+- 📝 publish generated documentation to GitHub pages instead of using static page
 
 ### Dependencies
 
