@@ -107,9 +107,10 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
+          mkdir -p tmp/packages
+          cp charts/cert-manager-webhook-ovh/README.md tmp/
           cp LICENSE charts/cert-manager-webhook-ovh/
           cp README.md charts/cert-manager-webhook-ovh/
-          mkdir -p tmp/packages
           helm package --destination tmp/packages/ charts/cert-manager-webhook-ovh/
           cp charts/cert-manager-webhook-ovh/Chart.yaml tmp/
           cp artifacthub-repo.yml tmp/
@@ -148,8 +149,9 @@ jobs:
           mv tmp/packages/* packages/
           mv tmp/Chart.yaml ./
           mv tmp/artifacthub-repo.yml ./
+          mv tmp/README.md ./
           helm repo index --url "https://$GITHUB_ACTOR.github.io/$(echo "$GITHUB_REPOSITORY" | cut --delimiter / --fields=2)" .
-          git add artifacthub-repo.yml index.yaml packages/
+          git add README.md artifacthub-repo.yml index.yaml packages/
           git status
           git commit -m "Publish $GITHUB_REF_NAME"
           git push origin gh-pages
