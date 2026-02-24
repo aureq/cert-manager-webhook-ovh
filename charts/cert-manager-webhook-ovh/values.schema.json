@@ -27,7 +27,7 @@
       "type": "object"
     },
     "extraObjects": {
-      "description": "Create dynamic manifests via values.\n\nFor example:\nextraObjects:\n  - |\n    apiVersion: v1\n    kind: ConfigMap\n    metadata:\n      name: '{{ template \"cert-manager.fullname\" . }}-extra-configmap'",
+      "description": "Create dynamic manifests via values.\n\nFor example:\n```\nextraObjects:\n  - |\n    apiVersion: v1\n    kind: ConfigMap\n    metadata:\n      name: '{{ template \"cert-manager.fullname\" . }}-extra-configmap'\n```",
       "items": {
         "type": "string"
       },
