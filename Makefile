@@ -42,7 +42,7 @@ helm-unittest: install-helm-unittest
 	@helm unittest charts/cert-manager-webhook-ovh/
 
 helm-docs: install-helm-docs
-	@helm-docs --chart-search-root charts/cert-manager-webhook-ovh/ --sort-values-order=file
+	@helm-docs --chart-search-root=charts/ --template-files=./_templates.gotmpl --template-files=README.md.gotmpl --sort-values-order=file
 
 helm-schema: install-helm-schema
 	@helm-schema --chart-search-root charts/cert-manager-webhook-ovh/ --add-schema-reference --keep-full-comment
