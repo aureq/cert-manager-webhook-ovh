@@ -26,7 +26,7 @@ The documentation is available at [https://aureq.github.io/cert-manager-webhook-
 
 ## Artifact details
 
-[![Artifact Hub](https://img.shields.io/endpoint?url=https://artifacthub.io/badge/repository/cert-manager-webhook-ovh)](https://artifacthub.io/packages/search?repo=cert-manager-webhook-ovh)
+[![Artifact Hub](https://img.shields.io/endpoint?url=https://artifacthub.io/badge/repository/cert-manager-webhook-ovh)](https://artifacthub.io/packages/helm/cert-manager-webhook-ovh/cert-manager-webhook-ovh)
 
 ## Support
 
