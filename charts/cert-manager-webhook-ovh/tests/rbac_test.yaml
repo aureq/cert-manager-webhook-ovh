@@ -1,5 +1,5 @@
 ---
-suite: Testing `root.rbac` option in `rbac.yaml` 1/1
+suite: Testing `root.rbac` option in `rbac.yaml` 1/4
 templates:
   - rbac.yaml
 values:
@@ -24,7 +24,7 @@ tests:
             - "letsencrypt-prod-ovh-credentials"
             - "ovh-credentials"
 ---
-suite: Testing `root.rbac` option in `rbac.yaml` 1/2
+suite: Testing `root.rbac` option in `rbac.yaml` 2/4
 templates:
   - rbac.yaml
 values:
@@ -51,3 +51,48 @@ tests:
             - "le-staging-oidc-dir-ovh-credentials"
             - "letsencrypt-prod-ovh-credentials"
             - "ovh-credentials"
+---
+suite: Testing `root.rbac` option in `rbac.yaml` 3/4
+templates:
+  - rbac.yaml
+values:
+  - values/valid/values-full.yaml
+tests:
+  - it: Validate use of `rbac` option in `RoleBinding`
+    documentSelector:
+      path: $[?(@.kind == "RoleBinding")].metadata.name
+      value: RELEASE-NAME-cert-manager-webhook-ovh:secret-reader
+    asserts:
+      - equal:
+          path: kind
+          value: RoleBinding
+      - equal:
+          path: metadata.name
+          value: RELEASE-NAME-cert-manager-webhook-ovh:secret-reader
+      - equal:
+          path: roleRef.kind
+          value: Role
+---
+suite: Testing `root.rbac` option in `rbac.yaml` 4/4
+templates:
+  - rbac.yaml
+values:
+  - values/valid/values-full.yaml
+set:
+  rbac:
+    roleType: ClusterRole
+tests:
+  - it: Validate use of `rbac` option in `RoleBinding`
+    documentSelector:
+      path: $[?(@.kind == "RoleBinding")].metadata.name
+      value: RELEASE-NAME-cert-manager-webhook-ovh:secret-reader
+    asserts:
+      - equal:
+          path: kind
+          value: RoleBinding
+      - equal:
+          path: metadata.name
+          value: RELEASE-NAME-cert-manager-webhook-ovh:secret-reader
+      - equal:
+          path: roleRef.kind
+          value: ClusterRole

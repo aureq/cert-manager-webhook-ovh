@@ -9,6 +9,7 @@
 ### Noteworthy changes
 
 - 🌿 make `secret-reader` RoleBinding `roleRef` kind configurable via `rbac.roleType` to address a permission issue.
+- 🌿 add unit tests to validate `rbac.roleType` option in Helm templates
 
 ## 0.9.2
 
