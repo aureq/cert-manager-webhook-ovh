@@ -162,7 +162,7 @@ metadata:
     {{- include "cert-manager-webhook-ovh.labels" $ | nindent 4 }}
 roleRef:
   apiGroup: rbac.authorization.k8s.io
-  kind: Role
+  kind: {{ $.Values.rbac.roleType | default "Role" }}
   name: {{ include "cert-manager-webhook-ovh.fullname" $ }}:secret-reader
 subjects:
 - apiGroup: ""
