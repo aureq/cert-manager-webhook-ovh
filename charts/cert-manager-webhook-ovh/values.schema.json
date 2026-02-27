@@ -754,6 +754,13 @@
               "description": "Node selector. See https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/ for more information.",
               "required": [],
               "title": "nodeSelector"
+            },
+            "tolerations": {
+              "additionalProperties": true,
+              "description": "Tolerations. See https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/ for more information.",
+              "required": [],
+              "title": "tolerations",
+              "type": "array"
             }
           },
           "required": [],
