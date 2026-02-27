@@ -85,13 +85,13 @@ spec:
             secretName: {{ include "cert-manager-webhook-ovh.servingCertificate" . }}
       {{- with $context := .Values.pod.selectors.nodeSelector }}
       nodeSelector:
-{{ toYaml $context | nindent 8 }}
+{{- toYaml $context | nindent 8 }}
       {{- end }}
       {{- with $context := .Values.pod.selectors.affinity }}
       affinity:
-{{ toYaml $context | nindent 8 }}
+{{- toYaml $context | nindent 8 }}
       {{- end }}
       {{- with $context := .Values.pod.selectors.tolerations }}
       tolerations:
-{{ toYaml $context | nindent 8 }}
+{{- toYaml $context | nindent 8 }}
       {{- end }}
