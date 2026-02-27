@@ -771,17 +771,7 @@ pod:
     #               values:
     #               - S2
     #           topologyKey: 'topology.kubernetes.io/zone'
-
-    # @schema
-    # required: false
-    # additionalProperties: true
-    # @schema
-    # -- Tolerations. See https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/ for more information.
     tolerations: []
-    # tolerations:
-    #   - key: "example-key"
-    #     operator: "Exists"
-    #     effect: "NoSchedule"
 
 # @schema
 # required: false
