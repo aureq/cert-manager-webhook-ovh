@@ -1,5 +1,15 @@
 # Changelog
 
+## 0.9.3-alpha.0
+
+⭐ If you are using this project, please consider supporting it by starring the repository. It helps me a lot to keep maintaining and improving this project. Thank you!
+
+❤️ In loving memory of my mom. She was my biggest supporter. This release is dedicated to her memory. I miss you mom, and I love you. April 27th, 1948 ~ February 19th, 2026.
+
+### Noteworthy changes
+
+- 🌿 make `secret-reader` RoleBinding `roleRef` kind configurable via `rbac.roleType` to address a permission issue.
+
 ## 0.9.2
 
 ⭐ If you are using this project, please consider supporting it by starring the repository. It helps me a lot to keep maintaining and improving this project. Thank you!
