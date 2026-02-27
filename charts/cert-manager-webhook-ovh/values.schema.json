@@ -756,8 +756,12 @@
               "title": "nodeSelector"
             },
             "tolerations": {
-              "additionalProperties": true,
               "description": "Tolerations. See https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/ for more information.",
+              "items": {
+                "additionalProperties": true,
+                "required": [],
+                "type": "object"
+              },
               "required": [],
               "title": "tolerations",
               "type": "array"
