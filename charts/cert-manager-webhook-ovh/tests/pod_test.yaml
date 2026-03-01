@@ -99,3 +99,28 @@ tests:
             limits:
               cpu: 200m
               memory: 96Mi
+      - isSubset:
+          path: spec.template.spec.nodeSelector
+          content:
+            disktype: ssd
+            kubernetes.io/os: linux
+      - isSubset:
+          path: spec.template.spec.affinity
+          content:
+            nodeAffinity:
+              requiredDuringSchedulingIgnoredDuringExecution:
+                nodeSelectorTerms:
+                - matchExpressions:
+                  - key: 'kubernetes.io/hostname'
+                    operator: 'In'
+                    values:
+                    - 'worker-1'
+                    - 'worker-2'
+      - isSubset:
+          path: spec.template.spec.tolerations[0]
+          content:
+            key: "key1"
+            operator: "Equal"
+            value: "value1"
+            effect: "NoSchedule"
+            tolerationSeconds: 3600
