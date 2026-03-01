@@ -10,7 +10,7 @@
 
 # cert-manager-webhook-ovh
 
-![Version: 0.9.3-alpha.0](https://img.shields.io/badge/Version-0.9.3--alpha.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 0.9.3-alpha.0](https://img.shields.io/badge/AppVersion-0.9.3--alpha.0-informational?style=flat-square)
+![Version: 0.9.3-alpha.1](https://img.shields.io/badge/Version-0.9.3--alpha.1-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 0.9.3-alpha.1](https://img.shields.io/badge/AppVersion-0.9.3--alpha.1-informational?style=flat-square)
 
 ![OVH Webhook for Cert Manager](https://raw.githubusercontent.com/aureq/cert-manager-webhook-ovh/main/assets/images/cert-manager-webhook-ovh.svg "OVH Webhook for Cert Manager")
 
@@ -265,6 +265,7 @@ The documentation below is automatically generated from the `values.yaml` file.
 | pod.resources | object | `{"limits":{},"requests":{}}` | We usually recommend not to specify default resources and to leave this as a conscious choice for the user. This also increases chances charts run on environments with little resources, such as Minikube. If you do want to specify resources, adjust them as necessary as shown below. |
 | pod.resources.requests | object | `{}` | Resource Requests. |
 | pod.resources.limits | object | `{}` | Resource Limits. |
+| pod.tolerations | list | `[]` | Tolerations for the pod. See https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/ for more information. |
 | pod.selectors.nodeSelector | object | `{}` | Node selector. See https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/ for more information. |
 | pod.selectors.affinity | object | `{}` | Affinity selectors. See https://kubernetes.io/docs/tasks/configure-pod-container/assign-pods-nodes-using-node-affinity/ for more information. |
 | nameOverride | string | `""` | Override the name of the deployed resources |
