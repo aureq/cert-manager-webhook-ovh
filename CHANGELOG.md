@@ -1,5 +1,18 @@
 # Changelog
 
+## 0.9.3-alpha.1
+
+⭐ If you are using this project, please consider supporting it by starring the repository. It helps me a lot to keep maintaining and improving this project. Thank you!
+
+❤️ In loving memory of my mom. She was my biggest supporter. This release is dedicated to her memory. I miss you mom, and I love you. April 27th, 1948 ~ February 19th, 2026.
+
+### Noteworthy changes
+
+- 🐛 fix template indentation (Fixes [#83](https://github.com/aureq/cert-manager-webhook-ovh/issues/83), Thanks to [Sébastien de Melo](https://github.com/sde-melo) for the report and the initial suggestion)
+- 🌿 add `pod.tolerations` support
+- 📝 document `pod.tolerations` parameter in README
+- 🌱 add unit tests for `nodeSelector`, `affinity` and `tolerations`
+
 ## 0.9.3-alpha.0
 
 ⭐ If you are using this project, please consider supporting it by starring the repository. It helps me a lot to keep maintaining and improving this project. Thank you!
