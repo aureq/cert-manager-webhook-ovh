@@ -11,6 +11,11 @@
 - 🌿 make `secret-reader` RoleBinding `roleRef` kind configurable via `rbac.roleType` to address a permission issue.
 - 🌿 add unit tests to validate `rbac.roleType` option in Helm templates
 
+### Dependencies
+
+- ⏩ update github.com/cert-manager/cert-manager to v1.19.4
+- ⏩ update  go.opentelemetry.io/otel/sdk to v1.40.0 to address [CVE-2026-24051](https://nvd.nist.gov/vuln/detail/CVE-2026-24051)
+
 ## 0.9.2
 
 ⭐ If you are using this project, please consider supporting it by starring the repository. It helps me a lot to keep maintaining and improving this project. Thank you!
