@@ -713,6 +713,36 @@ pod:
 
   # @schema
   # required: false
+  # items:
+  #   type: object
+  #   properties:
+  #     key:
+  #       type: string
+  #       required: false
+  #     operator:
+  #       required: false
+  #       default: Equal
+  #       enum: [Exists,Equal,Lt,Gt]
+  #     value:
+  #       type: string
+  #       required: false
+  #     effect:
+  #       required: false
+  #       enum: [NoExecute,NoSchedule,PreferNoSchedule]
+  #     tolerationSeconds:
+  #       type: integer
+  #       required: false
+  # @schema
+  # -- Tolerations for the pod. See https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/ for more information.
+  tolerations: []
+  # - key: "key1"
+  #   operator: "Equal"
+  #   value: "value1"
+  #   effect: "NoSchedule"
+  #   tolerationSeconds: 3600
+
+  # @schema
+  # required: false
   # type: object
   # @schema
   selectors:

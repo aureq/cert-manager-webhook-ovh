@@ -759,6 +759,44 @@
           "required": [],
           "title": "selectors",
           "type": "object"
+        },
+        "tolerations": {
+          "description": "Tolerations for the pod. See https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/ for more information.",
+          "items": {
+            "properties": {
+              "effect": {
+                "enum": [
+                  "NoExecute",
+                  "NoSchedule",
+                  "PreferNoSchedule"
+                ],
+                "required": []
+              },
+              "key": {
+                "type": "string"
+              },
+              "operator": {
+                "default": "Equal",
+                "enum": [
+                  "Exists",
+                  "Equal",
+                  "Lt",
+                  "Gt"
+                ],
+                "required": []
+              },
+              "tolerationSeconds": {
+                "type": "integer"
+              },
+              "value": {
+                "type": "string"
+              }
+            },
+            "required": [],
+            "type": "object"
+          },
+          "required": [],
+          "title": "tolerations"
         }
       },
       "required": [],

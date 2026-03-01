@@ -77,18 +77,22 @@ spec:
           resources: {{ toYaml $context | nindent 12 }}
           {{- end }}
           {{- with $context := .Values.pod.securityContext.container }}
-          securityContext: {{- toYaml $context | nindent 12 }}
+          securityContext:
+            {{- toYaml $context | nindent 12 }}
           {{- end }}
       volumes:
         - name: certs
           secret:
             secretName: {{ include "cert-manager-webhook-ovh.servingCertificate" . }}
       {{- with $context := .Values.pod.selectors.nodeSelector }}
-      nodeSelector: {{ toYaml $context | indent 8 }}
+      nodeSelector:
+        {{- toYaml $context | nindent 8 }}
       {{- end }}
-      {{- with $context := .Values.pod.affinity }}
-      affinity: {{ toYaml $context | indent 8 }}
+      {{- with $context := .Values.pod.selectors.affinity }}
+      affinity:
+        {{- toYaml $context | nindent 8 }}
       {{- end }}
       {{- with $context := .Values.pod.tolerations }}
-      tolerations: {{ toYaml $context | indent 8 }}
+      tolerations:
+        {{- toYaml $context | nindent 8 }}
       {{- end }}
