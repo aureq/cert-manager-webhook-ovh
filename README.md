@@ -12,7 +12,7 @@ This is a webhook solver for [OVH](http://www.ovh.com) DNS. In short, if your do
 - Support both multiple Cert Manager `ClusterIssuer` and `Issuer`.
 - Support both application based and OAuth2 based authentication.
 - Store OVH credentials in a secret per issuer, or use secret references.
-- Helm chart repository for ease and simplicity of deployment.
+- Helm chart repository and OCI registry for ease and simplicity of deployment.
 - Role based access control, across namespaces.
 - Support for ACME certificate profiles such as Let's Encrypt `shortlived` profile ([doc](https://cert-manager.io/docs/configuration/acme/#acme-certificate-profiles), [doc](https://letsencrypt.org/docs/profiles/), [blog](https://letsencrypt.org/2026/01/15/6day-and-ip-general-availability)).
 - Support for optional External Account Binding ([doc](https://cert-manager.io/docs/configuration/acme/#external-account-bindings)).
