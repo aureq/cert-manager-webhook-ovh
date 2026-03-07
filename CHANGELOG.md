@@ -9,7 +9,7 @@
 ### Noteworthy changes
 
 - ⚙️ publish chart to the OCI registry, thanks to [Erwan Leboucher](https://github.com/eleboucher)
-- ⚙️ set explicit Helm version v3.20.0 in both build jobs
+- ⚙️ set explicit Helm version v4.1.1 in both build jobs
 - 📄 document secret namespace requirement for credential secrets
 
 ## 0.9.3-alpha.1
