@@ -23,24 +23,25 @@ jobs:
   helm-test:
     runs-on: ubuntu-latest
     steps:
-      - uses: step-security/harden-runner@e3f713f2d8f53843e71c69a996d56f51aa9adfb9 # v2.14.1
+      - name: harden-runner
+        uses: step-security/harden-runner@58077d3c7e43986b6b15fba718e8ea69e387dfcc # v2.15.1
         with:
           egress-policy: audit
-      - name: Checkout
-        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+      - name: checkout-code
+        uses: actions/checkout@v6
         with:
           fetch-depth: 0
 
-      - name: Set up Helm
+      - name: set-up-helm
         uses: azure/setup-helm@v4.3.1
         with:
           version: v4.1.1
 
-      - name: Install Helm unittest plugin
+      - name: install-helm-unittest-plugin
         run: |
           make install-helm-unittest
 
-      - name: Run the Chart unit tests
+      - name: run-helm-unittest
         run: |
           make helm-unittest
 
@@ -55,33 +56,32 @@ jobs:
       packages: write
 
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
+      - name: checkout-code
+        uses: actions/checkout@v6
 
-      -
-        name: Set up QEMU
-        uses: docker/setup-qemu-action@v3
-      -
-        name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v3
+      - name: set-up-qemu
+        uses: docker/setup-qemu-action@v4
 
-      - name: Log in to the Container registry
-        uses: docker/login-action@v3
+      - name: set-up-docker-buildx
+        uses: docker/setup-buildx-action@v4
+
+      - name: log-in-to-container-registry
+        uses: docker/login-action@v4
         with:
           registry: ${{ env.REGISTRY }}
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Extract metadata (tags, labels) for Docker
+      - name: extract-metadata
         id: meta
-        uses: docker/metadata-action@v5
+        uses: docker/metadata-action@v6
         with:
           images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
           tags: |
             type=semver,pattern={{raw}}
 
-      - name: Build and push Docker image
-        uses: docker/build-push-action@v5
+      - name: build-and-push-container-image
+        uses: docker/build-push-action@v7
         with:
           context: .
           push: true
@@ -98,18 +98,18 @@ jobs:
       packages: write
 
     steps:
-      - name: tag-checkout-code
-        uses: actions/checkout@v4
+      - name: checkout-code
+        uses: actions/checkout@v6
         with:
           # # Fetch entire history. Required for chart-releaser; see https://github.com/helm/chart-releaser-action/issues/13#issuecomment-602063896
           fetch-depth: 0
 
-      - name: Set up Helm
+      - name: set-up-helm
         uses: azure/setup-helm@v4.3.1
         with:
           version: v4.1.1
 
-      - name: tag-package-chart
+      - name: create-chart-package
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
@@ -121,11 +121,11 @@ jobs:
           cp charts/cert-manager-webhook-ovh/Chart.yaml tmp/
           cp artifacthub-repo.yml tmp/
 
-      - name: Log in to OCI registry
+      - name: log-in-to-oci-registry
         run: |
           echo ${{ secrets.GITHUB_TOKEN }} | helm registry login ${{ env.REGISTRY }} -u ${{ github.actor }} --password-stdin
 
-      - name: oci-push-chart
+      - name: publish-chart-to-oci-registry
         run: |
           for PKG in tmp/packages/*.tgz; do
             if [ ! -s "$PKG" ]; then
@@ -136,21 +136,21 @@ jobs:
             helm push "$PKG" oci://${{ env.REGISTRY }}/${{ github.repository_owner }}/charts
           done
 
-      - name: tag-upload-artifacts
-        uses: actions/upload-artifact@v4
+      - name: upload-artifacts
+        uses: actions/upload-artifact@v7
         with:
           name: chart-archive
           path: tmp/
 
-      - name: gh-page-checkout-code
-        uses: actions/checkout@v4
+      - name: gh-pages-checkout-code
+        uses: actions/checkout@v6
         with:
           ref: 'gh-pages'
           # Fetch entire history. Required for chart-releaser; see https://github.com/helm/chart-releaser-action/issues/13#issuecomment-602063896
           fetch-depth: 0
 
       - name: gh-pages-download-artifacts
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v8
         with:
           name: chart-archive
           path: tmp
