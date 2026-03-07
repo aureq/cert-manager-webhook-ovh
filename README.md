@@ -10,7 +10,7 @@
 
 # cert-manager-webhook-ovh
 
-![Version: 0.9.3-alpha.1](https://img.shields.io/badge/Version-0.9.3--alpha.1-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 0.9.3-alpha.1](https://img.shields.io/badge/AppVersion-0.9.3--alpha.1-informational?style=flat-square)
+![Version: 0.9.3-alpha.2](https://img.shields.io/badge/Version-0.9.3--alpha.2-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 0.9.3-alpha.2](https://img.shields.io/badge/AppVersion-0.9.3--alpha.2-informational?style=flat-square)
 
 ![OVH Webhook for Cert Manager](https://raw.githubusercontent.com/aureq/cert-manager-webhook-ovh/main/assets/images/cert-manager-webhook-ovh.svg "OVH Webhook for Cert Manager")
 
@@ -230,19 +230,19 @@ The documentation below is automatically generated from the `values.yaml` file.
 | issuers[0].ovhAuthentication.applicationConsumerKey | string | `""` | Your OVH consumer key. Leave empty if you are using an existing secret. |
 | issuers[0].ovhAuthenticationRef | object | `{"applicationConsumerKeyRef":{"key":"applicationConsumerKey","name":""},"applicationKeyRef":{"key":"applicationKey","name":""},"applicationSecretRef":{"key":"applicationSecret","name":""},"oauth2ClientIDRef":{"key":"oauth2ClientID","name":""},"oauth2ClientSecretRef":{"key":"oauth2ClientSecret","name":""}}` | Define the details of a secret already containing the OVH credentials. If `ovhAuthenticationMethod` is `application`, then provide:   - `applicationKeyRef`, `applicationSecretRef` and `applicationConsumerKeyRef`. If `ovhAuthenticationMethod` is `oauth2`, then provide:   - `oauth2ClientIDRef` and `oauth2ClientSecretRef`. |
 | issuers[0].ovhAuthenticationRef.oauth2ClientIDRef | object | `{"key":"oauth2ClientID","name":""}` | The secret reference to an existing OVH OAuth 2 client ID. |
-| issuers[0].ovhAuthenticationRef.oauth2ClientIDRef.name | string | `""` | Name of the Kubernetes secret containing the OVH OAuth 2 client ID |
+| issuers[0].ovhAuthenticationRef.oauth2ClientIDRef.name | string | `""` | Name of the Kubernetes secret containing the OVH OAuth 2 client ID. This secret must be in the same namespace as this chart is deployed into. See https://github.com/aureq/cert-manager-webhook-ovh/issues/82 for more information. |
 | issuers[0].ovhAuthenticationRef.oauth2ClientIDRef.key | string | `"oauth2ClientID"` | The key name in the secret above that holds the actual OVH OAuth 2 client ID value |
 | issuers[0].ovhAuthenticationRef.oauth2ClientSecretRef | object | `{"key":"oauth2ClientSecret","name":""}` | The secret reference to an existing OVH Auth 2 client secret. |
-| issuers[0].ovhAuthenticationRef.oauth2ClientSecretRef.name | string | `""` | Name of the Kubernetes secret containing the OVH Auth 2 client secret |
+| issuers[0].ovhAuthenticationRef.oauth2ClientSecretRef.name | string | `""` | Name of the Kubernetes secret containing the OVH Auth 2 client secret This secret must be in the same namespace as this chart is deployed into. See https://github.com/aureq/cert-manager-webhook-ovh/issues/82 for more information. |
 | issuers[0].ovhAuthenticationRef.oauth2ClientSecretRef.key | string | `"oauth2ClientSecret"` | The key name in the secret above that holds the actual OVH Auth 2 client secret value |
 | issuers[0].ovhAuthenticationRef.applicationKeyRef | object | `{"key":"applicationKey","name":""}` | The secret reference to an existing OVH application key. |
-| issuers[0].ovhAuthenticationRef.applicationKeyRef.name | string | `""` | Name of the Kubernetes secret containing the OVH Application Key |
+| issuers[0].ovhAuthenticationRef.applicationKeyRef.name | string | `""` | Name of the Kubernetes secret containing the OVH Application Key This secret must be in the same namespace as this chart is deployed into. See https://github.com/aureq/cert-manager-webhook-ovh/issues/82 for more information. |
 | issuers[0].ovhAuthenticationRef.applicationKeyRef.key | string | `"applicationKey"` | The key name in the secret above that holds the actual OVH application key value |
 | issuers[0].ovhAuthenticationRef.applicationSecretRef | object | `{"key":"applicationSecret","name":""}` | The secret reference to an existing OVH application secret. |
-| issuers[0].ovhAuthenticationRef.applicationSecretRef.name | string | `""` | Name of the Kubernetes secret containing the OVH Application Secret |
+| issuers[0].ovhAuthenticationRef.applicationSecretRef.name | string | `""` | Name of the Kubernetes secret containing the OVH Application Secret This secret must be in the same namespace as this chart is deployed into. See https://github.com/aureq/cert-manager-webhook-ovh/issues/82 for more information. |
 | issuers[0].ovhAuthenticationRef.applicationSecretRef.key | string | `"applicationSecret"` | The key name in the secret above that holds the actual OVH application secret value |
 | issuers[0].ovhAuthenticationRef.applicationConsumerKeyRef | object | `{"key":"applicationConsumerKey","name":""}` | The secret reference to an existing OVH consumer key |
-| issuers[0].ovhAuthenticationRef.applicationConsumerKeyRef.name | string | `""` | Name of the Kubernetes secret containing the OVH consumer Key |
+| issuers[0].ovhAuthenticationRef.applicationConsumerKeyRef.name | string | `""` | Name of the Kubernetes secret containing the OVH consumer Key This secret must be in the same namespace as this chart is deployed into. See https://github.com/aureq/cert-manager-webhook-ovh/issues/82 for more information. |
 | issuers[0].ovhAuthenticationRef.applicationConsumerKeyRef.key | string | `"applicationConsumerKey"` | The key name in the secret above that holds the actual OVH consumer key value |
 | rbac | object | `{"roleType":"Role"}` | RBAC configuration for the webhook deployment |
 | rbac.roleType | string | `"Role"` | If the secret of the issuer is in a different namespace, change `Role` (default) to `ClusterRole` so the webhook is able to access this secret. |
