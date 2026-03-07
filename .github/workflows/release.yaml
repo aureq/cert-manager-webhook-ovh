@@ -95,6 +95,7 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: write
+      packages: write
 
     steps:
       - name: tag-checkout-code
@@ -102,6 +103,9 @@ jobs:
         with:
           # # Fetch entire history. Required for chart-releaser; see https://github.com/helm/chart-releaser-action/issues/13#issuecomment-602063896
           fetch-depth: 0
+
+      - name: Set up Helm
+        uses: azure/setup-helm@v4.3.1
 
       - name: tag-package-chart
         env:
@@ -114,6 +118,17 @@ jobs:
           helm package --destination tmp/packages/ charts/cert-manager-webhook-ovh/
           cp charts/cert-manager-webhook-ovh/Chart.yaml tmp/
           cp artifacthub-repo.yml tmp/
+
+      - name: Log in to OCI registry
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: oci-push-chart
+        run: |
+          helm push tmp/packages/cert-manager-webhook-ovh-*.tgz oci://${{ env.REGISTRY }}/${{ github.repository_owner }}/charts
 
       - name: tag-upload-artifacts
         uses: actions/upload-artifact@v4
