@@ -1,5 +1,19 @@
 # Changelog
 
+## 0.9.3-alpha.3
+
+### Dependencies
+
+- ⏩ upgrade step-security/harden-runner to v2.15.1
+- ⏩ upgrade actions/checkout to v6
+- ⏩ upgrade docker/setup-qemu-action to v4
+- ⏩ upgrade docker/setup-buildx-action to v4
+- ⏩ upgrade docker/login-action to v4
+- ⏩ upgrade docker/metadata-action to v6
+- ⏩ upgrade docker/build-push-action to v7
+- ⏩ upgrade actions/upload-artifact to v7
+- ⏩ upgrade actions/download-artifact to v8
+
 ## 0.9.3-alpha.2
 
 ⭐ If you are using this project, please consider supporting it by starring the repository. It helps me a lot to keep maintaining and improving this project. Thank you!
