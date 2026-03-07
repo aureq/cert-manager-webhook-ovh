@@ -81,3 +81,4 @@ We appreciate your understanding and cooperation in maintaining a positive and p
 - [Karol Stoiński](https://github.com/KarolStoinski)
 - [Pierre Mahot](https://github.com/pierremahot)
 - [Thomas Coudert](https://github.com/thcdrt)
+- [Erwan Leboucher](https://github.com/eleboucher)
