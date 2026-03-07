@@ -275,7 +275,7 @@
                       },
                       "name": {
                         "default": "",
-                        "description": "Name of the Kubernetes secret containing the OVH consumer Key",
+                        "description": "Name of the Kubernetes secret containing the OVH consumer Key\nThis secret must be in the same namespace as this chart is deployed into.\nSee https://github.com/aureq/cert-manager-webhook-ovh/issues/82 for more information.",
                         "title": "name",
                         "type": "string"
                       }
@@ -299,7 +299,7 @@
                       },
                       "name": {
                         "default": "",
-                        "description": "Name of the Kubernetes secret containing the OVH Application Key",
+                        "description": "Name of the Kubernetes secret containing the OVH Application Key\nThis secret must be in the same namespace as this chart is deployed into.\nSee https://github.com/aureq/cert-manager-webhook-ovh/issues/82 for more information.",
                         "title": "name",
                         "type": "string"
                       }
@@ -323,7 +323,7 @@
                       },
                       "name": {
                         "default": "",
-                        "description": "Name of the Kubernetes secret containing the OVH Application Secret",
+                        "description": "Name of the Kubernetes secret containing the OVH Application Secret\nThis secret must be in the same namespace as this chart is deployed into.\nSee https://github.com/aureq/cert-manager-webhook-ovh/issues/82 for more information.",
                         "title": "name",
                         "type": "string"
                       }
@@ -347,7 +347,7 @@
                       },
                       "name": {
                         "default": "",
-                        "description": "Name of the Kubernetes secret containing the OVH OAuth 2 client ID",
+                        "description": "Name of the Kubernetes secret containing the OVH OAuth 2 client ID.\nThis secret must be in the same namespace as this chart is deployed into.\nSee https://github.com/aureq/cert-manager-webhook-ovh/issues/82 for more information.",
                         "title": "name",
                         "type": "string"
                       }
@@ -371,7 +371,7 @@
                       },
                       "name": {
                         "default": "",
-                        "description": "Name of the Kubernetes secret containing the OVH Auth 2 client secret",
+                        "description": "Name of the Kubernetes secret containing the OVH Auth 2 client secret\nThis secret must be in the same namespace as this chart is deployed into.\nSee https://github.com/aureq/cert-manager-webhook-ovh/issues/82 for more information.",
                         "title": "name",
                         "type": "string"
                       }
