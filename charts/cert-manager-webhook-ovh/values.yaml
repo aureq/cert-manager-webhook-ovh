@@ -264,7 +264,9 @@ issuers:
         # required: true
         # type: string
         # @schema
-        # -- Name of the Kubernetes secret containing the OVH OAuth 2 client ID
+        # -- Name of the Kubernetes secret containing the OVH OAuth 2 client ID.
+        # This secret must be in the same namespace as this chart is deployed into.
+        # See https://github.com/aureq/cert-manager-webhook-ovh/issues/82 for more information.
         name: ''
 
         # @schema
@@ -286,6 +288,8 @@ issuers:
         # type: string
         # @schema
         # -- Name of the Kubernetes secret containing the OVH Auth 2 client secret
+        # This secret must be in the same namespace as this chart is deployed into.
+        # See https://github.com/aureq/cert-manager-webhook-ovh/issues/82 for more information.
         name: ''
 
         # @schema
@@ -308,6 +312,8 @@ issuers:
         # type: string
         # @schema
         # -- Name of the Kubernetes secret containing the OVH Application Key
+        # This secret must be in the same namespace as this chart is deployed into.
+        # See https://github.com/aureq/cert-manager-webhook-ovh/issues/82 for more information.
         name: ''
 
         # @schema
@@ -330,6 +336,8 @@ issuers:
         # type: string
         # @schema
         # -- Name of the Kubernetes secret containing the OVH Application Secret
+        # This secret must be in the same namespace as this chart is deployed into.
+        # See https://github.com/aureq/cert-manager-webhook-ovh/issues/82 for more information.
         name: ''
 
         # @schema
@@ -352,6 +360,8 @@ issuers:
         # type: string
         # @schema
         # -- Name of the Kubernetes secret containing the OVH consumer Key
+        # This secret must be in the same namespace as this chart is deployed into.
+        # See https://github.com/aureq/cert-manager-webhook-ovh/issues/82 for more information.
         name: ''
 
         # @schema
