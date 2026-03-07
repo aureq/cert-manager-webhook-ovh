@@ -2,6 +2,10 @@
 
 ## 0.9.3-alpha.3
 
+### Noteworthy changes
+
+- ⚙️ add harden-runner step to docker and helm jobs in release workflow
+
 ### Dependencies
 
 - ⏩ upgrade step-security/harden-runner to v2.15.1
