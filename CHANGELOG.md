@@ -1,5 +1,38 @@
 # Changelog
 
+## 0.9.3
+
+⭐ If you are using this project, please consider supporting it by starring the repository. It helps me a lot to keep maintaining and improving this project. Thank you!
+
+❤️ In loving memory of my mom. She was my biggest supporter. This release is dedicated to her memory. I miss you mom, and I love you. April 27th, 1948 ~ February 19th, 2026.
+
+### Noteworthy changes
+
+- 🌿 make `secret-reader` RoleBinding `roleRef` kind configurable via `rbac.roleType` to address a permission issue.
+- 🌿 add unit tests to validate `rbac.roleType` option in Helm templates
+- 🐛 fix template indentation (Fixes [#83](https://github.com/aureq/cert-manager-webhook-ovh/issues/83), Thanks to [Sébastien de Melo](https://github.com/sde-melo) for the report and the initial suggestion)
+- 🌿 add `pod.tolerations` support
+- 📝 document `pod.tolerations` parameter in README
+- 🌱 add unit tests for `nodeSelector`, `affinity` and `tolerations`
+- ⚙️ publish chart to the OCI registry, thanks to [Erwan Leboucher](https://github.com/eleboucher)
+- ⚙️ set explicit Helm version v4.1.1 in both build jobs
+- 📄 document secret namespace requirement for credential secrets
+- ⚙️ add harden-runner step to docker and helm jobs in release workflow
+
+### Dependencies
+
+- ⏩ update github.com/cert-manager/cert-manager to v1.19.4
+- ⏩ update  go.opentelemetry.io/otel/sdk to v1.40.0 to address [CVE-2026-24051](https://nvd.nist.gov/vuln/detail/CVE-2026-24051)
+- ⏩ upgrade step-security/harden-runner to v2.15.1
+- ⏩ upgrade actions/checkout to v6
+- ⏩ upgrade docker/setup-qemu-action to v4
+- ⏩ upgrade docker/setup-buildx-action to v4
+- ⏩ upgrade docker/login-action to v4
+- ⏩ upgrade docker/metadata-action to v6
+- ⏩ upgrade docker/build-push-action to v7
+- ⏩ upgrade actions/upload-artifact to v7
+- ⏩ upgrade actions/download-artifact to v8
+
 ## 0.9.3-alpha.3
 
 ### Noteworthy changes
