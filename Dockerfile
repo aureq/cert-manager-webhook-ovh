@@ -13,6 +13,9 @@ RUN CGO_ENABLED=0 go build -trimpath -o /go/bin/app -ldflags '-s -w -extldflags 
 
 FROM alpine:3.23
 
+RUN apk update && \
+    apk upgrade --no-cache
+
 COPY --from=build /go/bin/app /
 
 COPY --from=build /usr/sbin/setcap /usr/sbin/setcap

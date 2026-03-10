@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.9.4-alpha.0
+
+### Noteworthy changes
+
+- ⏩ upgrade base container image to grab latest security updates
+
 ## 0.9.3
 
 ⭐ If you are using this project, please consider supporting it by starring the repository. It helps me a lot to keep maintaining and improving this project. Thank you!
