@@ -75,7 +75,7 @@ trap "rm -f $RELEASE_CHANGELOG" EXIT
 
 echo -e "## Changes for cert-manager-webhook-ovh $CURRENT_VERSION\n" > "$RELEASE_CHANGELOG"
 
-cat CHANGELOG.md | sed -n "/## $CURRENT_VERSION/,/## $PREVIOUS_VERSION/p;" | sed 'N;$!P;$!D;$d' | awk 'NR>2' >> "$RELEASE_CHANGELOG"
+cat CHANGELOG.md | sed -n "/## ${CURRENT_VERSION}$/,/## ${PREVIOUS_VERSION}$/p;" | sed 'N;$!P;$!D;$d' | awk 'NR>2' >> "$RELEASE_CHANGELOG"
 RELEASE_DATE="$(TZ=UTC date)"
 echo -e "\n**Released on ${RELEASE_DATE}**" >> "$RELEASE_CHANGELOG"
 
