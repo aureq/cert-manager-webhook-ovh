@@ -18,6 +18,7 @@
 - ⚙️ set explicit Helm version v4.1.1 in both build jobs
 - 📄 document secret namespace requirement for credential secrets
 - ⚙️ add harden-runner step to docker and helm jobs in release workflow
+- 🐛 fix changelog extraction to match exact version strings
 
 ### Dependencies
 
