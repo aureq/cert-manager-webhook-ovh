@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.9.4
+
+### Noteworthy changes
+
+- ⏩ upgrade base container image to grab latest security updates
+
 ## 0.9.4-alpha.0
 
 ### Noteworthy changes
