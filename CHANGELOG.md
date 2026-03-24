@@ -1,5 +1,17 @@
 # Changelog
 
+## 0.9.5
+
+### Dependencies
+
+- ⏩ upgrade go to 1.25.8
+- ⏩ upgrade github.com/cert-manager/cert-manager to v1.20.0
+- ⏩ upgrade k8s.io/api to v0.35.3
+- ⏩ upgrade k8s.io/apiextensions-apiserver to v0.35.3
+- ⏩ upgrade k8s.io/apimachinery to v0.35.3
+- ⏩ upgrade k8s.io/client-go to v0.35.3
+- ⏩ upgrade google.golang.org/grpc to v1.79.3 to address [CVE-2026-33186](https://github.com/grpc/grpc-go/security/advisories/GHSA-p77j-4mvh-x3m3)
+
 ## 0.9.4
 
 ### Noteworthy changes
