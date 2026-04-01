@@ -16,6 +16,9 @@ test:
 		TEST_ASSET_KUBECTL="$(TEST_ASSET_KUBECTL)" \
 		go test -v .
 
+local-build:
+	CGO_ENABLED=0 go build -trimpath -o cert-manager-webhook-ovh .
+
 build:
 	@test -z "$$HTTP_PROXY" -a -z "$$HTTPS_PROXY" || docker buildx build \
 		--progress=plain \
