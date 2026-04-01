@@ -487,6 +487,15 @@ pod:
 
   # @schema
   # required: false
+  # type: string
+  # enum: [text, json, ""]
+  # @schema
+  # -- Set the logging format for the webhook. Accepted values are  `""` (unspecified, defaults to `text`), `text` or `json`.
+  # If not specified, the `--logging-format` argument is not passed and will default to `text`.
+  loggingFormat: ""
+
+  # @schema
+  # required: false
   # type: object
   # @schema
   # -- Define the security context for both the `Pod` and the `Container`.

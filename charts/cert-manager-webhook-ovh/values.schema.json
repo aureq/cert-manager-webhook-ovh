@@ -460,6 +460,17 @@
           "title": "hostNetwork",
           "type": "boolean"
         },
+        "loggingFormat": {
+          "default": "",
+          "description": "Set the logging format for the webhook. Accepted values are  `\"\"`, `text` (default) or `json`.\nIf not specified, the `--logging-format` argument is not passed and defaults to `text`.",
+          "enum": [
+            "text",
+            "json",
+            ""
+          ],
+          "title": "loggingFormat",
+          "type": "string"
+        },
         "podAnnotations": {
           "additionalProperties": true,
           "description": "Annotations to add to the Pod.\nSee https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/",

@@ -451,6 +451,16 @@ func refreshRecords(ovhClient *ovh.Client, domain string) error {
 	return nil
 }
 
+// loggingFormatIsJSON checks os.Args for --logging-format=json
+func loggingFormatIsJSON() bool {
+	for _, arg := range os.Args[1:] {
+		if arg == "--logging-format=json" {
+			return true
+		}
+	}
+	return false
+}
+
 // getLogger initializes and returns a singleton logger instance
 // with custom configuration options
 func getLogger() *log.Logger {
@@ -460,6 +470,9 @@ func getLogger() *log.Logger {
 			ReportTimestamp: true,
 			Level:           log.InfoLevel,
 		})
+		if loggingFormatIsJSON() {
+			logger.SetFormatter(log.JSONFormatter)
+		}
 	})
 	return logger
 }
