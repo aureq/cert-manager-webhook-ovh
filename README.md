@@ -18,6 +18,7 @@ This is a webhook solver for [OVH](http://www.ovh.com) DNS. In short, if your do
 - Support for optional External Account Binding ([doc](https://cert-manager.io/docs/configuration/acme/#external-account-bindings)).
 - JSON schema for `values.yaml` automatic validation.
 - Chart Unit tests for code quality and reliability.
+- Structured logging in text or JSON format.
 - Fully [documented](/charts/cert-manager-webhook-ovh) `values.yaml`.
 
 ## Documentation
