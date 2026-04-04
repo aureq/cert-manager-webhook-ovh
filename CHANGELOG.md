@@ -1,5 +1,19 @@
 # Changelog
 
+## 0.9.6-alpha.0
+
+### Noteworthy changes
+
+- 🎉 Add configurable logging format with JSON support `pod.loggingFormat`
+- 🌿 Add `pod.loggingVerbosity` option to control webhook log verbosity
+- 🌿 Replace `charmbracelet/log` with cert-manager's built-in logging
+- ⚙️ Add 'local-build' Makefile target for native binary compilation
+- 🌱 Bump chart appVersion and version to 0.9.6-alpha.0
+
+## Dependency
+
+- ⏩ upgrade github.com/cert-manager/cert-manager to v1.20.1
+
 ## 0.9.5
 
 ### Dependencies
