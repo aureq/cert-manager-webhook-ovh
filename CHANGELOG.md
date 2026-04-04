@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.9.6-alpha.1
+
+### Noteworthy changes
+
+- 🌱 Improve loggingFormat and loggingVerbosity test coverage
+- 🌱 Switch `pod.loggingVerbosity` to `enum` type
+- 🌱 Adjust unit tests since verbosity doesn't appear when not specified
+
 ## 0.9.6-alpha.0
 
 ### Noteworthy changes
