@@ -10,7 +10,7 @@
 - ⚙️ Add 'local-build' Makefile target for native binary compilation
 - 🌱 Bump chart appVersion and version to 0.9.6-alpha.0
 
-## Dependency
+### Dependency
 
 - ⏩ upgrade github.com/cert-manager/cert-manager to v1.20.1
 
