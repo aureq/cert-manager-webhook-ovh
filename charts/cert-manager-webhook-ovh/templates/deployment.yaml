@@ -51,6 +51,9 @@ spec:
             {{- if .Values.pod.loggingFormat }}
             - --logging-format={{ .Values.pod.loggingFormat }}
             {{- end }}
+            {{- if .Values.pod.loggingVerbosity }}
+            - -v={{ .Values.pod.loggingVerbosity }}
+            {{- end }}
           env:
             - name: GROUP_NAME
               value: {{ .Values.groupName | quote }}

@@ -149,6 +149,7 @@ tests:
             - "--secure-port=8443"
             - "--tls-cert-file=/tls/tls.crt"
             - "--tls-private-key-file=/tls/tls.key"
+            - "-v=2"
 
 ---
 suite: Testing `pod.loggingFormat=json` in `deployment.yaml`
@@ -175,6 +176,7 @@ tests:
             - "--tls-cert-file=/tls/tls.crt"
             - "--tls-private-key-file=/tls/tls.key"
             - "--logging-format=json"
+            - "-v=2"
 
 ---
 suite: Testing `pod.loggingFormat=text` in `deployment.yaml`
@@ -201,3 +203,32 @@ tests:
             - "--tls-cert-file=/tls/tls.crt"
             - "--tls-private-key-file=/tls/tls.key"
             - "--logging-format=text"
+            - "-v=2"
+---
+suite: Testing `pod.loggingVerbosity=5` in `deployment.yaml`
+templates:
+  - deployment.yaml
+values:
+  - values/valid/values-full.yaml
+chart:
+  version: 1.0.0
+  appVersion: 1.0.0
+set:
+  pod:
+    loggingFormat: text
+    loggingVerbosity: 5
+tests:
+  - it: Validate --logging-format=json arg is present
+    documentSelector:
+      path: $[?(@.kind == "Deployment")].metadata.name
+      value: RELEASE-NAME-cert-manager-webhook-ovh
+    asserts:
+      - equal:
+          path: spec.template.spec.containers[0].args
+          value:
+            - "--secure-port=8443"
+            - "--tls-cert-file=/tls/tls.crt"
+            - "--tls-private-key-file=/tls/tls.key"
+            - "--logging-format=text"
+            - "-v=5"
+

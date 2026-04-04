@@ -496,6 +496,18 @@ pod:
 
   # @schema
   # required: false
+  # type: integer
+  # minimum: 0
+  # default: 2
+  # maximum: 5
+  # @schema
+  # -- Set the logging verbosity level for the webhook. Accepted values are integers from `0` to `5`, with `0` being the least verbose and `5` being the most verbose.
+  # If not specified, the `-v` argument is not passed and will default to `2`.
+  # See https://github.com/kubernetes/community/blob/main/contributors/devel/sig-instrumentation/logging.md
+  loggingVerbosity: 2
+
+  # @schema
+  # required: false
   # type: object
   # @schema
   # -- Define the security context for both the `Pod` and the `Container`.
