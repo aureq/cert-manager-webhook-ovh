@@ -462,7 +462,7 @@
         },
         "loggingFormat": {
           "default": "",
-          "description": "Set the logging format for the webhook. Accepted values are  `\"\"`, `text` (default) or `json`.\nIf not specified, the `--logging-format` argument is not passed and defaults to `text`.",
+          "description": "Set the logging format for the webhook. Accepted values are  `\"\"` (unspecified, defaults to `text`), `text` or `json`.\nIf not specified, the `--logging-format` argument is not passed and will default to `text`.",
           "enum": [
             "text",
             "json",
