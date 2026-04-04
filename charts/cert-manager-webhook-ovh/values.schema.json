@@ -472,12 +472,19 @@
           "type": "string"
         },
         "loggingVerbosity": {
-          "default": 2,
+          "default": "",
           "description": "Set the logging verbosity level for the webhook. Accepted values are integers from `0` to `5`, with `0` being the least verbose and `5` being the most verbose.\nIf not specified, the `-v` argument is not passed and will default to `2`.\nSee https://github.com/kubernetes/community/blob/main/contributors/devel/sig-instrumentation/logging.md",
-          "maximum": 5,
-          "minimum": 0,
-          "title": "loggingVerbosity",
-          "type": "integer"
+          "enum": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            ""
+          ],
+          "required": [],
+          "title": "loggingVerbosity"
         },
         "podAnnotations": {
           "additionalProperties": true,
