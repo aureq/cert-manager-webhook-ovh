@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.9.7
+
+### Dependency
+
+- ⏩ upgrade go.opentelemetry.io/otel to v1.43.0 to address [CVE-2026-24051](https://nvd.nist.gov/vuln/detail/CVE-2026-24051)
+
 ## 0.9.6
 
 ### Noteworthy changes
