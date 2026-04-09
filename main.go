@@ -58,6 +58,7 @@ type ovhDNSProviderConfig struct {
 	ApplicationConsumerKeyRef corev1.SecretKeySelector `json:"applicationConsumerKeyRef"`
 	Oauth2ClientIDRef         corev1.SecretKeySelector `json:"oauth2ClientIDRef"`
 	Oauth2ClientSecretRef     corev1.SecretKeySelector `json:"oauth2ClientSecretRef"`
+	UseOvhApiZoneResolution   bool                     `json:"useOvhApiZoneResolution"`
 }
 
 type ovhZoneStatus struct {
@@ -195,12 +196,12 @@ func (s *ovhDNSProviderSolver) ovhClientOAuth2(ch *v1alpha1.ChallengeRequest, cf
 	return ovh.NewOAuth2Client(cfg.Endpoint, oauth2ClientID, oauth2ClientSecret)
 }
 
-// ovhClient creates and returns an OVH client based on the provided configuration.
-func (s *ovhDNSProviderSolver) ovhClient(ch *v1alpha1.ChallengeRequest) (*ovh.Client, error) {
+// ovhClientAndConfig creates and returns an OVH client and the parsed configuration.
+func (s *ovhDNSProviderSolver) ovhClientAndConfig(ch *v1alpha1.ChallengeRequest) (*ovh.Client, *ovhDNSProviderConfig, error) {
 	log.Info("Starting challenge request...")
 	cfg, err := loadConfig(ch.Config)
 	if err != nil {
-		return nil, err
+		return nil, nil, err
 	}
 
 	log.Info("Resource namespace", "namespace", ch.ResourceNamespace)
@@ -208,17 +209,22 @@ func (s *ovhDNSProviderSolver) ovhClient(ch *v1alpha1.ChallengeRequest) (*ovh.Cl
 	err = s.validate(&cfg, ch.AllowAmbientCredentials)
 	if err != nil {
 		log.Error(err, "Failed to validate OVH config")
-		return nil, err
+		return nil, nil, err
 	}
 
+	var client *ovh.Client
 	switch cfg.AuthenticationMethod {
 	case "application":
-		return s.ovhClientApplication(ch, &cfg)
+		client, err = s.ovhClientApplication(ch, &cfg)
 	case "oauth2":
-		return s.ovhClientOAuth2(ch, &cfg)
+		client, err = s.ovhClientOAuth2(ch, &cfg)
 	default:
-		return nil, fmt.Errorf("invalid value for authentifaction method, allowed values: application, oauth2'")
+		return nil, nil, fmt.Errorf("invalid value for authentifaction method, allowed values: application, oauth2'")
 	}
+	if err != nil {
+		return nil, nil, err
+	}
+	return client, &cfg, nil
 }
 
 func (s *ovhDNSProviderSolver) secret(ref corev1.SecretKeySelector, namespace string) (string, error) {
@@ -250,12 +256,17 @@ func (s *ovhDNSProviderSolver) secret(ref corev1.SecretKeySelector, namespace st
 // cert-manager itself will later perform a self check to ensure that the
 // solver has correctly configured the DNS provider.
 func (s *ovhDNSProviderSolver) Present(ch *v1alpha1.ChallengeRequest) error {
-	ovhClient, err := s.ovhClient(ch)
+	ovhClient, cfg, err := s.ovhClientAndConfig(ch)
 	if err != nil {
 		log.Error(err, "Failed to create OVH client")
 		return err
 	}
-	domain := util.UnFqdn(ch.ResolvedZone)
+
+	domain, err := s.resolveDomain(ovhClient, cfg, ch)
+	if err != nil {
+		return err
+	}
+
 	subDomain := getSubDomain(domain, ch.ResolvedFQDN)
 	target := ch.Key
 	return addTXTRecord(ovhClient, domain, subDomain, target)
@@ -268,12 +279,17 @@ func (s *ovhDNSProviderSolver) Present(ch *v1alpha1.ChallengeRequest) error {
 // This is in order to facilitate multiple DNS validations for the same domain
 // concurrently.
 func (s *ovhDNSProviderSolver) CleanUp(ch *v1alpha1.ChallengeRequest) error {
-	ovhClient, err := s.ovhClient(ch)
+	ovhClient, cfg, err := s.ovhClientAndConfig(ch)
 	if err != nil {
 		log.Error(err, "Failed to create OVH client")
 		return err
 	}
-	domain := util.UnFqdn(ch.ResolvedZone)
+
+	domain, err := s.resolveDomain(ovhClient, cfg, ch)
+	if err != nil {
+		return err
+	}
+
 	subDomain := getSubDomain(domain, ch.ResolvedFQDN)
 	target := ch.Key
 	return removeTXTRecord(ovhClient, domain, subDomain, target)
@@ -379,6 +395,58 @@ func removeTXTRecord(ovhClient *ovh.Client, domain, subDomain, target string) er
 	}
 
 	return refreshRecords(ovhClient, domain)
+}
+
+// resolveDomain determines the OVH DNS zone to use. When UseOvhApiZoneResolution
+// is enabled, it queries the OVH API to find the best matching zone. Otherwise,
+// it uses the SOA-based ResolvedZone from cert-manager.
+func (s *ovhDNSProviderSolver) resolveDomain(ovhClient *ovh.Client, cfg *ovhDNSProviderConfig, ch *v1alpha1.ChallengeRequest) (string, error) {
+	if cfg.UseOvhApiZoneResolution {
+		log.Info("Using OVH API zone resolution", "fqdn", ch.ResolvedFQDN)
+		return resolveZoneFromAPI(ovhClient, ch.ResolvedFQDN)
+	}
+	return util.UnFqdn(ch.ResolvedZone), nil
+}
+
+// resolveZoneFromAPI queries the OVH API (GET /domain/zone) to enumerate all
+// available zones, then selects the deepest (longest) zone that matches the FQDN.
+func resolveZoneFromAPI(ovhClient *ovh.Client, fqdn string) (string, error) {
+	var zones []string
+	err := ovhClient.Get("/domain/zone", &zones)
+	if err != nil {
+		log.Error(err, "Failed to list DNS zones from OVH API")
+		return "", fmt.Errorf("OVH API call failed: GET /domain/zone - %v", err)
+	}
+
+	zone, err := findMatchingZone(zones, fqdn)
+	if err != nil {
+		return "", err
+	}
+
+	log.Info("Resolved zone via OVH API", "fqdn", fqdn, "zone", zone)
+	return zone, nil
+}
+
+// findMatchingZone selects the deepest (longest) zone from the provided list
+// that the FQDN belongs to. Returns an error if no matching zone is found.
+func findMatchingZone(zones []string, fqdn string) (string, error) {
+	fqdn = util.UnFqdn(fqdn)
+
+	var bestMatch string
+	for _, zone := range zones {
+		zone = util.UnFqdn(zone)
+		if fqdn == zone || strings.HasSuffix(fqdn, "."+zone) {
+			if len(zone) > len(bestMatch) {
+				bestMatch = zone
+			}
+		}
+	}
+
+	if bestMatch == "" {
+		return "", fmt.Errorf("no matching OVH zone found for FQDN %q among zones %v", fqdn, zones)
+	}
+
+	return bestMatch, nil
 }
 
 // validateZone checks if the DNS zone for the given domain is deployed in OVH.

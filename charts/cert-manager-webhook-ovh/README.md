@@ -55,6 +55,10 @@ Obtaining API keys from your OVH account (in which your DNS zones are hosted) wi
       - `DELETE /domain/zone/*`
     - Restrict IPs: Leave blank or restrict as you need.
 
+    > **Note:** If you plan to use `useOvhApiZoneResolution: true` (for split-horizon DNS environments),
+    > you must also add the `GET /domain/zone` permission (without the `/*` wildcard). This allows
+    > the webhook to list all available zones via the OVH API instead of relying on SOA record lookups.
+
 Take note of the `ApplicationKey`, `ApplicationSecret` and `ConsumerKey` and save them in a **secure** location.
 
 ### OVH OAuth2 Client
@@ -161,6 +165,10 @@ With the OVHcloud API:
       ]
     }
     ```
+
+    > **Note:** If you plan to use `useOvhApiZoneResolution: true` (for split-horizon DNS environments),
+    > you may need to add an additional IAM action (e.g. `account:apiovh:dnsZone/get`) to allow the
+    > webhook to list all available DNS zones via the OVH API.
 
 4. You may take note of the policy Id in the response to more easily manage it in the future.
 5. You can now use the OAuth2 Client ID and Client Secret on the webhook.

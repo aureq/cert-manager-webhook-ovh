@@ -92,6 +92,8 @@ tests:
       - equal:
           path: spec.acme.solvers[0].dns01.webhook.config.applicationConsumerKeyRef.key
           value: applicationConsumerKey
+      - notExists:
+          path: spec.acme.solvers[0].dns01.webhook.config.useOvhApiZoneResolution
 
   - it: Validate use of `issuers` option in `ClusterIssuer` 3/5
     documentSelector:
@@ -173,6 +175,9 @@ tests:
       - equal:
           path: spec.acme.solvers[0].dns01.webhook.config.oauth2ClientSecretRef.key
           value: oauth2ClientSecret
+      - equal:
+          path: spec.acme.solvers[0].dns01.webhook.config.useOvhApiZoneResolution
+          value: true
 
   - it: Validate use of `issuers` option in `ClusterIssuer` 4/5
     documentSelector:

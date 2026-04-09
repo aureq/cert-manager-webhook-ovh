@@ -72,6 +72,7 @@ issuers:
         key: eabKey
     ovhEndpointName: ovh-eu
     ovhAuthenticationMethod: oauth2
+    useOvhApiZoneResolution: true
 
     ovhAuthentication:
       oauth2ClientID: 'oclientid-0123456789abcdef'

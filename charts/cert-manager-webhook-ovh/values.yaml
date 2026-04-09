@@ -199,6 +199,19 @@ issuers:
 
     # @schema
     # required: false
+    # type: boolean
+    # default: false
+    # @schema
+    # -- When `true`, the webhook will query the OVH API (`GET /domain/zone`) to resolve the DNS zone
+    # instead of relying on the SOA record lookup performed by cert-manager.
+    # This is useful in split-horizon DNS environments where local DNS overrides cause the SOA record
+    # to be incorrect or missing from the cert-manager pod's perspective.
+    # When enabled, the OVH API credentials must have access to `GET /domain/zone`.
+    # Defaults to `false`.
+    useOvhApiZoneResolution: false
+
+    # @schema
+    # required: false
     # type: object
     # @schema
     # -- Define your credentials below and the chart will create the necessary secret for you.

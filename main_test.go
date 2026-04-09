@@ -1,6 +1,7 @@
 package main
 
 import (
+	"encoding/json"
 	"testing"
 
 	// acmetest "github.com/cert-manager/cert-manager/test/acme"
@@ -106,5 +107,105 @@ func TestValidate(t *testing.T) {
 	}, false)
 	if err != nil {
 		t.Errorf("expected no error, got %v", err)
+	}
+}
+
+func TestFindMatchingZone(t *testing.T) {
+	tests := []struct {
+		name      string
+		zones     []string
+		fqdn      string
+		expected  string
+		expectErr bool
+	}{
+		{
+			name:     "single zone match",
+			zones:    []string{"example.com"},
+			fqdn:     "_acme-challenge.example.com.",
+			expected: "example.com",
+		},
+		{
+			name:     "deepest zone wins",
+			zones:    []string{"com", "example.com", "sub.example.com"},
+			fqdn:     "_acme-challenge.sub.example.com.",
+			expected: "sub.example.com",
+		},
+		{
+			name:     "fqdn equals zone exactly",
+			zones:    []string{"example.com"},
+			fqdn:     "example.com.",
+			expected: "example.com",
+		},
+		{
+			name:     "fqdn without trailing dot",
+			zones:    []string{"example.com"},
+			fqdn:     "_acme-challenge.example.com",
+			expected: "example.com",
+		},
+		{
+			name:      "no matching zone",
+			zones:     []string{"other.com", "another.org"},
+			fqdn:      "_acme-challenge.example.com.",
+			expectErr: true,
+		},
+		{
+			name:      "empty zones list",
+			zones:     []string{},
+			fqdn:      "_acme-challenge.example.com.",
+			expectErr: true,
+		},
+		{
+			name:     "multiple zones only one matches",
+			zones:    []string{"other.com", "example.com", "another.org"},
+			fqdn:     "_acme-challenge.test.example.com.",
+			expected: "example.com",
+		},
+		{
+			name:     "zone with trailing dot",
+			zones:    []string{"example.com."},
+			fqdn:     "_acme-challenge.example.com.",
+			expected: "example.com",
+		},
+	}
+
+	for _, tc := range tests {
+		t.Run(tc.name, func(t *testing.T) {
+			result, err := findMatchingZone(tc.zones, tc.fqdn)
+			if tc.expectErr {
+				if err == nil {
+					t.Errorf("expected error, got result %q", result)
+				}
+				return
+			}
+			if err != nil {
+				t.Errorf("unexpected error: %v", err)
+				return
+			}
+			if result != tc.expected {
+				t.Errorf("expected %q, got %q", tc.expected, result)
+			}
+		})
+	}
+}
+
+func TestConfigDeserializationWithUseOvhApiZoneResolution(t *testing.T) {
+	// Test that useOvhApiZoneResolution defaults to false
+	jsonData := []byte(`{"endpoint": "ovh-eu", "authenticationMethod": "application"}`)
+	var cfg ovhDNSProviderConfig
+	if err := json.Unmarshal(jsonData, &cfg); err != nil {
+		t.Fatalf("failed to unmarshal: %v", err)
+	}
+	if cfg.UseOvhApiZoneResolution {
+		t.Error("expected UseOvhApiZoneResolution to default to false")
+	}
+
+	// Test that useOvhApiZoneResolution can be set to true
+	jsonData = []byte(`{"endpoint": "ovh-eu", "authenticationMethod": "application", "useOvhApiZoneResolution": true}`)
+	cfg = ovhDNSProviderConfig{}
+	if err := json.Unmarshal(jsonData, &cfg); err != nil {
+		t.Fatalf("failed to unmarshal: %v", err)
+	}
+	if !cfg.UseOvhApiZoneResolution {
+		t.Error("expected UseOvhApiZoneResolution to be true")
 	}
 }
