@@ -1,5 +1,14 @@
 # Changelog
 
+## 0.9.8
+
+### Noteworthy changes
+
+- 🌱 Default `profile` and `cnameStrategy` to empty string instead of explicit values.
+- 🌱 Allow empty string in `pullPolicy`, `loggingFormat`, and `loggingVerbosity` enums.
+- 🌱 Add issuer test case for no-profile scenario
+- 🐛 fix test numbering.
+
 ## 0.9.7
 
 ### Dependency
