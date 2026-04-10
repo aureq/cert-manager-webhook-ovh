@@ -61,7 +61,8 @@
           "enum": [
             "Always",
             "IfNotPresent",
-            "Never"
+            "Never",
+            ""
           ],
           "required": [],
           "title": "pullPolicy"
@@ -112,11 +113,12 @@
                 "type": "string"
               },
               "cnameStrategy": {
-                "default": "None",
+                "default": "",
                 "description": "Follow CNAME records or not. 2 options:\n- `None` (default): Don't follow CNAME records\n- `Follow`: Follow CNAME records\nSee https://cert-manager.io/docs/configuration/acme/dns01/#delegated-domains-for-dns01 for more information.",
                 "enum": [
                   "None",
-                  "Follow"
+                  "Follow",
+                  ""
                 ],
                 "required": [],
                 "title": "cnameStrategy"
@@ -404,12 +406,13 @@
                 "title": "ovhEndpointName"
               },
               "profile": {
-                "default": "classic",
+                "default": "",
                 "description": "If the ACME server supports profiles, you can specify the profile name here.\nFor more details, see https://cert-manager.io/docs/configuration/acme/#acme-certificate-profiles\nPossible profiles are: `classic`, `tlsserver`, `shortlived`.",
                 "enum": [
                   "classic",
                   "tlsserver",
-                  "shortlived"
+                  "shortlived",
+                  ""
                 ],
                 "required": [],
                 "title": "profile"

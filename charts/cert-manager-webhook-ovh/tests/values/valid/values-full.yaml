@@ -311,6 +311,52 @@ issuers:
         name: 'ovh-credentials'
         key: applicationConsumerKey
 
+  - name: letsencrypt-prod-no-profile
+    create: true
+    kind: ClusterIssuer
+    namespace: default
+    acmeServerUrl: https://acme-v02.api.letsencrypt.org/directory
+    email: tls-manager@example.net
+    disableAccountKeyGeneration: false
+    # profile: classic
+    cnameStrategy: None
+
+    externalAccountBinding:
+      enabled: false
+      keyID: ''
+
+      keySecretRef:
+        name: ''
+        key: ''
+
+    ovhEndpointName: ovh-eu
+
+    ovhAuthenticationMethod: application
+
+    ovhAuthentication:
+      oauth2ClientID: ''
+      oauth2ClientSecret: ''
+      applicationKey: 'appkey-0123456789abcdef'
+      applicationSecret: 'appsecret-0123456789abcdef'
+      applicationConsumerKey: 'appconsumerkey-0123456789abcdef'
+
+    ovhAuthenticationRef:
+      oauth2ClientIDRef:
+        name: ''
+        key: oauth2ClientID
+      oauth2ClientSecretRef:
+        name: ''
+        key: oauth2ClientSecret
+      applicationKeyRef:
+        name: ''
+        key: applicationKey
+      applicationSecretRef:
+        name: ''
+        key: applicationSecret
+      applicationConsumerKeyRef:
+        name: ''
+        key: applicationConsumerKey
+
 rbac:
   roleType: Role
 

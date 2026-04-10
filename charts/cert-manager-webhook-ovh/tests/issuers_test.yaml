@@ -8,17 +8,17 @@ chart:
   version: 1.0.0
   appVersion: 1.0.0
 tests:
-  - it: Validate use of `issuers` option in `ClusterIssuer` 1/5
+  - it: Validate use of `issuers` option in `ClusterIssuer` 1/6
     documentSelector:
       path: kind
       value: ClusterIssuer
       matchMany: true
     asserts:
       - hasDocuments:
-          count: 5
+          count: 6
           filterAware: true
 
-  - it: Validate use of `issuers` option in `ClusterIssuer` 2/5
+  - it: Validate use of `issuers` option in `ClusterIssuer` 2/6
     documentSelector:
       path: $[?(@.kind == "ClusterIssuer")].metadata.name
       value: letsencrypt-prod
@@ -93,7 +93,7 @@ tests:
           path: spec.acme.solvers[0].dns01.webhook.config.applicationConsumerKeyRef.key
           value: applicationConsumerKey
 
-  - it: Validate use of `issuers` option in `ClusterIssuer` 3/5
+  - it: Validate use of `issuers` option in `ClusterIssuer` 3/6
     documentSelector:
       path: $[?(@.kind == "ClusterIssuer")].metadata.name
       value: le-staging-oidc-dir
@@ -174,7 +174,7 @@ tests:
           path: spec.acme.solvers[0].dns01.webhook.config.oauth2ClientSecretRef.key
           value: oauth2ClientSecret
 
-  - it: Validate use of `issuers` option in `ClusterIssuer` 4/5
+  - it: Validate use of `issuers` option in `ClusterIssuer` 4/6
     documentSelector:
       path: $[?(@.kind == "ClusterIssuer")].metadata.name
       value: le-staging-oidc-ref
@@ -244,7 +244,7 @@ tests:
           path: spec.acme.solvers[0].dns01.webhook.config.oauth2ClientSecretRef.key
           value: oauth2ClientSecret
 
-  - it: Validate use of `issuers` option in `ClusterIssuer` 4/5
+  - it: Validate use of `issuers` option in `ClusterIssuer` 5/6
     documentSelector:
       path: $[?(@.kind == "ClusterIssuer")].metadata.name
       value: le-staging-app-ref
@@ -319,6 +319,81 @@ tests:
           path: spec.acme.solvers[0].dns01.webhook.config.oauth2ClientIDRef
       - notExists:
           path: spec.acme.solvers[0].dns01.webhook.config.oauth2ClientSecretRef
+
+  - it: Validate use of `issuers` option in `ClusterIssuer` 6/6
+    documentSelector:
+      path: $[?(@.kind == "ClusterIssuer")].metadata.name
+      value: letsencrypt-prod-no-profile
+    asserts:
+      - equal:
+          path: kind
+          value: ClusterIssuer
+      - equal:
+          path: metadata.name
+          value: letsencrypt-prod-no-profile
+      - equal:
+          path: metadata.namespace
+          value: default
+        not: true
+      - equal:
+          path: spec.acme.server
+          value: https://acme-v02.api.letsencrypt.org/directory
+      - equal:
+          path: spec.acme.email
+          value: tls-manager@example.net
+      - notExists:
+          path: spec.acme.disableAccountKeyGeneration
+      - notExists:
+          path: spec.acme.externalAccountBinding
+      - notExists:
+          path: spec.acme.profile
+      - lengthEqual:
+          path: spec.acme.solvers
+          count: 1
+      - equal:
+          path: spec.acme.solvers[0].dns01.cnameStrategy
+          value: None
+      - equal:
+          path: spec.acme.solvers[0].dns01.webhook.solverName
+          value: ovh
+      - equal:
+          path: spec.acme.solvers[0].dns01.webhook.config.endpoint
+          value: ovh-eu
+      - equal:
+          path: spec.acme.solvers[0].dns01.webhook.config.authenticationMethod
+          value: application
+      - notExists:
+          path: spec.acme.solvers[0].dns01.webhook.config.applicationKeyRef
+        not: true
+      - notExists:
+          path: spec.acme.solvers[0].dns01.webhook.config.applicationSecretRef
+        not: true
+      - notExists:
+          path: spec.acme.solvers[0].dns01.webhook.config.applicationConsumerKeyRef
+        not: true
+      - notExists:
+          path: spec.acme.solvers[0].dns01.webhook.config.oauth2ClientIDRef
+      - notExists:
+          path: spec.acme.solvers[0].dns01.webhook.config.oauth2ClientSecretRef
+      - equal:
+          path: spec.acme.solvers[0].dns01.webhook.config.applicationKeyRef.name
+          value: letsencrypt-prod-no-profile-ovh-credentials
+      - equal:
+          path: spec.acme.solvers[0].dns01.webhook.config.applicationKeyRef.key
+          value: applicationKey
+      - equal:
+          path: spec.acme.solvers[0].dns01.webhook.config.applicationSecretRef.name
+          value: letsencrypt-prod-no-profile-ovh-credentials
+      - equal:
+          path: spec.acme.solvers[0].dns01.webhook.config.applicationSecretRef.key
+          value: applicationSecret
+      - equal:
+          path: spec.acme.solvers[0].dns01.webhook.config.applicationConsumerKeyRef.name
+          value: letsencrypt-prod-no-profile-ovh-credentials
+      - equal:
+          path: spec.acme.solvers[0].dns01.webhook.config.applicationConsumerKeyRef.key
+          value: applicationConsumerKey
+
 ---
 suite: Testing `root.issuers` option in `secret.yaml` 2/2
 templates:
@@ -329,7 +404,7 @@ chart:
   version: 1.0.0
   appVersion: 1.0.0
 tests:
-  - it: Validate use of `issuers` option in `ClusterIssuer` 1/x
+  - it: Validate use of `issuers` option in `ClusterIssuer` 1/2
     documentSelector:
       path: $[?(@.kind == "Secret")].metadata.name
       value: letsencrypt-prod-ovh-credentials
@@ -353,7 +428,7 @@ tests:
           path: data.applicationConsumerKey
           value: YXBwY29uc3VtZXJrZXktMDEyMzQ1Njc4OWFiY2RlZg==
 
-  - it: Validate use of `issuers` option in `ClusterIssuer` 2/x
+  - it: Validate use of `issuers` option in `ClusterIssuer` 2/2
     documentSelector:
       path: $[?(@.kind == "Secret")].metadata.name
       value: le-staging-oidc-dir-ovh-credentials

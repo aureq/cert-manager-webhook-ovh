@@ -108,24 +108,25 @@ issuers:
 
     # @schema
     # required: false
-    # enum: [classic, tlsserver, shortlived]
-    # default: classic
+    # enum: [classic, tlsserver, shortlived, ""]
+    # default: ""
     # @schema
     # -- If the ACME server supports profiles, you can specify the profile name here.
     # For more details, see https://cert-manager.io/docs/configuration/acme/#acme-certificate-profiles
     # Possible profiles are: `classic`, `tlsserver`, `shortlived`.
-    profile: classic
+    # Note: Not all ACME servers support profiles and this field should be left empty or commented if your ACME server does not support profiles.
+    profile: ""
 
     # @schema
     # required: false
-    # enum: [None, Follow]
-    # default: None
+    # enum: [None, Follow, ""]
+    # default: ""
     # @schema
     # -- Follow CNAME records or not. 2 options:
     # - `None` (default): Don't follow CNAME records
     # - `Follow`: Follow CNAME records
     # See https://cert-manager.io/docs/configuration/acme/dns01/#delegated-domains-for-dns01 for more information.
-    cnameStrategy: None
+    cnameStrategy: ""
 
     # @schema
     # required: false
@@ -417,7 +418,7 @@ image:
 
   # @schema
   # required: false
-  # enum: [Always,IfNotPresent,Never]
+  # enum: [Always, IfNotPresent, Never, ""]
   # default: IfNotPresent
   # @schema
   # -- The image pull policy as defined in the Kubernetes documentation.
@@ -489,6 +490,7 @@ pod:
   # required: false
   # type: string
   # enum: [text, json, ""]
+  # default: ""
   # @schema
   # -- Set the logging format for the webhook. Accepted values are  `""` (unspecified, defaults to `text`), `text` or `json`.
   # If not specified, the `--logging-format` argument is not passed and will default to `text`.
@@ -497,6 +499,7 @@ pod:
   # @schema
   # required: false
   # enum: [0, 1, 2, 3, 4, 5, ""]
+  # default: ""
   # @schema
   # -- Set the logging verbosity level for the webhook (and internal dependencies). Accepted values are integers from `0` to `5`, with `0` being the least verbose and `5` being the most verbose.
   # If not specified, verbose level defaults to `1`. Levels are: `0` (error), `1` (warn, default), `2` (info), `3` (extended info), `4` (debug), `5` (trace).
