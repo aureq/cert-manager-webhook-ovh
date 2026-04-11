@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.9.9 (unreleased)
+
+### Dependency
+
+- ⏩ upgrade github.com/cert-manager/cert-manager to v1.20.2
+
 ## 0.9.8
 
 ### Noteworthy changes
