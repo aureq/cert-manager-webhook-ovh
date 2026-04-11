@@ -407,7 +407,7 @@
               },
               "profile": {
                 "default": "",
-                "description": "If the ACME server supports profiles, you can specify the profile name here.\nFor more details, see https://cert-manager.io/docs/configuration/acme/#acme-certificate-profiles\nPossible profiles are: `classic`, `tlsserver`, `shortlived`.",
+                "description": "If the ACME server supports profiles, you can specify the profile name here.\nFor more details, see https://cert-manager.io/docs/configuration/acme/#acme-certificate-profiles\nPossible profiles are: `classic`, `tlsserver`, `shortlived`.\nNote: Not all ACME servers support profiles and this field should be left empty or commented if your ACME server does not support profiles.",
                 "enum": [
                   "classic",
                   "tlsserver",
