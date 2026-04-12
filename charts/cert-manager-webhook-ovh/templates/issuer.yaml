@@ -39,6 +39,9 @@ spec:
           config:
             endpoint: {{ .ovhEndpointName | quote }}
             authenticationMethod: {{ .ovhAuthenticationMethod | quote }}
+            {{- if .useOvhApiZoneResolution }}
+            useOvhApiZoneResolution: true
+            {{- end }}
             {{- if eq (include "cert-manager-webhook-ovh.isOvhAuthenticationAvail" .) "true" }}{{- /* direct authentication */ -}}
             {{- if eq .ovhAuthenticationMethod "application" }}
             applicationKeyRef:
