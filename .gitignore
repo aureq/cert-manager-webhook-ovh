@@ -22,8 +22,9 @@
 
 # Ignore the built binary
 /cert-manager-webhook-ovh
-_out
-kubebuilder-tools.tar.gz
+/_out
+/bin
+# kubebuilder-tools.tar.gz
 
 # Test data
 testdata/ovh/config.json
