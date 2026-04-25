@@ -21,6 +21,7 @@ tests:
           value:
             - "le-staging-app-dir-ovh-credentials"
             - "le-staging-oidc-dir-ovh-credentials"
+            - "letsencrypt-prod-no-profile-ovh-credentials"
             - "letsencrypt-prod-ovh-credentials"
             - "ovh-credentials"
 ---
@@ -49,6 +50,7 @@ tests:
           value:
             - "le-staging-app-dir-ovh-credentials"
             - "le-staging-oidc-dir-ovh-credentials"
+            - "letsencrypt-prod-no-profile-ovh-credentials"
             - "letsencrypt-prod-ovh-credentials"
             - "ovh-credentials"
 ---

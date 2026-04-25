@@ -42,7 +42,7 @@ We appreciate your understanding and cooperation in maintaining a positive and p
 ## Release workflow
 
 - Update `charts/cert-manager-webhook-ovh/Chart.yaml`
-- Run `make helm-schema helm-docs helm-unittest`
+- Run `make prepare tests`
 - Commit `charts/cert-manager-webhook-ovh/values.schema.json` (if any) and `charts/cert-manager-webhook-ovh/README.md` changes
 - Prepare `CHANGELOG.md` for `x.y.z`
 - Commit all changes

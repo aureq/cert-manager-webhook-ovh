@@ -26,36 +26,18 @@ jobs:
         # with:
         #   version: v3.19.5
 
-      - name: Install Helm unittest plugin
+      - name: Install Golang unit tests dependencies
         run: |
-          make install-helm-unittest
+          make install-go-tests
 
-      - name: Run the Chart unit tests
+      - name: Install Helm Chart unittest plugin
         run: |
-          make helm-unittest
+          make install-helm-unittests
 
-  # go-test:
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - uses: step-security/harden-runner@e3f713f2d8f53843e71c69a996d56f51aa9adfb9 # v2.14.1
-  #       with:
-  #         egress-policy: audit
-  #     - name: Checkout
-  #       uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+      - name: Run the Golang unit tests
+        run: |
+          make go-tests
 
-  #     - name: Fetch History
-  #       run: git fetch --prune --unshallow
-
-  #     - name: Setup Go
-  #       uses: actions/setup-go@d35c59abb061a4a6fb18e82ac0862c26744d6ab5 # v5.5.0
-  #       id: setup-go
-  #       with:
-  #         go-version-file: "go.mod"
-
-  #     - name: Download Go modules
-  #       if: ${{ steps.setup-go.outputs.cache-hit != 'true' }}
-  #       run: go mod download
-
-  #     - name: Run Unit Tests
-  #       run: |
-  #         make test
+      - name: Run the Helm Chart unit tests
+        run: |
+          make helm-unittests
