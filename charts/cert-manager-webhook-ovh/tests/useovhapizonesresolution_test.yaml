@@ -1,0 +1,26 @@
+---
+suite: Testing `useOvhApiZoneResolution` option in `issuer.yaml`
+templates:
+  - issuer.yaml
+values:
+  - values/valid/values-full.yaml
+chart:
+  version: 1.0.0
+  appVersion: 1.0.0
+tests:
+  - it: Should render useOvhApiZoneResolution when set to true
+    documentSelector:
+      path: $[?(@.kind == "ClusterIssuer")].metadata.name
+      value: le-staging-oidc-dir
+    asserts:
+      - equal:
+          path: spec.acme.solvers[0].dns01.webhook.config.useOvhApiZoneResolution
+          value: true
+
+  - it: Should not render useOvhApiZoneResolution when unset (defaults to false)
+    documentSelector:
+      path: $[?(@.kind == "ClusterIssuer")].metadata.name
+      value: letsencrypt-prod
+    asserts:
+      - notExists:
+          path: spec.acme.solvers[0].dns01.webhook.config.useOvhApiZoneResolution
