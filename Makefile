@@ -7,7 +7,7 @@ ENVTEST_K8S_VERSION=1.35.0
 IMAGE_NAME := "aureq/cert-manager-webhook-ovh"
 IMAGE_TAG := "latest"
 
-.PHONY: tests go-test setup-envtest envtest build helm-test rendered-manifest.yaml install-helm-docs schema install-helm-schema
+.PHONY: build clean envtest go-tests helm-docs helm-schema helm-unittests install-go-tests install-helm-docs install-helm-schema install-helm-unittests local-build prepare rendered-manifest.yaml tests
 
 OUT := $(shell pwd)/_out
 TEST_ASSET_ETCD := $(OUT)/kubebuilder/bin/etcd
@@ -48,13 +48,13 @@ define gomodver
 $(shell go list -m -f '{{if .Replace}}{{.Replace.Version}}{{else}}{{.Version}}{{end}}' $(1) 2>/dev/null)
 endef
 
-go-test: setup-envtest
+go-tests: install-go-tests
 	@TEST_ASSET_ETCD=$(LOCALBIN)/k8s/$(ENVTEST_K8S_VERSION)-$(OS)-$(ARCH)/etcd \
 		TEST_ASSET_KUBE_APISERVER=$(LOCALBIN)/k8s/$(ENVTEST_K8S_VERSION)-$(OS)-$(ARCH)/kube-apiserver \
 		TEST_ASSET_KUBECTL=$(LOCALBIN)/k8s/$(ENVTEST_K8S_VERSION)-$(OS)-$(ARCH)/kubectl \
 		$(GO) test -v .
 
-setup-envtest: envtest ## Download the binaries required for ENVTEST in the local bin directory.
+install-go-tests: envtest ## Download the binaries required for ENVTEST in the local bin directory.
 	@echo "Setting up envtest binaries for Kubernetes version $(ENVTEST_K8S_VERSION)..."
 	@"$(ENVTEST)" use $(ENVTEST_K8S_VERSION) --bin-dir "$(LOCALBIN)" -p path || { \
 		echo "Error: Failed to set up envtest binaries for version $(ENVTEST_K8S_VERSION)."; \
@@ -69,7 +69,7 @@ clean:
 	@chmod -R u+w $(LOCALBIN) $(OUT) 2>/dev/null || true
 	@rm -rf $(LOCALBIN) $(OUT)
 
-tests: go-test helm-unittest
+tests: go-tests helm-unittests
 
 prepare: helm-schema helm-docs
 
@@ -98,7 +98,7 @@ rendered-manifest.yaml:
         --set image.tag=$(IMAGE_TAG) \
         charts/cert-manager-webhook-ovh > "$(OUT)/rendered-manifest.yaml"
 
-helm-unittest: install-helm-unittest
+helm-unittests: install-helm-unittests
 	@helm unittest charts/cert-manager-webhook-ovh/
 
 helm-docs: install-helm-docs
@@ -107,7 +107,7 @@ helm-docs: install-helm-docs
 helm-schema: install-helm-schema
 	@helm-schema --chart-search-root charts/cert-manager-webhook-ovh/ --add-schema-reference --keep-full-comment
 
-install-helm-unittest:
+install-helm-unittests:
 	@helm plugin list | grep ^unittest >/dev/null 2>&1 || helm plugin install https://github.com/helm-unittest/helm-unittest --verify=false
 
 install-helm-docs:
