@@ -33,7 +33,7 @@ var (
 // To do so, it must implement the `github.com/jetstack/cert-manager/pkg/acme/webhook.Solver`
 // interface.
 type ovhDNSProviderSolver struct {
-	client *kubernetes.Clientset
+	client kubernetes.Interface
 }
 
 // ovhDNSProviderConfig is a structure that is used to decode into when

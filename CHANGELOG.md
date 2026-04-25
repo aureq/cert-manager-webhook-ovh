@@ -2,6 +2,12 @@
 
 ## 0.9.9 (unreleased)
 
+### Noteworthy changes
+
+- 🌿 Add comprehensive unit tests for `Name`, `loadConfig`, `getSubDomain`, `validate` edge cases, `secret` retrieval, and config JSON field names
+- 🌿 Add fake-clientset based test helpers (`jsonRaw`, `makeSecret`, `solverWithSecrets`) to support secret retrieval tests
+- 🌱 Switch `ovhDNSProviderSolver.client` field to `kubernetes.Interface` to enable injecting a fake clientset in tests
+
 ### Dependency
 
 - ⏩ upgrade github.com/cert-manager/cert-manager to v1.20.2
