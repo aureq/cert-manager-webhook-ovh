@@ -7,6 +7,9 @@
 - 🌿 Add comprehensive unit tests for `Name`, `loadConfig`, `getSubDomain`, `validate` edge cases, `secret` retrieval, and config JSON field names
 - 🌿 Add fake-clientset based test helpers (`jsonRaw`, `makeSecret`, `solverWithSecrets`) to support secret retrieval tests
 - 🌱 Switch `ovhDNSProviderSolver.client` field to `kubernetes.Interface` to enable injecting a fake clientset in tests
+- ⚙️ Enable Go unit tests in CI tests workflow alongside Helm chart unit tests
+- ⚙️ Align CI tests workflow with renamed Makefile targets (`install-go-tests`, `go-tests`, `install-helm-unittests`, `helm-unittests`)
+- 🔥 Remove commented-out `go-test` job stub from CI tests workflow
 - ⚙️ Rename Makefile targets for consistency (`go-test` to `go-tests`, `setup-envtest` to `install-go-tests`, `helm-unittest` to `helm-unittests`, `install-helm-unittest` to `install-helm-unittests`) and sort `.PHONY` declaration alphabetically
 
 ### Dependency
