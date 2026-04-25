@@ -5,6 +5,10 @@
 ### Dependency
 
 - ⏩ upgrade github.com/cert-manager/cert-manager to v1.20.2
+- ⏩ upgrade k8s.io/api to v0.35.4
+- ⏩ upgrade k8s.io/apiextensions-apiserver to v0.35.4
+- ⏩ upgrade k8s.io/apimachinery to v0.35.4
+- ⏩ upgrade k8s.io/client-go to v0.35.4
 
 ## 0.9.8
 
