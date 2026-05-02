@@ -98,7 +98,7 @@ rendered-manifest.yaml:
         --set image.tag=$(IMAGE_TAG) \
         charts/cert-manager-webhook-ovh > "$(OUT)/rendered-manifest.yaml"
 
-helm-unittests: install-helm-unittests
+helm-unittests: install-helm-unittests helm-schema
 	@helm unittest charts/cert-manager-webhook-ovh/
 
 helm-docs: install-helm-docs
