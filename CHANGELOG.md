@@ -41,6 +41,7 @@
 - ⏩ upgrade k8s.io/apiextensions-apiserver to v0.35.4
 - ⏩ upgrade k8s.io/apimachinery to v0.35.4
 - ⏩ upgrade k8s.io/client-go to v0.35.4
+- ⏩ upgrade `azure/setup-helm` action to v5.0.0 in release and tests workflows
 
 ## 0.9.8
 
