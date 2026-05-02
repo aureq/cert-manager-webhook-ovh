@@ -118,7 +118,7 @@ issuers:
     disableAccountKeyGeneration: false
 
     # @schema
-    # enum: ['classic', 'tlsserver', 'shortlived', '']
+    # enum: ['classic', 'tlsserver', 'shortlived', '', null]
     # default: ''
     # @schema
     # -- If the ACME server supports profiles, you can specify the profile name here.
@@ -128,7 +128,7 @@ issuers:
     profile: ''
 
     # @schema
-    # enum: ['None', 'Follow', '']
+    # enum: ['None', 'Follow', '', null]
     # default: ''
     # @schema
     # -- Follow CNAME records or not. 2 options:
@@ -217,31 +217,31 @@ issuers:
     ovhAuthentication:
 
       # @schema
-      # type: string
+      # type: [string, null]
       # @schema
       # -- The OVH OAuth 2 client ID. Leave empty if you are using an existing secret.
       oauth2ClientID: ''
 
       # @schema
-      # type: string
+      # type: [string, null]
       # @schema
       # -- The OVH OAuth 2 client secret. Leave empty if you are using an existing secret.
       oauth2ClientSecret: ''
 
       # @schema
-      # type: string
+      # type: [string, null]
       # @schema
       # -- The OVH application key. Leave empty if you are using an existing secret.
       applicationKey: ''
 
       # @schema
-      # type: string
+      # type: [string, null]
       # @schema
       # -- The OVH application secret. Leave empty if you are using an existing secret.
       applicationSecret: ''
 
       # @schema
-      # type: string
+      # type: [string, null]
       # @schema
       # -- Your OVH consumer key. Leave empty if you are using an existing secret.
       applicationConsumerKey: ''
@@ -401,14 +401,14 @@ image:
   repository: aureq/cert-manager-webhook-ovh
 
   # @schema
-  # type: string
+  # type: [string, null]
   # @schema
   # -- The tag to use from the registry. It can either be a version number like `1.0.0`
   # or a digest like `sha256:abcdef0123456789abcdef0123456789abcdef0123456789abcdef0123456789`.
   tag: ''
 
   # @schema
-  # enum: ['Always', 'IfNotPresent', 'Never', '']
+  # enum: ['Always', 'IfNotPresent', 'Never', '', null]
   # default: IfNotPresent
   # @schema
   # -- The image pull policy as defined in the Kubernetes documentation.
@@ -471,8 +471,7 @@ pod:
     # NO_PROXY: "cluster.local,127.0.0.1,localhost,10.0.0.0/8"
 
   # @schema
-  # type: string
-  # enum: ['text', 'json', '']
+  # enum: ['text', 'json', '', ]
   # default: ''
   # @schema
   # -- Set the logging format for the webhook. Accepted values are  `''` (unspecified, defaults to `text`), `text` or `json`.
@@ -480,7 +479,7 @@ pod:
   loggingFormat: ''
 
   # @schema
-  # enum: [0, 1, 2, 3, 4, 5, '']
+  # enum: [0, 1, 2, 3, 4, 5, '', null]
   # default: ''
   # @schema
   # -- Set the logging verbosity level for the webhook (and internal dependencies). Accepted values are integers from `0` to `5`, with `0` being the least verbose and `5` being the most verbose.
@@ -640,7 +639,7 @@ pod:
   hostNetwork: false
 
   # @schema
-  # type: string
+  # type: [string, null]
   # @schema
   # -- The optional priority class to be used for the cert-manager-webhook-ovh pod.
   priorityClassName: ''
@@ -754,13 +753,13 @@ pod:
     #           topologyKey: 'topology.kubernetes.io/zone'
 
 # @schema
-# type: string
+# type: [string, null]
 # @schema
 # -- Override the name of the deployed resources
 nameOverride: ''
 
 # @schema
-# type: string
+# type: [string, null]
 # @schema
 # -- Override the full name of the deployed resources
 fullnameOverride: ''

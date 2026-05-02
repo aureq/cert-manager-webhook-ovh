@@ -8,6 +8,9 @@
 - 🌿 Add fake-clientset based test helpers (`jsonRaw`, `makeSecret`, `solverWithSecrets`) to support secret retrieval tests
 - 🌱 Remove redundant `required: false` annotations from `@schema` blocks across `values.yaml`
 - 🌱 Use single-quoted strings in `@schema` default annotations and actual default values across `values.yaml` for YAML quoting consistency
+- 🌱 Allow `null` values in `@schema` enum annotations for `profile`, `cnameStrategy`, `imagePullPolicy`, and `loggingVerbosity` fields in `values.yaml`
+- 🌱 Allow `null` values in `@schema` type annotations for OVH authentication, image tag, priority class, and name override fields in `values.yaml`
+- 🌱 Remove redundant `type: string` from `loggingFormat` `@schema` block in `values.yaml`
 - 🌱 Use single-quoted strings in `@schema` enum annotations across `values.yaml` for YAML quoting consistency
 - 🌱 Switch `ovhDNSProviderSolver.client` field to `kubernetes.Interface` to enable injecting a fake clientset in tests
 - 🌱 Add `@schema.root` title and description annotations to `values.yaml` for JSON schema metadata
