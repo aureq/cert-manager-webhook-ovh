@@ -38,14 +38,14 @@ define go-install-tool
 	package=$(2)@$(3) ;\
 	echo "Installing $${package}" ;\
 	rm -f "$(1)" ;\
-	GOBIN="$(LOCALBIN)" go install $${package} ;\
+	GOBIN="$(LOCALBIN)" $(GO) install $${package} ;\
 	mv "$(LOCALBIN)/$$(basename "$(1)")" "$(1)-$(3)" ;\
 } ;\
 ln -sf "$$(realpath "$(1)-$(3)")" "$(1)"
 endef
 
 define gomodver
-$(shell go list -m -f '{{if .Replace}}{{.Replace.Version}}{{else}}{{.Version}}{{end}}' $(1) 2>/dev/null)
+$(shell $(GO) list -m -f '{{if .Replace}}{{.Replace.Version}}{{else}}{{.Version}}{{end}}' $(1) 2>/dev/null)
 endef
 
 go-tests: install-go-tests
@@ -74,7 +74,7 @@ tests: go-tests helm-unittests
 prepare: helm-schema helm-docs
 
 local-build:
-	CGO_ENABLED=0 go build -trimpath -o cert-manager-webhook-ovh .
+	CGO_ENABLED=0 $(GO) build -trimpath -o cert-manager-webhook-ovh .
 
 build:
 	@test -z "$$HTTP_PROXY" -a -z "$$HTTPS_PROXY" || docker buildx build \
@@ -98,7 +98,7 @@ rendered-manifest.yaml:
         --set image.tag=$(IMAGE_TAG) \
         charts/cert-manager-webhook-ovh > "$(OUT)/rendered-manifest.yaml"
 
-helm-unittests: install-helm-unittests
+helm-unittests: install-helm-unittests helm-schema
 	@helm unittest charts/cert-manager-webhook-ovh/
 
 helm-docs: install-helm-docs
@@ -111,7 +111,7 @@ install-helm-unittests:
 	@helm plugin list | grep ^unittest >/dev/null 2>&1 || helm plugin install https://github.com/helm-unittest/helm-unittest --verify=false
 
 install-helm-docs:
-	@go install github.com/norwoodj/helm-docs/cmd/helm-docs@latest
+	@$(GO) install github.com/norwoodj/helm-docs/cmd/helm-docs@latest
 
 install-helm-schema:
-	@go install github.com/dadav/helm-schema/cmd/helm-schema@latest
+	@$(GO) install github.com/dadav/helm-schema/cmd/helm-schema@latest

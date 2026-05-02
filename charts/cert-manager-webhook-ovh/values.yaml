@@ -1,5 +1,19 @@
+---
 # vim: set ft=yaml
 # yaml-language-server: $schema=values.schema.json
+
+# @schema.root
+# title: cert-manager-webhook-ovh Helm Chart values
+# description: Configuration values for the cert-manager-webhook-ovh Helm Chart
+# @schema.root
+
+## @formatter:off
+## values.yaml
+##
+## Repository: cert-manager-webhook-ovh-charts https://aureq.github.io/cert-manager-webhook-ovh/
+## Chart: cert-manager-webhook-ovh
+##
+## This values file is a baseline for other values files.
 
 # @schema
 # required: true
@@ -39,7 +53,6 @@ certManager:
   serviceAccountName: cert-manager
 
 # @schema
-# required: false
 # type: array
 # @schema
 # -- One or more issuers to create
@@ -61,7 +74,7 @@ issuers:
 
     # @schema
     # required: true
-    # enum: [ClusterIssuer, Issuer]
+    # enum: ['ClusterIssuer', 'Issuer']
     # @schema
     # -- The type of issuer to create. It can either be `ClusterIssuer` or `Issuer`.
     # If `Issuer` is specified, then the `namespace` is also required.
@@ -69,7 +82,6 @@ issuers:
     kind: ClusterIssuer
 
     # @schema
-    # required: false
     # type: string
     # @schema
     # -- If `kind` is `Issuer`, then indicate the namespace in which this issuer should be deployed into.
@@ -95,7 +107,6 @@ issuers:
     email: acme@example.net
 
     # @schema
-    # required: false
     # type: boolean
     # default: false
     # @schema
@@ -107,29 +118,26 @@ issuers:
     disableAccountKeyGeneration: false
 
     # @schema
-    # required: false
-    # enum: [classic, tlsserver, shortlived, ""]
-    # default: ""
+    # enum: ['classic', 'tlsserver', 'shortlived', '', null]
+    # default: ''
     # @schema
     # -- If the ACME server supports profiles, you can specify the profile name here.
     # For more details, see https://cert-manager.io/docs/configuration/acme/#acme-certificate-profiles
     # Possible profiles are: `classic`, `tlsserver`, `shortlived`.
     # Note: Not all ACME servers support profiles and this field should be left empty or commented if your ACME server does not support profiles.
-    profile: ""
+    profile: ''
 
     # @schema
-    # required: false
-    # enum: [None, Follow, ""]
-    # default: ""
+    # enum: ['None', 'Follow', '', null]
+    # default: ''
     # @schema
     # -- Follow CNAME records or not. 2 options:
     # - `None` (default): Don't follow CNAME records
     # - `Follow`: Follow CNAME records
     # See https://cert-manager.io/docs/configuration/acme/dns01/#delegated-domains-for-dns01 for more information.
-    cnameStrategy: ""
+    cnameStrategy: ''
 
     # @schema
-    # required: false
     # type: object
     # @schema
     # -- Define the EAB (external account binding) key using `secretRef`.
@@ -175,7 +183,7 @@ issuers:
 
     # @schema
     # required: true
-    # enum: [ovh-eu, ovh-ca, kimsufi-eu, kimsufi-ca, soyoustart-eu, soyoustart-ca, runabove-ca]
+    # enum: ['ovh-eu', 'ovh-ca', 'kimsufi-eu', 'kimsufi-ca', 'soyoustart-eu', 'soyoustart-ca', 'runabove-ca']
     # @schema
     # -- The endpoint name of the OVH API. It must be one of the following:
     # `ovh-eu`, `ovh-ca`, `kimsufi-eu`, `kimsufi-ca`, `soyoustart-eu`, `soyoustart-ca`, `runabove-ca`.
@@ -184,7 +192,7 @@ issuers:
 
     # @schema
     # required: true
-    # enum: [application, oauth2]
+    # enum: ['application', 'oauth2']
     # @schema
     # -- Define how the webhook should authenticate with the OVH API. It can be either `application` or `oauth2`.
     # When `ovhAuthenticationMethod` is `application`, then use:
@@ -223,42 +231,37 @@ issuers:
     ovhAuthentication:
 
       # @schema
-      # required: false
-      # type: string
+      # type: [string, null]
       # @schema
       # -- The OVH OAuth 2 client ID. Leave empty if you are using an existing secret.
       oauth2ClientID: ''
 
       # @schema
-      # required: false
-      # type: string
+      # type: [string, null]
       # @schema
       # -- The OVH OAuth 2 client secret. Leave empty if you are using an existing secret.
       oauth2ClientSecret: ''
 
       # @schema
-      # required: false
-      # type: string
+      # type: [string, null]
       # @schema
       # -- The OVH application key. Leave empty if you are using an existing secret.
       applicationKey: ''
 
       # @schema
-      # required: false
-      # type: string
+      # type: [string, null]
       # @schema
       # -- The OVH application secret. Leave empty if you are using an existing secret.
       applicationSecret: ''
 
       # @schema
-      # required: false
-      # type: string
+      # type: [string, null]
       # @schema
       # -- Your OVH consumer key. Leave empty if you are using an existing secret.
       applicationConsumerKey: ''
 
     # @schema
-    # required: false
+    # type: object
     # @schema
     # -- Define the details of a secret already containing the OVH credentials.
     # If `ovhAuthenticationMethod` is `application`, then provide:
@@ -268,7 +271,6 @@ issuers:
     ovhAuthenticationRef:
 
       # @schema
-      # required: false
       # type: object
       # @schema
       # -- The secret reference to an existing OVH OAuth 2 client ID.
@@ -291,7 +293,6 @@ issuers:
         key: oauth2ClientID
 
       # @schema
-      # required: false
       # type: object
       # @schema
       # -- The secret reference to an existing OVH Auth 2 client secret.
@@ -315,7 +316,6 @@ issuers:
         key: oauth2ClientSecret
 
       # @schema
-      # required: false
       # type: object
       # @schema
       # -- The secret reference to an existing OVH application key.
@@ -339,7 +339,6 @@ issuers:
         key: applicationKey
 
       # @schema
-      # required: false
       # type: object
       # @schema
       # -- The secret reference to an existing OVH application secret.
@@ -363,7 +362,6 @@ issuers:
         key: applicationSecret
 
       # @schema
-      # required: false
       # type: object
       # @schema
       # -- The secret reference to an existing OVH consumer key
@@ -387,14 +385,12 @@ issuers:
         key: applicationConsumerKey
 
 # @schema
-# required: false
 # type: object
 # @schema
 # -- RBAC configuration for the webhook deployment
 rbac:
   # @schema
-  # required: false
-  # enum: [Role, ClusterRole]
+  # enum: ['Role', 'ClusterRole']
   # default: Role
   # @schema
   # -- If the secret of the issuer is in a different namespace, change `Role` (default)
@@ -402,43 +398,37 @@ rbac:
   roleType: Role
 
 # @schema
-# required: false
 # type: object
 # @schema
 image:
 
   # @schema
-  # required: false
   # type: string
   # @schema
   # -- The registry to use.
   registry: 'ghcr.io'
 
   # @schema
-  # required: false
   # type: string
   # @schema
   # -- The repository location on the registry.
   repository: aureq/cert-manager-webhook-ovh
 
   # @schema
-  # required: false
-  # type: string
+  # type: [string, null]
   # @schema
   # -- The tag to use from the registry. It can either be a version number like `1.0.0`
   # or a digest like `sha256:abcdef0123456789abcdef0123456789abcdef0123456789abcdef0123456789`.
   tag: ''
 
   # @schema
-  # required: false
-  # enum: [Always, IfNotPresent, Never, ""]
+  # enum: ['Always', 'IfNotPresent', 'Never', '', null]
   # default: IfNotPresent
   # @schema
   # -- The image pull policy as defined in the Kubernetes documentation.
   pullPolicy: IfNotPresent
 
   # @schema
-  # required: false
   # type: array
   # @schema
   # -- The image pull secrets to use if your registry requires it.
@@ -453,7 +443,6 @@ image:
 pod:
 
   # @schema
-  # required: false
   # additionalProperties: true
   # @schema
   # -- Extra annotations for the Pod spec. See https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/ for more information.
@@ -461,7 +450,6 @@ pod:
 
   # @schema
   # type: object
-  # required: false
   # additionalProperties: true
   # @schema
   # -- Labels to add to the Pod.
@@ -470,7 +458,6 @@ pod:
 
   # @schema
   # type: object
-  # required: false
   # additionalProperties: true
   # @schema
   # -- Annotations to add to the Pod.
@@ -479,7 +466,6 @@ pod:
 
   # @schema
   # type: integer
-  # required: false
   # minimum: 1
   # default: 1
   # @schema
@@ -487,7 +473,6 @@ pod:
   replicas: 1
 
   # @schema
-  # required: false
   # type: object
   # additionalProperties: true
   # @schema
@@ -500,27 +485,23 @@ pod:
     # NO_PROXY: "cluster.local,127.0.0.1,localhost,10.0.0.0/8"
 
   # @schema
-  # required: false
-  # type: string
-  # enum: [text, json, ""]
-  # default: ""
+  # enum: ['text', 'json', '', ]
+  # default: ''
   # @schema
-  # -- Set the logging format for the webhook. Accepted values are  `""` (unspecified, defaults to `text`), `text` or `json`.
+  # -- Set the logging format for the webhook. Accepted values are  `''` (unspecified, defaults to `text`), `text` or `json`.
   # If not specified, the `--logging-format` argument is not passed and will default to `text`.
-  loggingFormat: ""
+  loggingFormat: ''
 
   # @schema
-  # required: false
-  # enum: [0, 1, 2, 3, 4, 5, ""]
-  # default: ""
+  # enum: [0, 1, 2, 3, 4, 5, '', null]
+  # default: ''
   # @schema
   # -- Set the logging verbosity level for the webhook (and internal dependencies). Accepted values are integers from `0` to `5`, with `0` being the least verbose and `5` being the most verbose.
   # If not specified, verbose level defaults to `1`. Levels are: `0` (error), `1` (warn, default), `2` (info), `3` (extended info), `4` (debug), `5` (trace).
   # See https://github.com/kubernetes/community/blob/main/contributors/devel/sig-instrumentation/logging.md
-  loggingVerbosity: ""
+  loggingVerbosity: ''
 
   # @schema
-  # required: false
   # type: object
   # @schema
   # -- Define the security context for both the `Pod` and the `Container`.
@@ -529,77 +510,55 @@ pod:
   securityContext:
 
     # @schema
-    # required: false
     # type: object
     # properties:
     #   appArmorProfile:
     #     type: object
-    #     required: false
     #     properties:
     #       localHostProfile:
     #         type: string
-    #         required: false
     #       type:
-    #         required: false
-    #         enum: [Localhost,RuntimeDefault,Unconfined]
+    #         enum: ['Localhost','RuntimeDefault','Unconfined']
     #   fsGroup:
     #     type: integer
-    #     required: false
     #   fsGroupChangePolicy:
-    #     required: false
-    #     enum: [Always,OnRootMismatch]
+    #     enum: ['Always','OnRootMismatch']
     #   runAsGroup:
     #     type: integer
-    #     required: false
     #   runAsNonRoot:
     #     type: boolean
-    #     required: false
     #   runAsUser:
     #     type: integer
-    #     required: false
     #   seLinuxChangePolicy:
-    #     required: false
-    #     enum: [MountOption,Recursive]
+    #     enum: ['MountOption','Recursive']
     #   seLinuxOptions:
     #     type: object
-    #     required: false
     #     properties:
     #       level:
     #         type: string
-    #         required: false
     #       role:
     #         type: string
-    #         required: false
     #       type:
     #         type: string
-    #         required: false
     #       user:
     #         type: string
-    #         required: false
     #   seccompProfile:
     #     type: object
-    #     required: false
     #     properties:
     #       localhostProfile:
     #         type: string
-    #         required: false
     #       type:
-    #         required: false
-    #         enum: [Localhost,RuntimeDefault,Unconfined]
+    #         enum: ['Localhost','RuntimeDefault','Unconfined']
     #   supplementalGroups:
     #     type: array
     #     items:
     #       type: integer
-    #       required: false
-    #     required: false
     #   supplementalGroupsPolicy:
-    #     required: false
-    #     enum: [Merge,Strict]
+    #     enum: ['Merge','Strict']
     #   sysctls:
     #     type: array
     #     items:
     #       type: object
-    #       required: false
     #       properties:
     #         name:
     #           type: string
@@ -614,82 +573,58 @@ pod:
       runAsGroup: 1000
 
     # @schema
-    # required: false
     # type: object
     # properties:
     #   allowPrivilegeEscalation:
     #     type: boolean
-    #     required: false
     #   appArmorProfile:
     #     type: object
-    #     required: false
     #     properties:
     #       localHostProfile:
     #         type: string
-    #         required: false
     #       type:
-    #         required: false
-    #         enum: [Localhost,RuntimeDefault,Unconfined]
+    #         enum: ['Localhost','RuntimeDefault','Unconfined']
     #   capabilities:
     #     type: object
-    #     required: false
     #     properties:
     #       add:
     #         type: array
-    #         required: false
     #         items:
     #           type: string
-    #           required: false
     #       drop:
     #         type: array
-    #         required: false
     #         items:
     #           type: string
-    #           required: false
     #   privileged:
     #     type: boolean
-    #     required: false
     #   procMount:
     #     type: string
-    #     required: false
     #   readOnlyRootFilesystem:
     #     type: boolean
-    #     required: false
     #   runAsGroup:
     #     type: integer
-    #     required: false
     #   runAsNonRoot:
     #     type: boolean
-    #     required: false
     #   runAsUser:
     #     type: integer
-    #     required: false
     #   seLinuxOptions:
     #     type: object
-    #     required: false
     #     properties:
     #       level:
     #         type: string
-    #         required: false
     #       role:
     #         type: string
-    #         required: false
     #       type:
     #         type: string
-    #         required: false
     #       user:
     #         type: string
-    #         required: false
     #   seccompProfile:
     #     type: object
-    #     required: false
     #     properties:
     #       localhostProfile:
     #         type: string
-    #         required: false
     #       type:
-    #         required: false
-    #         enum: [Localhost,RuntimeDefault,Unconfined]
+    #         enum: ['Localhost','RuntimeDefault','Unconfined']
     # @schema
     # -- Container Security Context.
     container:
@@ -698,7 +633,6 @@ pod:
       privileged: false
 
   # @schema
-  # required: false
   # type: integer
   # minimum: 1
   # maximum: 65535
@@ -710,7 +644,6 @@ pod:
 
   # @schema
   # type: boolean
-  # required: false
   # default: false
   # @schema
   # -- Specifies if the webhook should be started in `hostNetwork` mode.
@@ -720,14 +653,12 @@ pod:
   hostNetwork: false
 
   # @schema
-  # required: false
-  # type: string
+  # type: [string, null]
   # @schema
   # -- The optional priority class to be used for the cert-manager-webhook-ovh pod.
   priorityClassName: ''
 
   # @schema
-  # required: false
   # type: object
   # @schema
   # -- We usually recommend not to specify default resources and to leave this as a conscious choice for the user.
@@ -736,7 +667,6 @@ pod:
   resources:
 
     # @schema
-    # required: false
     # additionalProperties: true
     # @schema
     # -- Resource Requests.
@@ -746,7 +676,6 @@ pod:
     #   memory: 64Mi
 
     # @schema
-    # required: false
     # additionalProperties: true
     # @schema
     # -- Resource Limits.
@@ -756,26 +685,20 @@ pod:
     #   memory: 96Mi
 
   # @schema
-  # required: false
   # items:
   #   type: object
   #   properties:
   #     key:
   #       type: string
-  #       required: false
   #     operator:
-  #       required: false
   #       default: Equal
-  #       enum: [Exists,Equal,Lt,Gt]
+  #       enum: ['Exists','Equal','Lt','Gt']
   #     value:
   #       type: string
-  #       required: false
   #     effect:
-  #       required: false
-  #       enum: [NoExecute,NoSchedule,PreferNoSchedule]
+  #       enum: ['NoExecute','NoSchedule','PreferNoSchedule']
   #     tolerationSeconds:
   #       type: integer
-  #       required: false
   # @schema
   # -- Tolerations for the pod. See https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/ for more information.
   tolerations: []
@@ -786,13 +709,11 @@ pod:
   #   tolerationSeconds: 3600
 
   # @schema
-  # required: false
   # type: object
   # @schema
   selectors:
 
     # @schema
-    # required: false
     # additionalProperties: true
     # @schema
     # -- Node selector. See https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/ for more information.
@@ -802,7 +723,6 @@ pod:
     #   kubernetes.io/hostname: 'worker-1'
 
     # @schema
-    # required: false
     # additionalProperties: true
     # @schema
     # -- Affinity selectors. See https://kubernetes.io/docs/tasks/configure-pod-container/assign-pods-nodes-using-node-affinity/ for more information.
@@ -847,18 +767,16 @@ pod:
     #           topologyKey: 'topology.kubernetes.io/zone'
 
 # @schema
-# required: false
-# type: string
+# type: [string, null]
 # @schema
 # -- Override the name of the deployed resources
-nameOverride: ""
+nameOverride: ''
 
 # @schema
-# required: false
-# type: string
+# type: [string, null]
 # @schema
 # -- Override the full name of the deployed resources
-fullnameOverride: ""
+fullnameOverride: ''
 
 
 # @schema
@@ -870,7 +788,7 @@ service:
 
   # @schema
   # required: true
-  # enum: [ClusterIP, NodePort, LoadBalancer]
+  # enum: ['ClusterIP', 'NodePort', 'LoadBalancer']
   # default: ClusterIP
   # @schema
   # -- The service type to use.
@@ -887,7 +805,6 @@ service:
   port: 443
 
   # @schema
-  # required: false
   # additionalProperties: true
   # @schema
   # -- Extra annotations for the service. See https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/ for more information.
@@ -895,7 +812,6 @@ service:
 
 # @schema
 # type: array
-# required: false
 # items:
 #   type: string
 # @schema

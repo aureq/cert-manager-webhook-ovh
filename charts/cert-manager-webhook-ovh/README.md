@@ -10,7 +10,7 @@
 
 # cert-manager-webhook-ovh
 
-![Version: 0.9.8](https://img.shields.io/badge/Version-0.9.8-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 0.9.8](https://img.shields.io/badge/AppVersion-0.9.8-informational?style=flat-square)
+![Version: 0.9.9](https://img.shields.io/badge/Version-0.9.9-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 0.9.9](https://img.shields.io/badge/AppVersion-0.9.9-informational?style=flat-square)
 
 ![OVH Webhook for Cert Manager](https://raw.githubusercontent.com/aureq/cert-manager-webhook-ovh/main/assets/images/cert-manager-webhook-ovh.svg "OVH Webhook for Cert Manager")
 
@@ -264,7 +264,7 @@ The documentation below is automatically generated from the `values.yaml` file.
 | pod.podAnnotations | object | `{}` | Annotations to add to the Pod. See https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/ |
 | pod.replicas | int | `1` | Number of replicas in this deployment. |
 | pod.environment | object | `{}` | Use this option to add environment variables relevant to your deployment. These fields will be passed on to the container when Chart is deployed. |
-| pod.loggingFormat | string | `""` | Set the logging format for the webhook. Accepted values are  `""` (unspecified, defaults to `text`), `text` or `json`. If not specified, the `--logging-format` argument is not passed and will default to `text`. |
+| pod.loggingFormat | string | `""` | Set the logging format for the webhook. Accepted values are  `''` (unspecified, defaults to `text`), `text` or `json`. If not specified, the `--logging-format` argument is not passed and will default to `text`. |
 | pod.loggingVerbosity | string | `""` | Set the logging verbosity level for the webhook (and internal dependencies). Accepted values are integers from `0` to `5`, with `0` being the least verbose and `5` being the most verbose. If not specified, verbose level defaults to `1`. Levels are: `0` (error), `1` (warn, default), `2` (info), `3` (extended info), `4` (debug), `5` (trace). See https://github.com/kubernetes/community/blob/main/contributors/devel/sig-instrumentation/logging.md |
 | pod.securityContext | object | `{"container":{"allowPrivilegeEscalation":false,"privileged":false,"readOnlyRootFilesystem":true},"pod":{"runAsGroup":1000,"runAsUser":1000}}` | Define the security context for both the `Pod` and the `Container`. See the Kubernetes API [reference](https://kubernetes.io/docs/reference/generated/kubernetes-api/latest/#securitycontext-v1-core) and the Kubernetes [documentation](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/) for more information. |
 | pod.securityContext.pod | object | `{"runAsGroup":1000,"runAsUser":1000}` | Pod Security Context. |
