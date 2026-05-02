@@ -4,6 +4,7 @@
 
 ### Noteworthy changes
 
+- ⚙️ Use `$(GO)` variable instead of hardcoded `go` command throughout Makefile for consistency
 - 🌱 Remove redundant `required: false` annotations from `@schema` blocks across `values.yaml`
 - 🐛 Add missing `type: object` annotation to `ovhAuthenticationRef` schema block
 - 🌱 Use single-quoted strings in `@schema` default annotations and actual default values across `values.yaml` for YAML quoting consistency
