@@ -4,6 +4,7 @@
 
 ### Noteworthy changes
 
+- 🌱 Use single-quoted strings in `@schema` default annotations and actual default values across `values.yaml` for YAML quoting consistency
 - 🌱 Use single-quoted strings in `@schema` enum annotations across `values.yaml` for YAML quoting consistency
 - 🌿 Add comprehensive unit tests for `Name`, `loadConfig`, `getSubDomain`, `validate` edge cases, `secret` retrieval, and config JSON field names
 - 🌿 Add fake-clientset based test helpers (`jsonRaw`, `makeSecret`, `solverWithSecrets`) to support secret retrieval tests
