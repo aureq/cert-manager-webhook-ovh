@@ -38,13 +38,21 @@ jobs:
         with:
           version: v4.1.1
 
-      - name: install-helm-unittest-plugin
+      - name: Install Golang unit tests dependencies
         run: |
-          make install-helm-unittest
+          make install-go-tests
 
-      - name: run-helm-unittest
+      - name: Install Helm Chart unittest plugin
         run: |
-          make helm-unittest
+          make install-helm-unittests
+
+      - name: Run the Golang unit tests
+        run: |
+          make go-tests
+
+      - name: Run the Helm Chart unit tests
+        run: |
+          make helm-unittests
 
   build-and-push-image:
     runs-on: ubuntu-latest

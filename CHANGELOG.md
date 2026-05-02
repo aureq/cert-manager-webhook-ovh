@@ -24,6 +24,7 @@
 - ⚙️ Enable Go unit tests in CI tests workflow alongside Helm chart unit tests
 - ⚙️ Align CI tests workflow with renamed Makefile targets (`install-go-tests`, `go-tests`, `install-helm-unittests`, `helm-unittests`)
 - ⚙️ Rename Makefile targets for consistency (`go-test` to `go-tests`, `setup-envtest` to `install-go-tests`, `helm-unittest` to `helm-unittests`, `install-helm-unittest` to `install-helm-unittests`) and sort `.PHONY` declaration alphabetically
+- ⚙️ Align release workflow with renamed Makefile targets and separate Go and Helm test steps
 - ⚙️ Add `helm-schema` as a dependency of `helm-unittests` Makefile target to ensure schema is up-to-date before running tests
 
 ### Fixes
