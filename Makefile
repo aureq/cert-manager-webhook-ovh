@@ -1,6 +1,7 @@
 GO ?= $(shell which go)
 OS ?= $(shell $(GO) env GOOS)
 ARCH ?= $(shell $(GO) env GOARCH)
+GOPATH := $(shell $(GO) env GOPATH)
 
 ENVTEST_K8S_VERSION=1.35.0
 
@@ -102,10 +103,10 @@ helm-unittests: install-helm-unittests helm-schema
 	@helm unittest charts/cert-manager-webhook-ovh/
 
 helm-docs: install-helm-docs
-	@helm-docs --chart-search-root=charts/ --template-files=./_templates.gotmpl --template-files=README.md.gotmpl --sort-values-order=file
+	@$(GOPATH)/bin/helm-docs --chart-search-root=charts/ --template-files=./_templates.gotmpl --template-files=README.md.gotmpl --sort-values-order=file
 
 helm-schema: install-helm-schema
-	@helm-schema --chart-search-root charts/cert-manager-webhook-ovh/ --add-schema-reference --keep-full-comment
+	@$(GOPATH)/bin/helm-schema --chart-search-root=charts/cert-manager-webhook-ovh/ --no-dependencies --add-schema-reference
 
 install-helm-unittests:
 	@helm plugin list | grep ^unittest >/dev/null 2>&1 || helm plugin install https://github.com/helm-unittest/helm-unittest --verify=false
