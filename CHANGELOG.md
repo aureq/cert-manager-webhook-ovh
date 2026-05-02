@@ -19,6 +19,7 @@
 - 🔥 Remove commented-out `go-test` job stub from CI tests workflow
 - 📝 Update README to use single-quoted strings in `pod.loggingFormat` description
 - 📝 Add file header comments with repository and chart information to `values.yaml`
+- 📝 Update README version badges to 0.9.9
 - ⚙️ Use `$(GO)` variable instead of hardcoded `go` command throughout Makefile for consistency
 - ⚙️ Enable Go unit tests in CI tests workflow alongside Helm chart unit tests
 - ⚙️ Align CI tests workflow with renamed Makefile targets (`install-go-tests`, `go-tests`, `install-helm-unittests`, `helm-unittests`)
