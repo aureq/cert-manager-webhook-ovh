@@ -1,5 +1,19 @@
+---
 # vim: set ft=yaml
 # yaml-language-server: $schema=values.schema.json
+
+# @schema.root
+# title: cert-manager-webhook-ovh Helm Chart values
+# description: Configuration values for the cert-manager-webhook-ovh Helm Chart
+# @schema.root
+
+## @formatter:off
+## values.yaml
+##
+## Repository: cert-manager-webhook-ovh-charts https://aureq.github.io/cert-manager-webhook-ovh/
+## Chart: cert-manager-webhook-ovh
+##
+## This values file is a baseline for other values files.
 
 # @schema
 # required: true

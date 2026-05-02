@@ -4,18 +4,23 @@
 
 ### Noteworthy changes
 
-- ⚙️ Use `$(GO)` variable instead of hardcoded `go` command throughout Makefile for consistency
-- 🌱 Remove redundant `required: false` annotations from `@schema` blocks across `values.yaml`
-- 🐛 Add missing `type: object` annotation to `ovhAuthenticationRef` schema block
-- 🌱 Use single-quoted strings in `@schema` default annotations and actual default values across `values.yaml` for YAML quoting consistency
-- 🌱 Use single-quoted strings in `@schema` enum annotations across `values.yaml` for YAML quoting consistency
 - 🌿 Add comprehensive unit tests for `Name`, `loadConfig`, `getSubDomain`, `validate` edge cases, `secret` retrieval, and config JSON field names
 - 🌿 Add fake-clientset based test helpers (`jsonRaw`, `makeSecret`, `solverWithSecrets`) to support secret retrieval tests
+- 🌱 Remove redundant `required: false` annotations from `@schema` blocks across `values.yaml`
+- 🌱 Use single-quoted strings in `@schema` default annotations and actual default values across `values.yaml` for YAML quoting consistency
+- 🌱 Use single-quoted strings in `@schema` enum annotations across `values.yaml` for YAML quoting consistency
 - 🌱 Switch `ovhDNSProviderSolver.client` field to `kubernetes.Interface` to enable injecting a fake clientset in tests
+- 🌱 Add `@schema.root` title and description annotations to `values.yaml` for JSON schema metadata
+- 🔥 Remove commented-out `go-test` job stub from CI tests workflow
+- 📝 Add file header comments with repository and chart information to `values.yaml`
+- ⚙️ Use `$(GO)` variable instead of hardcoded `go` command throughout Makefile for consistency
 - ⚙️ Enable Go unit tests in CI tests workflow alongside Helm chart unit tests
 - ⚙️ Align CI tests workflow with renamed Makefile targets (`install-go-tests`, `go-tests`, `install-helm-unittests`, `helm-unittests`)
-- 🔥 Remove commented-out `go-test` job stub from CI tests workflow
 - ⚙️ Rename Makefile targets for consistency (`go-test` to `go-tests`, `setup-envtest` to `install-go-tests`, `helm-unittest` to `helm-unittests`, `install-helm-unittest` to `install-helm-unittests`) and sort `.PHONY` declaration alphabetically
+
+### Fixes
+
+- 🐛 Add missing `type: object` annotation to `ovhAuthenticationRef` schema block
 
 ### Dependency
 
