@@ -61,7 +61,7 @@ issuers:
 
     # @schema
     # required: true
-    # enum: [ClusterIssuer, Issuer]
+    # enum: ['ClusterIssuer', 'Issuer']
     # @schema
     # -- The type of issuer to create. It can either be `ClusterIssuer` or `Issuer`.
     # If `Issuer` is specified, then the `namespace` is also required.
@@ -108,7 +108,7 @@ issuers:
 
     # @schema
     # required: false
-    # enum: [classic, tlsserver, shortlived, ""]
+    # enum: ['classic', 'tlsserver', 'shortlived', '']
     # default: ""
     # @schema
     # -- If the ACME server supports profiles, you can specify the profile name here.
@@ -119,7 +119,7 @@ issuers:
 
     # @schema
     # required: false
-    # enum: [None, Follow, ""]
+    # enum: ['None', 'Follow', '']
     # default: ""
     # @schema
     # -- Follow CNAME records or not. 2 options:
@@ -175,7 +175,7 @@ issuers:
 
     # @schema
     # required: true
-    # enum: [ovh-eu, ovh-ca, kimsufi-eu, kimsufi-ca, soyoustart-eu, soyoustart-ca, runabove-ca]
+    # enum: ['ovh-eu', 'ovh-ca', 'kimsufi-eu', 'kimsufi-ca', 'soyoustart-eu', 'soyoustart-ca', 'runabove-ca']
     # @schema
     # -- The endpoint name of the OVH API. It must be one of the following:
     # `ovh-eu`, `ovh-ca`, `kimsufi-eu`, `kimsufi-ca`, `soyoustart-eu`, `soyoustart-ca`, `runabove-ca`.
@@ -184,7 +184,7 @@ issuers:
 
     # @schema
     # required: true
-    # enum: [application, oauth2]
+    # enum: ['application', 'oauth2']
     # @schema
     # -- Define how the webhook should authenticate with the OVH API. It can be either `application` or `oauth2`.
     # When `ovhAuthenticationMethod` is `application`, then use:
@@ -381,7 +381,7 @@ issuers:
 rbac:
   # @schema
   # required: false
-  # enum: [Role, ClusterRole]
+  # enum: ['Role', 'ClusterRole']
   # default: Role
   # @schema
   # -- If the secret of the issuer is in a different namespace, change `Role` (default)
@@ -418,7 +418,7 @@ image:
 
   # @schema
   # required: false
-  # enum: [Always, IfNotPresent, Never, ""]
+  # enum: ['Always', 'IfNotPresent', 'Never', '']
   # default: IfNotPresent
   # @schema
   # -- The image pull policy as defined in the Kubernetes documentation.
@@ -489,7 +489,7 @@ pod:
   # @schema
   # required: false
   # type: string
-  # enum: [text, json, ""]
+  # enum: ['text', 'json', '']
   # default: ""
   # @schema
   # -- Set the logging format for the webhook. Accepted values are  `""` (unspecified, defaults to `text`), `text` or `json`.
@@ -498,7 +498,7 @@ pod:
 
   # @schema
   # required: false
-  # enum: [0, 1, 2, 3, 4, 5, ""]
+  # enum: [0, 1, 2, 3, 4, 5, '']
   # default: ""
   # @schema
   # -- Set the logging verbosity level for the webhook (and internal dependencies). Accepted values are integers from `0` to `5`, with `0` being the least verbose and `5` being the most verbose.
@@ -528,13 +528,13 @@ pod:
     #         required: false
     #       type:
     #         required: false
-    #         enum: [Localhost,RuntimeDefault,Unconfined]
+    #         enum: ['Localhost','RuntimeDefault','Unconfined']
     #   fsGroup:
     #     type: integer
     #     required: false
     #   fsGroupChangePolicy:
     #     required: false
-    #     enum: [Always,OnRootMismatch]
+    #     enum: ['Always','OnRootMismatch']
     #   runAsGroup:
     #     type: integer
     #     required: false
@@ -546,7 +546,7 @@ pod:
     #     required: false
     #   seLinuxChangePolicy:
     #     required: false
-    #     enum: [MountOption,Recursive]
+    #     enum: ['MountOption','Recursive']
     #   seLinuxOptions:
     #     type: object
     #     required: false
@@ -572,7 +572,7 @@ pod:
     #         required: false
     #       type:
     #         required: false
-    #         enum: [Localhost,RuntimeDefault,Unconfined]
+    #         enum: ['Localhost','RuntimeDefault','Unconfined']
     #   supplementalGroups:
     #     type: array
     #     items:
@@ -581,7 +581,7 @@ pod:
     #     required: false
     #   supplementalGroupsPolicy:
     #     required: false
-    #     enum: [Merge,Strict]
+    #     enum: ['Merge','Strict']
     #   sysctls:
     #     type: array
     #     items:
@@ -616,7 +616,7 @@ pod:
     #         required: false
     #       type:
     #         required: false
-    #         enum: [Localhost,RuntimeDefault,Unconfined]
+    #         enum: ['Localhost','RuntimeDefault','Unconfined']
     #   capabilities:
     #     type: object
     #     required: false
@@ -676,7 +676,7 @@ pod:
     #         required: false
     #       type:
     #         required: false
-    #         enum: [Localhost,RuntimeDefault,Unconfined]
+    #         enum: ['Localhost','RuntimeDefault','Unconfined']
     # @schema
     # -- Container Security Context.
     container:
@@ -753,13 +753,13 @@ pod:
   #     operator:
   #       required: false
   #       default: Equal
-  #       enum: [Exists,Equal,Lt,Gt]
+  #       enum: ['Exists','Equal','Lt','Gt']
   #     value:
   #       type: string
   #       required: false
   #     effect:
   #       required: false
-  #       enum: [NoExecute,NoSchedule,PreferNoSchedule]
+  #       enum: ['NoExecute','NoSchedule','PreferNoSchedule']
   #     tolerationSeconds:
   #       type: integer
   #       required: false
@@ -857,7 +857,7 @@ service:
 
   # @schema
   # required: true
-  # enum: [ClusterIP, NodePort, LoadBalancer]
+  # enum: ['ClusterIP', 'NodePort', 'LoadBalancer']
   # default: ClusterIP
   # @schema
   # -- The service type to use.
