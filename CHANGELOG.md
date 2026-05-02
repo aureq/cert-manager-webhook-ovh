@@ -4,6 +4,8 @@
 
 ### Noteworthy changes
 
+- 🌱 Remove redundant `required: false` annotations from `@schema` blocks across `values.yaml`
+- 🐛 Add missing `type: object` annotation to `ovhAuthenticationRef` schema block
 - 🌱 Use single-quoted strings in `@schema` default annotations and actual default values across `values.yaml` for YAML quoting consistency
 - 🌱 Use single-quoted strings in `@schema` enum annotations across `values.yaml` for YAML quoting consistency
 - 🌿 Add comprehensive unit tests for `Name`, `loadConfig`, `getSubDomain`, `validate` edge cases, `secret` retrieval, and config JSON field names
