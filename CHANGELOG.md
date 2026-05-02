@@ -36,6 +36,8 @@
 
 ### Dependency
 
+- ⏩ upgrade go to 1.26.2
+- ⏩ upgrade Go build image to golang 1.26 in Dockerfile
 - ⏩ upgrade github.com/cert-manager/cert-manager to v1.20.2
 - ⏩ upgrade k8s.io/api to v0.35.4
 - ⏩ upgrade k8s.io/apiextensions-apiserver to v0.35.4
