@@ -1,6 +1,7 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
   "additionalProperties": false,
+  "description": "Configuration values for the cert-manager-webhook-ovh Helm Chart",
   "properties": {
     "certManager": {
       "additionalProperties": false,
@@ -37,8 +38,12 @@
     "fullnameOverride": {
       "default": "",
       "description": "Override the full name of the deployed resources",
+      "required": [],
       "title": "fullnameOverride",
-      "type": "string"
+      "type": [
+        "string",
+        "null"
+      ]
     },
     "global": {
       "description": "Global values are values that can be accessed from any chart or subchart by exactly the same name.",
@@ -48,7 +53,7 @@
     },
     "groupName": {
       "default": "acme.mycompany.example",
-      "description": "The `groupName` here is used to identify your company or business unit that\ncreated this webhook.\nFor example, this may be `acme.mycompany.example`.\nThis name will need to be referenced in each Issuer's `webhook` stanza to\ninform cert-manager of where to send ChallengePayload resources in order to\nsolve the DNS01 challenge.\nThis group name should be **unique**, hence using your own company's domain\nhere is recommended.",
+      "description": "vim: set ft=yaml\nyaml-language-server: $schema=values.schema.json\n\n\n#\n# values.yaml\n#\n# Repository: cert-manager-webhook-ovh-charts https://aureq.github.io/cert-manager-webhook-ovh/\n# Chart: cert-manager-webhook-ovh\n#\n# This values file is a baseline for other values files.\n\nThe `groupName` here is used to identify your company or business unit that\ncreated this webhook.\nFor example, this may be `acme.mycompany.example`.\nThis name will need to be referenced in each Issuer's `webhook` stanza to\ninform cert-manager of where to send ChallengePayload resources in order to\nsolve the DNS01 challenge.\nThis group name should be **unique**, hence using your own company's domain\nhere is recommended.",
       "title": "groupName",
       "type": "string"
     },
@@ -62,7 +67,8 @@
             "Always",
             "IfNotPresent",
             "Never",
-            ""
+            "",
+            null
           ],
           "required": [],
           "title": "pullPolicy"
@@ -90,8 +96,12 @@
         "tag": {
           "default": "",
           "description": "The tag to use from the registry. It can either be a version number like `1.0.0`\nor a digest like `sha256:abcdef0123456789abcdef0123456789abcdef0123456789abcdef0123456789`.",
+          "required": [],
           "title": "tag",
-          "type": "string"
+          "type": [
+            "string",
+            "null"
+          ]
         }
       },
       "required": [],
@@ -118,7 +128,8 @@
                 "enum": [
                   "None",
                   "Follow",
-                  ""
+                  "",
+                  null
                 ],
                 "required": [],
                 "title": "cnameStrategy"
@@ -219,32 +230,52 @@
                   "applicationConsumerKey": {
                     "default": "",
                     "description": "Your OVH consumer key. Leave empty if you are using an existing secret.",
+                    "required": [],
                     "title": "applicationConsumerKey",
-                    "type": "string"
+                    "type": [
+                      "string",
+                      "null"
+                    ]
                   },
                   "applicationKey": {
                     "default": "",
                     "description": "The OVH application key. Leave empty if you are using an existing secret.",
+                    "required": [],
                     "title": "applicationKey",
-                    "type": "string"
+                    "type": [
+                      "string",
+                      "null"
+                    ]
                   },
                   "applicationSecret": {
                     "default": "",
                     "description": "The OVH application secret. Leave empty if you are using an existing secret.",
+                    "required": [],
                     "title": "applicationSecret",
-                    "type": "string"
+                    "type": [
+                      "string",
+                      "null"
+                    ]
                   },
                   "oauth2ClientID": {
                     "default": "",
                     "description": "The OVH OAuth 2 client ID. Leave empty if you are using an existing secret.",
+                    "required": [],
                     "title": "oauth2ClientID",
-                    "type": "string"
+                    "type": [
+                      "string",
+                      "null"
+                    ]
                   },
                   "oauth2ClientSecret": {
                     "default": "",
                     "description": "The OVH OAuth 2 client secret. Leave empty if you are using an existing secret.",
+                    "required": [],
                     "title": "oauth2ClientSecret",
-                    "type": "string"
+                    "type": [
+                      "string",
+                      "null"
+                    ]
                   }
                 },
                 "required": [],
@@ -412,7 +443,8 @@
                   "classic",
                   "tlsserver",
                   "shortlived",
-                  ""
+                  "",
+                  null
                 ],
                 "required": [],
                 "title": "profile"
@@ -438,8 +470,12 @@
     "nameOverride": {
       "default": "",
       "description": "Override the name of the deployed resources",
+      "required": [],
       "title": "nameOverride",
-      "type": "string"
+      "type": [
+        "string",
+        "null"
+      ]
     },
     "pod": {
       "additionalProperties": false,
@@ -465,14 +501,14 @@
         },
         "loggingFormat": {
           "default": "",
-          "description": "Set the logging format for the webhook. Accepted values are  `\"\"` (unspecified, defaults to `text`), `text` or `json`.\nIf not specified, the `--logging-format` argument is not passed and will default to `text`.",
+          "description": "Set the logging format for the webhook. Accepted values are  `''` (unspecified, defaults to `text`), `text` or `json`.\nIf not specified, the `--logging-format` argument is not passed and will default to `text`.",
           "enum": [
             "text",
             "json",
             ""
           ],
-          "title": "loggingFormat",
-          "type": "string"
+          "required": [],
+          "title": "loggingFormat"
         },
         "loggingVerbosity": {
           "default": "",
@@ -484,7 +520,8 @@
             3,
             4,
             5,
-            ""
+            "",
+            null
           ],
           "required": [],
           "title": "loggingVerbosity"
@@ -514,8 +551,12 @@
         "priorityClassName": {
           "default": "",
           "description": "The optional priority class to be used for the cert-manager-webhook-ovh pod.",
+          "required": [],
           "title": "priorityClassName",
-          "type": "string"
+          "type": [
+            "string",
+            "null"
+          ]
         },
         "replicas": {
           "default": 1,
@@ -895,5 +936,6 @@
     "pod",
     "service"
   ],
+  "title": "cert-manager-webhook-ovh Helm Chart values",
   "type": "object"
 }
