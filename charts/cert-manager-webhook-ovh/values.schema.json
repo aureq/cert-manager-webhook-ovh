@@ -53,7 +53,7 @@
     },
     "groupName": {
       "default": "acme.mycompany.example",
-      "description": "vim: set ft=yaml\nyaml-language-server: $schema=values.schema.json\n\n\n#\n# values.yaml\n#\n# Repository: cert-manager-webhook-ovh-charts https://aureq.github.io/cert-manager-webhook-ovh/\n# Chart: cert-manager-webhook-ovh\n#\n# This values file is a baseline for other values files.\n\nThe `groupName` here is used to identify your company or business unit that\ncreated this webhook.\nFor example, this may be `acme.mycompany.example`.\nThis name will need to be referenced in each Issuer's `webhook` stanza to\ninform cert-manager of where to send ChallengePayload resources in order to\nsolve the DNS01 challenge.\nThis group name should be **unique**, hence using your own company's domain\nhere is recommended.",
+      "description": "The `groupName` here is used to identify your company or business unit that\ncreated this webhook.\nFor example, this may be `acme.mycompany.example`.\nThis name will need to be referenced in each Issuer's `webhook` stanza to\ninform cert-manager of where to send ChallengePayload resources in order to\nsolve the DNS01 challenge.\nThis group name should be **unique**, hence using your own company's domain\nhere is recommended.",
       "title": "groupName",
       "type": "string"
     },
