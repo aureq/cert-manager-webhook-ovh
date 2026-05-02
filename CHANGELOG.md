@@ -1,6 +1,6 @@
 # Changelog
 
-## 0.9.9 (unreleased)
+## 0.9.9
 
 ### Noteworthy changes
 
@@ -15,6 +15,7 @@
 - 🌱 Regenerate `values.schema.json` to reflect `@schema` annotation changes from `values.yaml`
 - 🌱 Switch `ovhDNSProviderSolver.client` field to `kubernetes.Interface` to enable injecting a fake clientset in tests
 - 🌱 Add `@schema.root` title and description annotations to `values.yaml` for JSON schema metadata
+- 🌱 Bump chart appVersion and version to 0.9.9
 - 🔥 Remove commented-out `go-test` job stub from CI tests workflow
 - 📝 Update README to use single-quoted strings in `pod.loggingFormat` description
 - 📝 Add file header comments with repository and chart information to `values.yaml`
