@@ -33,6 +33,25 @@ We agree to restrict the following behaviors in our community. Instances, threat
 6. **Endangerment.** Causing, encouraging, or threatening violence or other harm toward any person or group.
 7. Behaving in other ways that **threaten the well-being** of our community.
 
+### Generative AI
+
+We welcome the use of generative AI from our contributors in a general sense. We however have several rules which dictate the way in which it is used. It's an amazing tool that can save countless hours of work, but we want to ensure that it is used responsibly.
+
+1. The human is 100% responsible for the content of the generated content, and every element of the proposed change.
+2. The content of the proposed change must be reviewed by a human prior to making a pull request, and;
+   1. The relevant linters and tests must pass.
+   2. If you used AI tools in the creation of the content you must explicitly disclose this fact in the first line of the
+      description of the pull request.
+   3. You must fully understand the content of the proposed change. Inability to explain any given change may result in
+      the pull request being rejected summarily, especially if the reasons for the change cannot be articulated in a
+      clear manner.
+3. The reviewers, and author of the pull request; must not use generative AI in the formal review process itself i.e.
+   when questions are asked, changes are requested, or responses to the reviewers are made. The use of AI tools within
+   the review process must be explicit and assistive in nature.
+4. Large changes must not solely be produced by generative AI.
+5. The generative AI tools or their companies must not be listed as participants in the change as a commit trailer i.e.
+   in the Co-authored-by, Signed-off-by, Reviewed-by, Reported-by, Assisted-by, Co-developed-by, or similar trailers.
+
 ### Other Restrictions
 
 1. **Misleading identity.** Impersonating someone else for any reason, or pretending to be someone else to evade enforcement actions.
