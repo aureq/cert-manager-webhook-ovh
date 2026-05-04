@@ -70,7 +70,7 @@ clean:
 	@chmod -R u+w $(LOCALBIN) $(OUT) 2>/dev/null || true
 	@rm -rf $(LOCALBIN) $(OUT)
 
-tests: go-tests helm-unittests
+tests: go-tests helm-unittests helm-lint
 
 prepare: helm-schema helm-docs
 
@@ -107,6 +107,9 @@ helm-docs: install-helm-docs
 
 helm-schema: install-helm-schema
 	@$(GOPATH)/bin/helm-schema --chart-search-root=charts/cert-manager-webhook-ovh/ --no-dependencies --add-schema-reference
+
+helm-lint:
+	@helm lint --strict charts/cert-manager-webhook-ovh/
 
 install-helm-unittests:
 	@helm plugin list | grep ^unittest >/dev/null 2>&1 || helm plugin install https://github.com/helm-unittest/helm-unittest --verify=false
