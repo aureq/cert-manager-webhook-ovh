@@ -39,3 +39,7 @@ jobs:
       - name: Run the Helm Chart unit tests
         run: |
           make helm-unittests
+
+      - name: Run the Helm Chart lint
+        run: |
+          make helm-lint
