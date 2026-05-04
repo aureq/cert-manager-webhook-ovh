@@ -1,5 +1,15 @@
 # Changelog
 
+## 0.9.10 (unreleased)
+
+### Noteworthy changes
+
+- ⚙️ Add Helm Chart lint step to CI workflows
+- ⚙️ Add pull request template
+- ⚙️ Add Helm lint target and include it in tests
+- 📝 Add generative AI usage guidelines to Code of Conduct
+- 📝 Add Contributor Covenant 3.0 Code of Conduct
+
 ## 0.9.9
 
 ### Noteworthy changes
