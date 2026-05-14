@@ -1,6 +1,6 @@
 # Changelog
 
-## 0.9.10 (unreleased)
+## 0.9.10
 
 ### Noteworthy changes
 
@@ -9,6 +9,13 @@
 - ⚙️ Add Helm lint target and include it in tests
 - 📝 Add generative AI usage guidelines to Code of Conduct
 - 📝 Add Contributor Covenant 3.0 Code of Conduct
+
+### Dependencies
+
+- ⏩ upgrade k8s.io/api to v0.36.1
+- ⏩ upgrade k8s.io/apiextensions-apiserver to v0.36.1
+- ⏩ upgrade k8s.io/apimachinery to v0.36.1
+- ⏩ upgrade k8s.io/client-go to v0.36.1
 
 ## 0.9.9
 
@@ -155,7 +162,7 @@
 ### Dependencies
 
 - ⏩ update github.com/cert-manager/cert-manager to v1.19.4
-- ⏩ update  go.opentelemetry.io/otel/sdk to v1.40.0 to address [CVE-2026-24051](https://nvd.nist.gov/vuln/detail/CVE-2026-24051)
+- ⏩ update go.opentelemetry.io/otel/sdk to v1.40.0 to address [CVE-2026-24051](https://nvd.nist.gov/vuln/detail/CVE-2026-24051)
 - ⏩ upgrade step-security/harden-runner to v2.15.1
 - ⏩ upgrade actions/checkout to v6
 - ⏩ upgrade docker/setup-qemu-action to v4
@@ -223,7 +230,7 @@
 ### Dependencies
 
 - ⏩ update github.com/cert-manager/cert-manager to v1.19.4
-- ⏩ update  go.opentelemetry.io/otel/sdk to v1.40.0 to address [CVE-2026-24051](https://nvd.nist.gov/vuln/detail/CVE-2026-24051)
+- ⏩ update go.opentelemetry.io/otel/sdk to v1.40.0 to address [CVE-2026-24051](https://nvd.nist.gov/vuln/detail/CVE-2026-24051)
 
 ## 0.9.2
 
@@ -289,7 +296,7 @@
 ### Noteworthy changes
 
 - 🌿 add unit tests for `groupName`, `certManager`, `rbac`, `image`, `service` and `pod` options
-- 🌿 refactor authentication helper functions in _helpers.tpl
+- 🌿 refactor authentication helper functions in \_helpers.tpl
 - 🌿 update helm unit tests for refactored authentication helpers
 - 🌿 update test values for refactored authentication validation
 - 🌿 add `annotations` support for `service`
@@ -337,7 +344,7 @@
 ### Noteworthy changes
 
 - 🎉 add dedicated validator template for issuer authentication
-- 🌿 refactor authentication helper functions in _helpers.tpl
+- 🌿 refactor authentication helper functions in \_helpers.tpl
 - 🌿 update helm unit tests for refactored authentication helpers
 - 🌿 update test values for refactored authentication validation
 - 🌱 remove redundant fail check and add inline comments in issuer.yaml
@@ -509,7 +516,7 @@
 
 - 🧹 maintenance release, updated dependenies only.
 - 🐛 fix minor casing issue in `Dockerfile`
-- 🙈 ignore .aider* files
+- 🙈 ignore .aider\* files
 
 ### Dependencies
 
@@ -771,7 +778,7 @@
 ### Noteworthy changes
 
 - 🚀 use kubernetes recommended labels
-- ✨ move some helm logic in _helpers.tpl
+- ✨ move some helm logic in \_helpers.tpl
 - ✨ completely rework `values.yaml` to support creating issuers and ovh credentials
 - ✨ create role and bind it so the webhook can access necessary secrets
 - ⬆️ upgrade dependencies to reduce warnings
@@ -806,7 +813,7 @@
 
 ### Note worthy changes
 
-- ✨ move some helm logic in _helpers.tpl
+- ✨ move some helm logic in \_helpers.tpl
 - ✨ completely rework `values.yaml` to support creating issuers and ovh credentials
 - ✨ create role and bind it so the webhook can access necessary secrets
 - 📄 documentation and helm chart hosted at [https://aureq.github.io/cert-manager-webhook-ovh/](https://aureq.github.io/cert-manager-webhook-ovh/)
