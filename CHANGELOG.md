@@ -4,11 +4,14 @@
 
 ### Noteworthy changes
 
+- 🌱 Bump chart appVersion and version to 0.9.10
+- 📝 Update README version badges to 0.9.10
+- 📝 Add generative AI usage guidelines to Code of Conduct
+- 📝 Add Contributor Covenant 3.0 Code of Conduct
+- ⚙️ Bump envtest Kubernetes version to 1.36.0
 - ⚙️ Add Helm Chart lint step to CI workflows
 - ⚙️ Add pull request template
 - ⚙️ Add Helm lint target and include it in tests
-- 📝 Add generative AI usage guidelines to Code of Conduct
-- 📝 Add Contributor Covenant 3.0 Code of Conduct
 
 ### Dependencies
 
