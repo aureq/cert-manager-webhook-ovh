@@ -3,7 +3,7 @@ OS ?= $(shell $(GO) env GOOS)
 ARCH ?= $(shell $(GO) env GOARCH)
 GOPATH := $(shell $(GO) env GOPATH)
 
-ENVTEST_K8S_VERSION=1.35.0
+ENVTEST_K8S_VERSION=1.36.0
 
 IMAGE_NAME := "aureq/cert-manager-webhook-ovh"
 IMAGE_TAG := "latest"
