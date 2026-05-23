@@ -6,6 +6,7 @@
 
 - 🌿 Add new `preferredChain` field to ACME issuer configuration. See [documentation](https://cert-manager.io/docs/configuration/acme/#alternative-certificate-chains).
 - 📝 Expand `preferredChain` documentation in `values.yaml` to reference both the cert-manager `alternative-certificate-chains` configuration guide and the ACME issuer API reference.
+- 📝 Document support for alternative certificate chains in `README.md` features list.
 
 ### Dependency
 
