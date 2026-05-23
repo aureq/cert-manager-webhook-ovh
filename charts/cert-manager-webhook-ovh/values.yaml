@@ -137,7 +137,9 @@ issuers:
     # "DST Root CA X3" or "ISRG Root X1" for the newer Let’s Encrypt root CA. This value picks the first certificate
     # bundle in the combined set of ACME default and alternative chains that has a root-most certificate with this
     # value as its issuer’s commonname.
-    # See https://cert-manager.io/docs/reference/api-docs/#acme.cert-manager.io/v1.ACMEIssuer for more information.
+    # See:
+    # - https://cert-manager.io/docs/configuration/acme/#alternative-certificate-chains
+    # - https://cert-manager.io/docs/reference/api-docs/#acme.cert-manager.io/v1.ACMEIssuer
     preferredChain: ''
 
     # @schema
