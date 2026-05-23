@@ -63,6 +63,7 @@ issuers:
     email: tls-manager@example.net
     disableAccountKeyGeneration: true
     profile: classic
+    preferredChain: 'ISRG Root X1'
     cnameStrategy: Follow
     externalAccountBinding:
       enabled: true
@@ -319,6 +320,7 @@ issuers:
     email: tls-manager@example.net
     disableAccountKeyGeneration: false
     # profile: classic
+    preferredChain: ''
     cnameStrategy: None
 
     externalAccountBinding:

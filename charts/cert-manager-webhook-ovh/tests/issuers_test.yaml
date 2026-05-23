@@ -46,6 +46,8 @@ tests:
       - equal:
           path: spec.acme.profile
           value: classic
+      - notExists:
+          path: spec.acme.preferredChain
       - lengthEqual:
           path: spec.acme.solvers
           count: 1
@@ -134,6 +136,11 @@ tests:
       - equal:
           path: spec.acme.profile
           value: classic
+      - exists:
+          path: spec.acme.preferredChain
+      - equal:
+          path: spec.acme.preferredChain
+          value: ISRG Root X1
       - lengthEqual:
           path: spec.acme.solvers
           count: 1
@@ -347,6 +354,8 @@ tests:
           path: spec.acme.externalAccountBinding
       - notExists:
           path: spec.acme.profile
+      - notExists:
+          path: spec.acme.preferredChain
       - lengthEqual:
           path: spec.acme.solvers
           count: 1

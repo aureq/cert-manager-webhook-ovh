@@ -18,6 +18,9 @@ spec:
     {{- if .profile }}
     profile: {{ .profile | quote }}
     {{- end }}
+    {{- if .preferredChain }}
+    preferredChain: {{ .preferredChain | quote }}
+    {{- end }}
     {{- if eq (include "cert-manager-webhook-ovh.isExternalAccountBindingAvail" .) "true" }}
     externalAccountBinding:
       keyID: {{ .externalAccountBinding.keyID | quote }}

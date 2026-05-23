@@ -436,6 +436,16 @@
                 "required": [],
                 "title": "ovhEndpointName"
               },
+              "preferredChain": {
+                "default": "",
+                "description": "The preferred certificate chain to request from the ACME server.\n`preferredChain` is the chain to use if the ACME server outputs multiple. `preferredChain` is no guarantee that\nthis one gets delivered by the ACME endpoint. For example, for Let’s Encrypt’s DST cross-sign you would use:\n\"DST Root CA X3\" or \"ISRG Root X1\" for the newer Let’s Encrypt root CA. This value picks the first certificate\nbundle in the combined set of ACME default and alternative chains that has a root-most certificate with this\nvalue as its issuer’s commonname.\nSee https://cert-manager.io/docs/reference/api-docs/#acme.cert-manager.io/v1.ACMEIssuer for more information.",
+                "required": [],
+                "title": "preferredChain",
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
               "profile": {
                 "default": "",
                 "description": "If the ACME server supports profiles, you can specify the profile name here.\nFor more details, see https://cert-manager.io/docs/configuration/acme/#acme-certificate-profiles\nPossible profiles are: `classic`, `tlsserver`, `shortlived`.\nNote: Not all ACME servers support profiles and this field should be left empty or commented if your ACME server does not support profiles.",
