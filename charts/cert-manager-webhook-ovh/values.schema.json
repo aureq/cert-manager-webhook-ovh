@@ -438,7 +438,7 @@
               },
               "preferredChain": {
                 "default": "",
-                "description": "The preferred certificate chain to request from the ACME server.\n`preferredChain` is the chain to use if the ACME server outputs multiple. `preferredChain` is no guarantee that\nthis one gets delivered by the ACME endpoint. For example, for Let’s Encrypt’s DST cross-sign you would use:\n\"DST Root CA X3\" or \"ISRG Root X1\" for the newer Let’s Encrypt root CA. This value picks the first certificate\nbundle in the combined set of ACME default and alternative chains that has a root-most certificate with this\nvalue as its issuer’s commonname.\nSee https://cert-manager.io/docs/reference/api-docs/#acme.cert-manager.io/v1.ACMEIssuer for more information.",
+                "description": "The preferred certificate chain to request from the ACME server.\n`preferredChain` is the chain to use if the ACME server outputs multiple. `preferredChain` is no guarantee that\nthis one gets delivered by the ACME endpoint. For example, for Let’s Encrypt’s DST cross-sign you would use:\n\"DST Root CA X3\" or \"ISRG Root X1\" for the newer Let’s Encrypt root CA. This value picks the first certificate\nbundle in the combined set of ACME default and alternative chains that has a root-most certificate with this\nvalue as its issuer’s commonname.\nSee:\n- https://cert-manager.io/docs/configuration/acme/#alternative-certificate-chains\n- https://cert-manager.io/docs/reference/api-docs/#acme.cert-manager.io/v1.ACMEIssuer",
                 "required": [],
                 "title": "preferredChain",
                 "type": [
