@@ -1,5 +1,15 @@
 # Changelog
 
+## 0.9.12
+
+This is a maintenance release to address 30 security issues in the underlying container image. No functional changes have been made in this release.
+
+### Dependency
+
+- ⏩ upgrade Go to 1.26.4
+- ⏩ upgrade Go build image to golang 1.26-alpine3.24 in Dockerfile
+- ⏩ upgrade Alpine base image to 3.24
+
 ## 0.9.11
 
 ### Noteworthy changes
