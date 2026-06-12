@@ -19,4 +19,6 @@ _out
 testdata/ovh/config.json
 testdata/ovh/ovh-credentials.yaml
 
+.vscode/
+bin/
 tmp/
