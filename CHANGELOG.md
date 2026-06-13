@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.9.13
+
+### Dependencies
+
+- ⏩ upgrade `azure/setup-helm` action to v5.0.0 in chart release job and drop explicit Helm version pin
+
 ## 0.9.12
 
 This is a maintenance release to address 30 security issues in the underlying container image. No functional changes have been made in this release.
