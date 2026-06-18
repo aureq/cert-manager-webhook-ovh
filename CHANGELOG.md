@@ -4,6 +4,8 @@
 
 ### Noteworthy changes
 
+- 🌱 Bump chart appVersion and version to 0.9.14
+- 📝 Update README version badges to 0.9.14
 - ⚙️ add `go-updates` Makefile target to upgrade Go module dependencies (including `k8s.io/client-go` and `k8s.io/apiextensions-apiserver`) and run `go mod tidy`
 
 ### Dependencies
