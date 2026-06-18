@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.9.14 (unreleased)
+
+### Noteworthy changes
+
+- ⚙️ add `go-updates` Makefile target to upgrade Go module dependencies (including `k8s.io/client-go` and `k8s.io/apiextensions-apiserver`) and run `go mod tidy`
+
+### Dependencies
+
 ## 0.9.13
 
 ### Dependencies

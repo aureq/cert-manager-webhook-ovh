@@ -49,6 +49,12 @@ define gomodver
 $(shell $(GO) list -m -f '{{if .Replace}}{{.Replace.Version}}{{else}}{{.Version}}{{end}}' $(1) 2>/dev/null)
 endef
 
+go-updates:
+	@go get -u ./...
+	@go get k8s.io/client-go
+	@go get k8s.io/apiextensions-apiserver
+	@go mod tidy
+
 go-tests: install-go-tests
 	@TEST_ASSET_ETCD=$(LOCALBIN)/k8s/$(ENVTEST_K8S_VERSION)-$(OS)-$(ARCH)/etcd \
 		TEST_ASSET_KUBE_APISERVER=$(LOCALBIN)/k8s/$(ENVTEST_K8S_VERSION)-$(OS)-$(ARCH)/kube-apiserver \
