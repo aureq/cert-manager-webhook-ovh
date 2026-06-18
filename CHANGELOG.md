@@ -8,6 +8,12 @@
 
 ### Dependencies
 
+- ⏩ upgrade k8s.io/api to v0.36.2
+- ⏩ upgrade k8s.io/apiextensions-apiserver to v0.36.2
+- ⏩ upgrade k8s.io/apimachinery to v0.36.2
+- ⏩ upgrade k8s.io/client-go to v0.36.2
+- ⏩ refresh indirect Go module dependencies
+
 ## 0.9.13
 
 ### Dependencies
