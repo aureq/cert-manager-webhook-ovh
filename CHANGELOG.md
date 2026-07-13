@@ -1,10 +1,10 @@
 # Changelog
 
-## 0.9.14 (unreleased)
+## 0.9.14
 
 ### Noteworthy changes
 
-- 🌱 Bump chart appVersion and version to 0.9.14
+- 🌱 Bump chart `appVersion` and `version` to 0.9.14
 - 📝 Update README version badges to 0.9.14
 - ⚙️ add `go-updates` Makefile target to upgrade Go module dependencies (including `k8s.io/client-go` and `k8s.io/apiextensions-apiserver`) and run `go mod tidy`
 
@@ -14,6 +14,8 @@
 - ⏩ upgrade k8s.io/apiextensions-apiserver to v0.36.2
 - ⏩ upgrade k8s.io/apimachinery to v0.36.2
 - ⏩ upgrade k8s.io/client-go to v0.36.2
+- ⏩ upgrade github.com/cert-manager/cert-manager to v1.21.0
+- ⏩ upgrade Go to 1.26.5
 - ⏩ refresh indirect Go module dependencies
 
 ## 0.9.13
