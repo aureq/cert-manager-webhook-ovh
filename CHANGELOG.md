@@ -1,5 +1,16 @@
 # Changelog
 
+## 0.9.15 (unreleased)
+
+### Dependencies
+
+- ⏩ upgrade k8s.io/api to v0.36.3
+- ⏩ upgrade k8s.io/apiextensions-apiserver to v0.36.3
+- ⏩ upgrade k8s.io/apimachinery to v0.36.3
+- ⏩ upgrade k8s.io/client-go to v0.36.3
+- ⏩ upgrade github.com/cert-manager/cert-manager to v1.21.1
+- ⏩ refresh indirect Go module dependencies
+
 ## 0.9.14
 
 ### Noteworthy changes
