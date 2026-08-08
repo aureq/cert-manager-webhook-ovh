@@ -1,6 +1,6 @@
 # Changelog
 
-## 0.9.15 (unreleased)
+## 0.9.15
 
 ### Noteworthy changes
 
