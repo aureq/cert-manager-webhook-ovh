@@ -2,8 +2,14 @@
 
 ## 0.9.15 (unreleased)
 
+### Noteworthy changes
+
+- 🌱 Bump chart `appVersion` and `version` to 0.9.15
+- 📝 Update README version badges to 0.9.15
+
 ### Dependencies
 
+- ⏩ upgrade google.golang.org/grpc to v1.83.0 to address [GHSA-hrxh-6v49-42gf](https://github.com/grpc/grpc-go/security/advisories/GHSA-hrxh-6v49-42gf)
 - ⏩ upgrade k8s.io/api to v0.36.3
 - ⏩ upgrade k8s.io/apiextensions-apiserver to v0.36.3
 - ⏩ upgrade k8s.io/apimachinery to v0.36.3
