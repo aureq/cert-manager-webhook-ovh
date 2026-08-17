@@ -1,5 +1,16 @@
 # Changelog
 
+## 0.9.16 (unreleased)
+
+### Noteworthy changes
+
+- 🌱 Bump chart `appVersion` and `version` to 0.9.16
+- 📝 Update README version badges to 0.9.16
+
+### Dependencies
+
+- ⏩ refresh indirect Go module dependencies
+
 ## 0.9.15
 
 ### Noteworthy changes
