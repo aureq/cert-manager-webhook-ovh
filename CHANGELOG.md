@@ -1,6 +1,6 @@
 # Changelog
 
-## 0.9.16 (unreleased)
+## 0.9.16
 
 ### Noteworthy changes
 
