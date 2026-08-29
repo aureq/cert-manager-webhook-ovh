@@ -103,3 +103,22 @@ the template will `fail` with a clear error message indicating the reason of the
 {{- if eq ($.Values.groupName | trim) "" -}}
   {{- fail "Invalid configuration: Missing value for required field 'groupName'." -}}
 {{- end -}}
+
+{{- /*
+  📄 validate any labels returned by the `cert-manager-webhook-ovh.labels` template.
+
+  The code below checks that all labels returned by `cert-manager-webhook-ovh` do not include any
+  illegal charaters, and are at most 63 characters long. If the validation fails, the template will
+  `fail` with a clear error message indicating the reason of the failure.
+*/ -}}
+
+{{- $labels := include "cert-manager-webhook-ovh.labels" . | fromYaml -}}
+{{- range $key, $value := $labels -}}
+  {{- $value = $value | toString -}}
+  {{- if not (regexMatch "^(([A-Za-z0-9][-A-Za-z0-9_.]*)?[A-Za-z0-9])?$" $value)  -}}
+    {{- fail (printf "Invalid label value for '%s': '%s' contains invalid characters." $key $value) -}}
+  {{- end -}}
+  {{- if gt (len $value) 63  -}}
+    {{- fail (printf "Invalid label value for '%s': '%s' is over the 63 character limit." $key $value) -}}
+  {{- end -}}
+{{- end -}}

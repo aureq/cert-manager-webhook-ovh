@@ -1,0 +1,432 @@
+# vim: set ft=yaml
+# yaml-language-server: $schema=../../../values.schema.json
+
+groupName: acme.helm.unittest.example
+
+certManager:
+  namespace: cert-system
+  serviceAccountName: cert-manager
+
+issuers:
+
+  - name: letsencrypt-prod
+    create: true
+    kind: ClusterIssuer
+    namespace: default
+    acmeServerUrl: https://acme-v02.api.letsencrypt.org/directory
+    email: tls-manager@example.net
+    disableAccountKeyGeneration: false
+    profile: classic
+    cnameStrategy: None
+
+    externalAccountBinding:
+      enabled: false
+      keyID: ''
+
+      keySecretRef:
+        name: ''
+        key: ''
+
+    ovhEndpointName: ovh-eu
+
+    ovhAuthenticationMethod: application
+
+    ovhAuthentication:
+      oauth2ClientID: ''
+      oauth2ClientSecret: ''
+      applicationKey: 'appkey-0123456789abcdef'
+      applicationSecret: 'appsecret-0123456789abcdef'
+      applicationConsumerKey: 'appconsumerkey-0123456789abcdef'
+
+    ovhAuthenticationRef:
+      oauth2ClientIDRef:
+        name: ''
+        key: oauth2ClientID
+      oauth2ClientSecretRef:
+        name: ''
+        key: oauth2ClientSecret
+      applicationKeyRef:
+        name: ''
+        key: applicationKey
+      applicationSecretRef:
+        name: ''
+        key: applicationSecret
+      applicationConsumerKeyRef:
+        name: ''
+        key: applicationConsumerKey
+
+  - name: le-staging-oidc-dir
+    create: true
+    kind: ClusterIssuer
+    namespace: cert-system
+    acmeServerUrl: https://acme-staging-v02.api.letsencrypt.org/directory
+    email: tls-manager@example.net
+    disableAccountKeyGeneration: true
+    profile: classic
+    preferredChain: 'ISRG Root X1'
+    cnameStrategy: Follow
+    externalAccountBinding:
+      enabled: true
+      keyID: my-keyid-1
+      keySecretRef:
+        name: eab-key-secret
+        key: eabKey
+    ovhEndpointName: ovh-eu
+    ovhAuthenticationMethod: oauth2
+
+    ovhAuthentication:
+      oauth2ClientID: 'oclientid-0123456789abcdef'
+      oauth2ClientSecret: 'oclientsecret-0123456789abcdef'
+      applicationKey: ''
+      applicationSecret: ''
+      applicationConsumerKey: ''
+
+    ovhAuthenticationRef:
+      oauth2ClientIDRef:
+        name: ''
+        key: oauth2ClientID
+      oauth2ClientSecretRef:
+        name: ''
+        key: oauth2ClientSecret
+      applicationKeyRef:
+        name: ''
+        key: applicationKey
+      applicationSecretRef:
+        name: ''
+        key: applicationSecret
+      applicationConsumerKeyRef:
+        name: ''
+        key: applicationConsumerKey
+
+  - name: le-staging-oidc-ref
+    create: true
+    kind: ClusterIssuer
+    namespace: default
+    acmeServerUrl: https://acme-staging-v02.api.letsencrypt.org/directory
+    email: tls-manager@example.net
+    disableAccountKeyGeneration: false
+    profile: classic
+    cnameStrategy: None
+    externalAccountBinding:
+      enabled: false
+      keyID: my-keyid-1
+      keySecretRef:
+        name: eab-key-secret
+        key: eabKey
+    ovhEndpointName: ovh-eu
+    ovhAuthenticationMethod: oauth2
+
+    ovhAuthentication:
+      oauth2ClientID: ''
+      oauth2ClientSecret: ''
+      applicationKey: ''
+      applicationSecret: ''
+      applicationConsumerKey: ''
+
+    ovhAuthenticationRef:
+      oauth2ClientIDRef:
+        name: 'ovh-credentials'
+        key: oauth2ClientID
+      oauth2ClientSecretRef:
+        name: 'ovh-credentials'
+        key: oauth2ClientSecret
+      applicationKeyRef:
+        name: ''
+        key: applicationKey
+      applicationSecretRef:
+        name: ''
+        key: applicationSecret
+      applicationConsumerKeyRef:
+        name: ''
+        key: applicationConsumerKey
+
+  - name: le-staging-app-dir
+    create: true
+    kind: ClusterIssuer
+    namespace: default
+    acmeServerUrl: https://acme-staging-v02.api.letsencrypt.org/directory
+    email: tls-manager@example.net
+    disableAccountKeyGeneration: false
+    profile: classic
+    cnameStrategy: None
+    externalAccountBinding:
+      enabled: false
+      keyID: my-keyid-1
+      keySecretRef:
+        name: eab-key-secret
+        key: eabKey
+    ovhEndpointName: ovh-eu
+    ovhAuthenticationMethod: application
+
+    ovhAuthentication:
+      oauth2ClientID: ''
+      oauth2ClientSecret: ''
+      applicationKey: 'appkey-0123456789abcdef'
+      applicationSecret: 'appsecret-0123456789abcdef'
+      applicationConsumerKey: 'appconsumerkey-0123456789abcdef'
+
+    ovhAuthenticationRef:
+      oauth2ClientIDRef:
+        name: ''
+        key: oauth2ClientID
+      oauth2ClientSecretRef:
+        name: ''
+        key: oauth2ClientSecret
+      applicationKeyRef:
+        name: ''
+        key: applicationKey
+      applicationSecretRef:
+        name: ''
+        key: applicationSecret
+      applicationConsumerKeyRef:
+        name: ''
+        key: applicationConsumerKey
+
+  - name: le-staging-app-ref
+    create: true
+    kind: ClusterIssuer
+    namespace: default
+    acmeServerUrl: https://acme-staging-v02.api.letsencrypt.org/directory
+    email: tls-manager@example.net
+    disableAccountKeyGeneration: false
+    profile: classic
+    cnameStrategy: None
+    externalAccountBinding:
+      enabled: false
+      keyID: my-keyid-1
+      keySecretRef:
+        name: eab-key-secret
+        key: eabKey
+    ovhEndpointName: ovh-eu
+    ovhAuthenticationMethod: application
+
+    ovhAuthentication:
+      oauth2ClientID: ''
+      oauth2ClientSecret: ''
+      applicationKey: ''
+      applicationSecret: ''
+      applicationConsumerKey: ''
+
+    ovhAuthenticationRef:
+      oauth2ClientIDRef:
+        name: ''
+        key: oauth2ClientID
+      oauth2ClientSecretRef:
+        name: ''
+        key: oauth2ClientSecret
+      applicationKeyRef:
+        name: 'ovh-credentials'
+        key: applicationKey
+      applicationSecretRef:
+        name: 'ovh-credentials'
+        key: applicationSecret
+      applicationConsumerKeyRef:
+        name: 'ovh-credentials'
+        key: applicationConsumerKey
+
+  - name: not-letsencrypt-prod
+    create: false
+    kind: ClusterIssuer
+    namespace: default
+    acmeServerUrl: https://acme-v02.api.letsencrypt.org/directory
+    email: tls-manager@example.net
+    disableAccountKeyGeneration: false
+    profile: classic
+    cnameStrategy: None
+
+    externalAccountBinding:
+      enabled: false
+      keyID: ''
+
+      keySecretRef:
+        name: ''
+        key: ''
+
+    ovhEndpointName: ovh-eu
+
+    ovhAuthenticationMethod: application
+
+    ovhAuthentication:
+      oauth2ClientID: ''
+      oauth2ClientSecret: ''
+      applicationKey: 'appkey-0123456789abcdef'
+      applicationSecret: 'appsecret-0123456789abcdef'
+      applicationConsumerKey: 'appconsumerkey-0123456789abcdef'
+
+    ovhAuthenticationRef:
+      oauth2ClientIDRef:
+        name: ''
+        key: oauth2ClientID
+      oauth2ClientSecretRef:
+        name: ''
+        key: oauth2ClientSecret
+      applicationKeyRef:
+        name: ''
+        key: applicationKey
+      applicationSecretRef:
+        name: ''
+        key: applicationSecret
+      applicationConsumerKeyRef:
+        name: ''
+        key: applicationConsumerKey
+
+  - name: not-le-staging-app-ref
+    create: false
+    kind: ClusterIssuer
+    namespace: default
+    acmeServerUrl: https://acme-staging-v02.api.letsencrypt.org/directory
+    email: tls-manager@example.net
+    disableAccountKeyGeneration: false
+    profile: classic
+    cnameStrategy: None
+    externalAccountBinding:
+      enabled: false
+      keyID: my-keyid-1
+      keySecretRef:
+        name: eab-key-secret
+        key: eabKey
+    ovhEndpointName: ovh-eu
+    ovhAuthenticationMethod: application
+
+    ovhAuthentication:
+      oauth2ClientID: ''
+      oauth2ClientSecret: ''
+      applicationKey: ''
+      applicationSecret: ''
+      applicationConsumerKey: ''
+
+    ovhAuthenticationRef:
+      oauth2ClientIDRef:
+        name: ''
+        key: oauth2ClientID
+      oauth2ClientSecretRef:
+        name: ''
+        key: oauth2ClientSecret
+      applicationKeyRef:
+        name: 'ovh-credentials'
+        key: applicationKey
+      applicationSecretRef:
+        name: 'ovh-credentials'
+        key: applicationSecret
+      applicationConsumerKeyRef:
+        name: 'ovh-credentials'
+        key: applicationConsumerKey
+
+  - name: letsencrypt-prod-no-profile
+    create: true
+    kind: ClusterIssuer
+    namespace: default
+    acmeServerUrl: https://acme-v02.api.letsencrypt.org/directory
+    email: tls-manager@example.net
+    disableAccountKeyGeneration: false
+    # profile: classic
+    preferredChain: ''
+    cnameStrategy: None
+
+    externalAccountBinding:
+      enabled: false
+      keyID: ''
+
+      keySecretRef:
+        name: ''
+        key: ''
+
+    ovhEndpointName: ovh-eu
+
+    ovhAuthenticationMethod: application
+
+    ovhAuthentication:
+      oauth2ClientID: ''
+      oauth2ClientSecret: ''
+      applicationKey: 'appkey-0123456789abcdef'
+      applicationSecret: 'appsecret-0123456789abcdef'
+      applicationConsumerKey: 'appconsumerkey-0123456789abcdef'
+
+    ovhAuthenticationRef:
+      oauth2ClientIDRef:
+        name: ''
+        key: oauth2ClientID
+      oauth2ClientSecretRef:
+        name: ''
+        key: oauth2ClientSecret
+      applicationKeyRef:
+        name: ''
+        key: applicationKey
+      applicationSecretRef:
+        name: ''
+        key: applicationSecret
+      applicationConsumerKeyRef:
+        name: ''
+        key: applicationConsumerKey
+
+rbac:
+  roleType: Role
+
+image:
+  registry: 'ghcr.io'
+  repository: aureq/cert-manager-webhook-ovh
+  tag: 'sha256:abcdef0123456789abcdef0123456789abcdef0123456789abcdef0123456789'
+  pullPolicy: IfNotPresent
+  pullSecrets: []
+
+pod:
+  annotations: {}
+  podLabels: {}
+  podAnnotations: {}
+  replicas: 1
+  environment:
+    HTTP_PROXY: "http://proxy.example.net:3129"
+    HTTPS_PROXY: "http://proxy.example.net:3129"
+    NO_PROXY: "10.0.0.0/8,127.0.0.0/8,172.16.0.0/12,192.168.0.0/16,*.svc,*.cluster.local,*.svc.cluster.local,169.254.169.254,127.0.0.1,localhost,localhost.localdomain"
+
+  securityContext:
+    pod:
+      runAsUser: 1000
+      runAsGroup: 1000
+    container:
+      readOnlyRootFilesystem: true
+      allowPrivilegeEscalation: false
+      privileged: false
+
+  port: 8443
+  hostNetwork: false
+  priorityClassName: ''
+  resources:
+    requests:
+      cpu: 100m
+      memory: 64Mi
+    limits:
+      cpu: 200m
+      memory: 96Mi
+
+  tolerations:
+  - key: "key1"
+    operator: "Equal"
+    value: "value1"
+    effect: "NoSchedule"
+    tolerationSeconds: 3600
+
+  selectors:
+    nodeSelector:
+      disktype: ssd
+      kubernetes.io/os: linux
+    affinity:
+      nodeAffinity:
+        requiredDuringSchedulingIgnoredDuringExecution:
+          nodeSelectorTerms:
+          - matchExpressions:
+            - key: 'kubernetes.io/hostname'
+              operator: 'In'
+              values:
+              - 'worker-1'
+              - 'worker-2'
+
+nameOverride: ""
+fullnameOverride: ""
+
+service:
+  type: ClusterIP
+  port: 443
+  annotations: {}
+
+extraObjects: []
