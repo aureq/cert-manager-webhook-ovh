@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.9.17 (unreleased)
+
+### Noteworthy changes
+
+- 📝 Add `CONTRIBUTING.md` with contributor guidelines and a reference to the Code of Conduct generative AI policy
+- 📝 Rewrite the Code of Conduct generative AI section to prohibit AI-authored contributions
+
 ## 0.9.16
 
 ### Noteworthy changes
