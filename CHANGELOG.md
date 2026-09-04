@@ -6,6 +6,15 @@
 
 - 📝 Add `CONTRIBUTING.md` with contributor guidelines and a reference to the Code of Conduct generative AI policy
 - 📝 Rewrite the Code of Conduct generative AI section to prohibit AI-authored contributions
+- ⚙️ Bump envtest Kubernetes version to 1.37.0 in the Makefile
+
+### Dependencies
+
+- ⏩ upgrade k8s.io/api to v0.37.0
+- ⏩ upgrade k8s.io/apiextensions-apiserver to v0.37.0
+- ⏩ upgrade k8s.io/apimachinery to v0.37.0
+- ⏩ upgrade k8s.io/client-go to v0.37.0
+- ⏩ refresh indirect Go module dependencies
 
 ## 0.9.16
 
