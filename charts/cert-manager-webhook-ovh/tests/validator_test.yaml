@@ -155,3 +155,31 @@ tests:
     asserts:
       - failedTemplate:
           errorMessage: "Invalid configuration: Missing value for required field 'groupName'."
+---
+suite: Testing `validator.yaml` 12/x
+templates:
+  - validator.yaml
+values:
+  - values/invalid/values-label-invalid-chars.yaml
+chart:
+  version: 1.0.0
+  appVersion: 1.0.0
+tests:
+  - it: Validate failed rendering in `validator.yaml` 1/x
+    asserts:
+      - failedTemplate:
+          errorMessage: "Invalid label value for 'app.kubernetes.io/name': 'this-name-contains-invalid-chars?' contains invalid characters."
+---
+suite: Testing `validator.yaml` 13/x
+templates:
+  - validator.yaml
+values:
+  - values/invalid/values-label-longer-than-limit.yaml
+chart:
+  version: 1.0.0
+  appVersion: 1.0.0
+tests:
+  - it: Validate failed rendering in `validator.yaml` 1/x
+    asserts:
+      - failedTemplate:
+          errorMessage: "Invalid label value for 'app.kubernetes.io/version': 'this.is.a.very.long.image.tag.abcdef0123456789abcdef0123456789abcdef0123456789abcdef0123456789' is over the 63 character limit."

@@ -73,7 +73,9 @@ app.kubernetes.io/managed-by: {{ .Release.Service }}
 app.kubernetes.io/part-of: cert-manager
 {{ include "cert-manager-webhook-ovh.selectorLabels" . }}
 {{- if or .Chart.AppVersion .Values.image.tag }}
-app.kubernetes.io/version: {{ (.Values.image.tag | default .Chart.AppVersion | split "@")._0 | quote }}
+{{- $tag := .Values.image.tag | default .Chart.AppVersion | toString }}
+{{- $tag := hasPrefix "sha256:" $tag | ternary ($tag | trimPrefix "sha256:" | trunc 32) $tag }}
+app.kubernetes.io/version: {{ ($tag | split "@")._0 | quote }}
 {{- end }}
 {{- end -}}
 

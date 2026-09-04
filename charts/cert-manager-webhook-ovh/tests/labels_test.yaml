@@ -1,0 +1,23 @@
+---
+suite: Testing `image.tag` option set to a digest in all templates
+templates:
+  - '*.yaml'
+values:
+  - values/valid/values-tag-digest-gets-truncated.yaml
+chart:
+  version: 1.0.0
+  appVersion: 1.0.0
+tests:
+  - it: Validate succesful rendering with a digest in `image.tag`
+    asserts:
+      - notFailedTemplate: {}
+
+  - it: Validate digest truncation in `app.kubernetes.io/version` label
+    documentSelector:
+      path: metadata.labels
+      matchMany: true
+      skipEmptyTemplates: true
+    asserts:
+      - equal:
+          path: metadata.labels["app.kubernetes.io/version"]
+          value: abcdef0123456789abcdef0123456789
