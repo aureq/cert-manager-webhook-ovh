@@ -15,6 +15,7 @@
 - ⏩ upgrade k8s.io/apiextensions-apiserver to v0.37.0
 - ⏩ upgrade k8s.io/apimachinery to v0.37.0
 - ⏩ upgrade k8s.io/client-go to v0.37.0
+- ⏩ upgrade github.com/cert-manager/cert-manager to v1.21.2
 - ⏩ add a `replace` directive redirecting `github.com/google/cel-go` to `github.com/cel-expr/cel-go` at v0.31.0
 - ⏩ refresh indirect Go module dependencies
 

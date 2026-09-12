@@ -14,8 +14,8 @@ github.com/cel-expr/cel-go v0.31.0 h1:lcCZcHBRoMqGmgL0JZgSN6tmnmPinTK84ieBH1LJli
 github.com/cel-expr/cel-go v0.31.0/go.mod h1:X0bD6iVNR8pkROSOoHVdgTkzmRcosof7WQqCD6wcMc8=
 github.com/cenkalti/backoff/v5 v5.0.3 h1:ZN+IMa753KfX5hd8vVaMixjnqRZ3y8CuJKRKj1xcsSM=
 github.com/cenkalti/backoff/v5 v5.0.3/go.mod h1:rkhZdG3JZukswDf7f0cwqPNk4K0sa+F97BxZthm/crw=
-github.com/cert-manager/cert-manager v1.21.1 h1:0LttV37Q5c2CBNoHkjuI8sLKTXWZDC2SwQkxrBMKV9w=
-github.com/cert-manager/cert-manager v1.21.1/go.mod h1:sVwmLBWoiB1BRd0rJElBGQuiu94z4k7p3Kd0FRQyfgw=
+github.com/cert-manager/cert-manager v1.21.2 h1:UWgoYM+KLNtRlqmoWOKjKBOBUPVHeepQ6/ac3ERJW68=
+github.com/cert-manager/cert-manager v1.21.2/go.mod h1:cUXqp2Ki46IovJB+XpkfaFNzitQDJjyfjrCAsl5Jnns=
 github.com/cespare/xxhash/v2 v2.3.0 h1:UL815xU9SqsFlibzuggzjXhog7bL6oX9BbNZnL2UFvs=
 github.com/cespare/xxhash/v2 v2.3.0/go.mod h1:VGX0DQ3Q6kWi7AoAeZDth3/j3BFtOZR5XLFGgcrjCOs=
 github.com/coreos/go-semver v0.3.1 h1:yi21YpKnrx1gt5R+la8n5WgS0kCrsPp33dmEyHReZr4=
