@@ -103,3 +103,57 @@ the template will `fail` with a clear error message indicating the reason of the
 {{- if eq ($.Values.groupName | trim) "" -}}
   {{- fail "Invalid configuration: Missing value for required field 'groupName'." -}}
 {{- end -}}
+
+{{- /* 📄 validate any labels returned by the `cert-manager-webhook-ovh.labels` template.
+
+The code below checks that all labels returned by `cert-manager-webhook-ovh` meet the following requirements:
+  - Are at most 63 characters long
+  - Start and end with an alphanumeric character
+  - Only contain alphanumeric characters, '-', '_' and '.'
+If the validation fails, the template will `fail` with a clear error message indicating the reason of the failure.
+
+See https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/#syntax-and-character-set
+*/ -}}
+{{- $labels := include "cert-manager-webhook-ovh.labels" . | fromYaml -}}
+{{- range $key, $value := $labels -}}
+  {{- $value = $value | toString -}}
+  {{- if gt (len $value) 63  -}}
+    {{- fail (printf "Invalid label value for '%s' The value '%s' is over the 63 character limit." $key $value) -}}
+  {{- end -}}
+  {{- if not (regexMatch "^[A-Za-z0-9].*?$" $value)  -}}
+    {{- fail (printf "Invalid label value for '%s'. The value '%s' doesn't start with an alphanumeric character." $key $value) -}}
+  {{- end -}}
+  {{- if not (regexMatch "^.*[A-Za-z0-9]$" $value)  -}}
+    {{- fail (printf "Invalid label value for '%s'. The value '%s' doesn't end with an alphanumeric character." $key $value) -}}
+  {{- end -}}
+  {{- if not (regexMatch "^(([A-Za-z0-9][-A-Za-z0-9_.]*)?[A-Za-z0-9])?$" $value)  -}}
+    {{- fail (printf "Invalid label value for '%s'. The value '%s' contains invalid characters. Only alphanumeric characters, '-', '_' and '.' are allowed." $key $value) -}}
+  {{- end -}}
+{{- end -}}
+
+{{- /* 📄 validate user-supplied `pod.podLabels` in `values.yaml`.
+
+The code below checks that all user-supplied `podLabels` meet the following requirements:
+  - Are at most 63 characters long
+  - Start and end with an alphanumeric character
+  - Only contain alphanumeric characters, '-', '_' and '.'
+If the validation fails, the template will `fail` with a clear error message indicating the reason of the failure.
+
+See https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/#syntax-and-character-set
+*/ -}}
+{{- $labels := $.Values.pod.podLabels -}}
+{{- range $key, $value := $labels -}}
+  {{- $value = $value | toString -}}
+  {{- if gt (len $value) 63  -}}
+    {{- fail (printf "Invalid podLabel value for '%s'. The value '%s' is over the 63 character limit." $key $value) -}}
+  {{- end -}}
+  {{- if not (regexMatch "^[A-Za-z0-9].*?$" $value)  -}}
+    {{- fail (printf "Invalid podLabel value for '%s'. The value '%s' doesn't start with an alphanumeric character." $key $value) -}}
+  {{- end -}}
+  {{- if not (regexMatch "^.*[A-Za-z0-9]$" $value)  -}}
+    {{- fail (printf "Invalid podLabel value for '%s'. The value '%s' doesn't end with an alphanumeric character." $key $value) -}}
+  {{- end -}}
+  {{- if not (regexMatch "^(([A-Za-z0-9][-A-Za-z0-9_.]*)?[A-Za-z0-9])?$" $value)  -}}
+    {{- fail (printf "Invalid podLabel value for '%s'. The value '%s' contains invalid characters. Only alphanumeric characters, '-', '_' and '.' are allowed." $key $value) -}}
+  {{- end -}}
+{{- end -}}

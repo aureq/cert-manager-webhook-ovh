@@ -371,7 +371,8 @@ image:
 
 pod:
   annotations: {}
-  podLabels: {}
+  podLabels:
+    pod-label-1: pod-label-value-1
   podAnnotations: {}
   replicas: 1
   environment:

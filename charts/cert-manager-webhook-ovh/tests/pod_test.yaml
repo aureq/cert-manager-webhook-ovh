@@ -304,3 +304,92 @@ tests:
             - "--tls-private-key-file=/tls/tls.key"
             - "--logging-format=json"
             - "-v=5"
+
+---
+suite: Testing `image.tag` usage in `deployment.yaml`
+templates:
+  - deployment.yaml
+values:
+  - values/valid/values-full.yaml
+chart:
+  version: 1.0.0
+  appVersion: 1.0.0
+set:
+  image:
+    tag: 'latest'
+tests:
+  - it: Validate `image.tag`
+    documentSelector:
+      path: $[?(@.kind == "Deployment")].metadata.name
+      value: RELEASE-NAME-cert-manager-webhook-ovh
+    asserts:
+      - equal:
+          path: spec.template.spec.containers[0].image
+          value: ghcr.io/aureq/cert-manager-webhook-ovh:latest
+  - it: Validate `app.kubernetes.io/version` label
+    documentSelector:
+      path: $[?(@.kind == "Deployment")].metadata.name
+      value: RELEASE-NAME-cert-manager-webhook-ovh
+    asserts:
+      - equal:
+          path: metadata.labels["app.kubernetes.io/version"]
+          value: 1.0.0
+  - it: Validate `image.tag`
+    documentSelector:
+      path: $[?(@.kind == "Deployment")].metadata.name
+      value: RELEASE-NAME-cert-manager-webhook-ovh
+    asserts:
+      - equal:
+          path: spec.template.spec.containers[0].image
+          value: ghcr.io/aureq/cert-manager-webhook-ovh:latest
+
+---
+suite: Testing labels generation in `deployment.yaml`
+templates:
+  - deployment.yaml
+values:
+  - values/valid/values-full.yaml
+chart:
+  version: 1.0.1
+  appVersion: 1.0.0
+tests:
+  - it: Validate `app.kubernetes.io/component` label
+    documentSelector:
+      path: $[?(@.kind == "Deployment")].metadata.name
+      value: RELEASE-NAME-cert-manager-webhook-ovh
+    asserts:
+      - equal:
+          path: metadata.labels["app.kubernetes.io/component"]
+          value: webhook
+  - it: Validate `app.kubernetes.io/managed-by` label
+    documentSelector:
+      path: $[?(@.kind == "Deployment")].metadata.name
+      value: RELEASE-NAME-cert-manager-webhook-ovh
+    asserts:
+      - equal:
+          path: metadata.labels["app.kubernetes.io/managed-by"]
+          value: Helm
+  - it: Validate `app.kubernetes.io/part-of` label
+    documentSelector:
+      path: $[?(@.kind == "Deployment")].metadata.name
+      value: RELEASE-NAME-cert-manager-webhook-ovh
+    asserts:
+      - equal:
+          path: metadata.labels["app.kubernetes.io/part-of"]
+          value: cert-manager
+  - it: Validate `app.kubernetes.io/version` label
+    documentSelector:
+      path: $[?(@.kind == "Deployment")].metadata.name
+      value: RELEASE-NAME-cert-manager-webhook-ovh
+    asserts:
+      - equal:
+          path: metadata.labels["app.kubernetes.io/version"]
+          value: 1.0.0
+  - it: Validate `helm.sh/chart` label
+    documentSelector:
+      path: $[?(@.kind == "Deployment")].metadata.name
+      value: RELEASE-NAME-cert-manager-webhook-ovh
+    asserts:
+      - equal:
+          path: metadata.labels["helm.sh/chart"]
+          value: cert-manager-webhook-ovh-1.0.1

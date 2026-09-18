@@ -72,9 +72,7 @@ app.kubernetes.io/component: webhook
 app.kubernetes.io/managed-by: {{ .Release.Service }}
 app.kubernetes.io/part-of: cert-manager
 {{ include "cert-manager-webhook-ovh.selectorLabels" . }}
-{{- if or .Chart.AppVersion .Values.image.tag }}
-app.kubernetes.io/version: {{ (.Values.image.tag | default .Chart.AppVersion | split "@")._0 | quote }}
-{{- end }}
+app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 {{- end -}}
 
 {{/*

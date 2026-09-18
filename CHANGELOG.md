@@ -4,9 +4,18 @@
 
 ### Noteworthy changes
 
+- 🌿 Validate labels produced by the `cert-manager-webhook-ovh.labels` template against the Kubernetes label value syntax, failing the rendering with a descriptive error
+- 🌿 Validate user-supplied `pod.podLabels` against the Kubernetes label value syntax (63 character limit, alphanumeric start and end, allowed characters), failing the rendering with a descriptive error
+- 🌱 Add unit tests for `image.tag` handling and generated chart labels in `deployment.yaml`
+- 🌱 Add unit tests covering `pod.podLabels` validation in `validator.yaml`
+- 🌱 Add a sample `pod.podLabels` entry to the `values-full.yaml` test fixture
 - 📝 Add `CONTRIBUTING.md` with contributor guidelines and a reference to the Code of Conduct generative AI policy
 - 📝 Rewrite the Code of Conduct generative AI section to prohibit AI-authored contributions
 - ⚙️ Bump envtest Kubernetes version to 1.37.0 in the Makefile
+
+### Fixes
+
+- 🐛 Derive the `app.kubernetes.io/version` label from `.Chart.AppVersion` only, so a custom `image.tag` can no longer render an invalid label value
 
 ### Dependencies
 

@@ -155,3 +155,97 @@ tests:
     asserts:
       - failedTemplate:
           errorMessage: "Invalid configuration: Missing value for required field 'groupName'."
+
+---
+suite: Testing `validator.yaml` 12/x
+templates:
+  - validator.yaml
+values:
+  - values/valid/values-full.yaml
+chart:
+  version: 1.0.0
+  appVersion: 1.0.0
+set:
+  pod:
+    podLabels:
+      app.example.com/too-long-by-one: 0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef
+tests:
+  - it: Validate failed rendering in `validator.yaml` 1/x
+    asserts:
+      - failedTemplate:
+          errorMessage: "Invalid podLabel value for 'app.example.com/too-long-by-one'. The value '0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef' is over the 63 character limit."
+
+---
+suite: Testing `validator.yaml` 13/x
+templates:
+  - validator.yaml
+values:
+  - values/valid/values-full.yaml
+chart:
+  version: 1.0.0
+  appVersion: 1.0.0
+set:
+  pod:
+    podLabels:
+      app.example.com/invalid-start: -abc123
+tests:
+  - it: Validate failed rendering in `validator.yaml` 1/x
+    asserts:
+      - failedTemplate:
+          errorMessage: "Invalid podLabel value for 'app.example.com/invalid-start'. The value '-abc123' doesn't start with an alphanumeric character."
+
+---
+suite: Testing `validator.yaml` 14/x
+templates:
+  - validator.yaml
+values:
+  - values/valid/values-full.yaml
+chart:
+  version: 1.0.0
+  appVersion: 1.0.0
+set:
+  pod:
+    podLabels:
+      app.example.com/invalid-end: abc123-
+tests:
+  - it: Validate failed rendering in `validator.yaml` 1/x
+    asserts:
+      - failedTemplate:
+          errorMessage: "Invalid podLabel value for 'app.example.com/invalid-end'. The value 'abc123-' doesn't end with an alphanumeric character."
+
+---
+suite: Testing `validator.yaml` 15/x
+templates:
+  - validator.yaml
+values:
+  - values/valid/values-full.yaml
+chart:
+  version: 1.0.0
+  appVersion: 1.0.0
+set:
+  pod:
+    podLabels:
+      app.example.com/invalid-character: an/invalid/character/or/four
+tests:
+  - it: Validate failed rendering in `validator.yaml` 1/x
+    asserts:
+      - failedTemplate:
+          errorMessage: "Invalid podLabel value for 'app.example.com/invalid-character'. The value 'an/invalid/character/or/four' contains invalid characters. Only alphanumeric characters, '-', '_' and '.' are allowed."
+
+---
+suite: Testing `validator.yaml` 16/x
+templates:
+  - validator.yaml
+values:
+  - values/valid/values-full.yaml
+chart:
+  version: 1.0.0
+  appVersion: 1.0.0
+set:
+  pod:
+    podLabels:
+      app.example.com/valid: A-valid-Label-value-1234
+tests:
+  - it: Validate correct rendering in `validator.yaml` 1/x
+    asserts:
+      - notFailedTemplate: {}
