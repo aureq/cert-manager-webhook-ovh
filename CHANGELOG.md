@@ -22,6 +22,7 @@
 ### Dependencies
 
 - ⏩ upgrade Go to 1.27.1
+- ⏩ upgrade build image to Go 1.27.1
 - ⏩ upgrade k8s.io/api to v0.37.0
 - ⏩ upgrade k8s.io/apiextensions-apiserver to v0.37.0
 - ⏩ upgrade k8s.io/apimachinery to v0.37.0
