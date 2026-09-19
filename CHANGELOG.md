@@ -1,6 +1,6 @@
 # Changelog
 
-## 0.9.17 (unreleased)
+## 0.9.17
 
 ### Noteworthy changes
 
@@ -9,8 +9,10 @@
 - 🌱 Add unit tests for `image.tag` handling and generated chart labels in `deployment.yaml`
 - 🌱 Add unit tests covering `pod.podLabels` validation in `validator.yaml`
 - 🌱 Add a sample `pod.podLabels` entry to the `values-full.yaml` test fixture
+- 🌱 Bump chart `appVersion` and `version` to 0.9.17
 - 📝 Add `CONTRIBUTING.md` with contributor guidelines and a reference to the Code of Conduct generative AI policy
 - 📝 Rewrite the Code of Conduct generative AI section to prohibit AI-authored contributions
+- 📝 Update README version badges to 0.9.17
 - ⚙️ Bump envtest Kubernetes version to 1.37.0 in the Makefile
 
 ### Fixes
