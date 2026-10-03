@@ -8,6 +8,11 @@ ENVTEST_K8S_VERSION=1.37.0
 IMAGE_NAME := "aureq/cert-manager-webhook-ovh"
 IMAGE_TAG := "latest"
 
+# Push to a private registry when its URL and credentials are all provided.
+ifneq ($(and $(REGISTRY_USER),$(REGISTRY_PASSWORD),$(REGISTRY_URL)),)
+IMAGE_NAME := "$(REGISTRY_URL)/cert-manager-webhook-ovh"
+endif
+
 .PHONY: build clean envtest go-tests helm-docs helm-schema helm-unittests install-go-tests install-helm-docs install-helm-schema install-helm-unittests local-build prepare rendered-manifest.yaml tests
 
 OUT := $(shell pwd)/_out

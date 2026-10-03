@@ -1,5 +1,19 @@
 # Changelog
 
+## 0.9.18 (unreleased)
+
+### Noteworthy changes
+
+- ⚙️ Use `$(REGISTRY_URL)/cert-manager-webhook-ovh` as the Makefile image name when `REGISTRY_URL`, `REGISTRY_USER` and `REGISTRY_PASSWORD` are all set, so images can be built and pushed to a private registry
+
+### Dependencies
+
+- ⏩ upgrade k8s.io/api to v0.37.1
+- ⏩ upgrade k8s.io/apiextensions-apiserver to v0.37.1
+- ⏩ upgrade k8s.io/apimachinery to v0.37.1
+- ⏩ upgrade k8s.io/client-go to v0.37.1
+- ⏩ refresh indirect Go module dependencies
+
 ## 0.9.17
 
 ### Noteworthy changes
