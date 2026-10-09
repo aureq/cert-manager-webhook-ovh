@@ -12,6 +12,7 @@
 - ⏩ upgrade k8s.io/apiextensions-apiserver to v0.37.1
 - ⏩ upgrade k8s.io/apimachinery to v0.37.1
 - ⏩ upgrade k8s.io/client-go to v0.37.1
+- ⏩ upgrade golang.org/x/net to v0.61.0 to address [CVE-2026-78659](https://nvd.nist.gov/vuln/detail/CVE-2026-78659), [CVE-2026-78660](https://nvd.nist.gov/vuln/detail/CVE-2026-78660), [CVE-2026-78669](https://nvd.nist.gov/vuln/detail/CVE-2026-78669), [CVE-2026-78663](https://nvd.nist.gov/vuln/detail/CVE-2026-78663) and [CVE-2026-97032](https://nvd.nist.gov/vuln/detail/CVE-2026-97032)
 - ⏩ refresh indirect Go module dependencies
 
 ## 0.9.17
