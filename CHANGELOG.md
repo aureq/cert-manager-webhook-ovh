@@ -10,6 +10,7 @@
 - 🌱 The ambient-credentials notice, which skips config validation, is now logged as a warning
 - 🌱 Move the OVH client builders and DNS zone/record helpers to `ovh.go`
 - 🌱 Move the Kubernetes secret lookup plus config decoding to `k8s.go`
+- 📝 Point the `pod.loggingVerbosity` docs at the cert-manager `pkg/logs` verbosity constants, alongside the upstream Kubernetes logging conventions link
 - ⚙️ Optimize `Dockerfile` for local development
 
 ### Fixes
