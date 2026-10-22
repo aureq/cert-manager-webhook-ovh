@@ -7,9 +7,10 @@
 - 🌿 Break down code into separate files so it's easier to manage
 - 🌿 Give every log call an explicit verbosity level so it works with `loggingVerbosity`
 - 🌿 Add trace enter/exit logs to each function
-- 🌱 The ambient-credentials notice, which skips config validation, is now logged as a warning.
+- 🌱 The ambient-credentials notice, which skips config validation, is now logged as a warning
 - 🌱 Move the OVH client builders and DNS zone/record helpers to `ovh.go`
 - 🌱 Move the Kubernetes secret lookup plus config decoding to `k8s.go`
+- ⚙️ Optimize `Dockerfile` for local development
 
 ### Fixes
 

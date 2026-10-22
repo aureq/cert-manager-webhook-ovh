@@ -6,9 +6,11 @@ RUN apk update && \
 
 WORKDIR /go/src/app
 ENV GO111MODULE=on
-COPY . .
 
+COPY go.mod go.sum .
 RUN go mod download
+
+COPY . .
 RUN CGO_ENABLED=0 go build -trimpath -o /go/bin/app -ldflags '-s -w -extldflags "-static"' .
 
 FROM alpine:3.24
