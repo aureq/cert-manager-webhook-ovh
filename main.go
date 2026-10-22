@@ -98,7 +98,7 @@ func (s *ovhDNSProviderSolver) Name() string {
 	return "ovh"
 }
 
-func (s *ovhDNSProviderSolver) validate(cfg *ovhDNSProviderConfig, allowAmbientCredentials bool) error {
+func (s *ovhDNSProviderSolver) validateProviderConfig(cfg *ovhDNSProviderConfig, allowAmbientCredentials bool) error {
 	log.Info("Validating provider config...")
 
 	var err error
@@ -143,8 +143,8 @@ func (s *ovhDNSProviderSolver) validate(cfg *ovhDNSProviderConfig, allowAmbientC
 			return err
 		}
 	default:
-		err = errors.New("invalid value for authentifaction method, allowed values: 'application' and 'oauth2'")
-		log.Error(err, "Invalid value for authentifaction method, allowed values: 'application' and 'oauth2'", "ovhAuthenticationMethod", cfg.AuthenticationMethod)
+		err = errors.New("invalid value for authentication method, allowed values: 'application' and 'oauth2'")
+		log.Error(err, "Invalid value for authentication method, allowed values: 'application' and 'oauth2'", "ovhAuthenticationMethod", cfg.AuthenticationMethod)
 		return err
 	}
 	log.Info("Provider config: passed.")
@@ -205,7 +205,7 @@ func (s *ovhDNSProviderSolver) ovhClient(ch *v1alpha1.ChallengeRequest) (*ovh.Cl
 
 	log.Info("Resource namespace", "namespace", ch.ResourceNamespace)
 
-	err = s.validate(&cfg, ch.AllowAmbientCredentials)
+	err = s.validateProviderConfig(&cfg, ch.AllowAmbientCredentials)
 	if err != nil {
 		log.Error(err, "Failed to validate OVH config")
 		return nil, err
@@ -217,7 +217,7 @@ func (s *ovhDNSProviderSolver) ovhClient(ch *v1alpha1.ChallengeRequest) (*ovh.Cl
 	case "oauth2":
 		return s.ovhClientOAuth2(ch, &cfg)
 	default:
-		return nil, fmt.Errorf("invalid value for authentifaction method, allowed values: application, oauth2'")
+		return nil, fmt.Errorf("invalid value for authentication method, allowed values: application, oauth2'")
 	}
 }
 

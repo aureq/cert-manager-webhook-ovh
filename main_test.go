@@ -41,7 +41,7 @@ func solverWithSecrets(secrets ...*corev1.Secret) *ovhDNSProviderSolver {
 	}
 }
 
-func TestValidate(t *testing.T) {
+func TestValidateProviderConfig(t *testing.T) {
 	s := &ovhDNSProviderSolver{}
 
 	// fixture := acmetest.NewFixture(&ovhDNSProviderSolver{},
@@ -56,13 +56,13 @@ func TestValidate(t *testing.T) {
 	// fixture.RunExtended(t)
 
 	// No endpoint provided
-	err := s.validate(&ovhDNSProviderConfig{}, false)
+	err := s.validateProviderConfig(&ovhDNSProviderConfig{}, false)
 	if err == nil || err.Error() != "no endpoint provided in OVH config" {
 		t.Errorf("expected missing endpoint error, got %v", err)
 	}
 
 	// No application key
-	err = s.validate(&ovhDNSProviderConfig{
+	err = s.validateProviderConfig(&ovhDNSProviderConfig{
 		Endpoint:             "ovh-eu",
 		AuthenticationMethod: "application",
 	}, false)
@@ -71,7 +71,7 @@ func TestValidate(t *testing.T) {
 	}
 
 	// No application secret
-	err = s.validate(&ovhDNSProviderConfig{
+	err = s.validateProviderConfig(&ovhDNSProviderConfig{
 		Endpoint:             "ovh-eu",
 		AuthenticationMethod: "application",
 		ApplicationKeyRef:    corev1.SecretKeySelector{LocalObjectReference: corev1.LocalObjectReference{Name: "applicationKey"}},
@@ -81,7 +81,7 @@ func TestValidate(t *testing.T) {
 	}
 
 	// No consumer key nor application consumer key
-	err = s.validate(&ovhDNSProviderConfig{
+	err = s.validateProviderConfig(&ovhDNSProviderConfig{
 		Endpoint:             "ovh-eu",
 		AuthenticationMethod: "application",
 		ApplicationKeyRef:    corev1.SecretKeySelector{LocalObjectReference: corev1.LocalObjectReference{Name: "applicationKey"}},
@@ -92,7 +92,7 @@ func TestValidate(t *testing.T) {
 	}
 
 	// No OAuth2 Client ID
-	err = s.validate(&ovhDNSProviderConfig{
+	err = s.validateProviderConfig(&ovhDNSProviderConfig{
 		Endpoint:             "ovh-eu",
 		AuthenticationMethod: "oauth2",
 	}, false)
@@ -101,7 +101,7 @@ func TestValidate(t *testing.T) {
 	}
 
 	// No OAuth2 Client Secret
-	err = s.validate(&ovhDNSProviderConfig{
+	err = s.validateProviderConfig(&ovhDNSProviderConfig{
 		Endpoint:             "ovh-eu",
 		AuthenticationMethod: "oauth2",
 		Oauth2ClientIDRef:    corev1.SecretKeySelector{LocalObjectReference: corev1.LocalObjectReference{Name: "oauth2ClientId"}},
@@ -111,16 +111,16 @@ func TestValidate(t *testing.T) {
 	}
 
 	// Invalid Authentication Method
-	err = s.validate(&ovhDNSProviderConfig{
+	err = s.validateProviderConfig(&ovhDNSProviderConfig{
 		Endpoint:             "ovh-eu",
 		AuthenticationMethod: "foo",
 	}, false)
-	if err == nil || err.Error() != "invalid value for authentifaction method, allowed values: 'application' and 'oauth2'" {
+	if err == nil || err.Error() != "invalid value for authentication method, allowed values: 'application' and 'oauth2'" {
 		t.Errorf("expected invalid method error, got %v", err)
 	}
 
 	// Valid configuration for Application
-	err = s.validate(&ovhDNSProviderConfig{
+	err = s.validateProviderConfig(&ovhDNSProviderConfig{
 		Endpoint:                  "ovh-eu",
 		AuthenticationMethod:      "application",
 		ApplicationKeyRef:         corev1.SecretKeySelector{LocalObjectReference: corev1.LocalObjectReference{Name: "applicationKey"}},
@@ -132,7 +132,7 @@ func TestValidate(t *testing.T) {
 	}
 
 	// Valid configuration for OAuth2
-	err = s.validate(&ovhDNSProviderConfig{
+	err = s.validateProviderConfig(&ovhDNSProviderConfig{
 		Endpoint:              "ovh-eu",
 		AuthenticationMethod:  "oauth2",
 		Oauth2ClientIDRef:     corev1.SecretKeySelector{LocalObjectReference: corev1.LocalObjectReference{Name: "oauth2ClientId"}},
@@ -380,14 +380,14 @@ func TestValidateAmbientCredentials(t *testing.T) {
 
 	// Security: completely empty config with ambient=true must pass validation,
 	// since credentials will come from the environment.
-	err := s.validate(&ovhDNSProviderConfig{}, true)
+	err := s.validateProviderConfig(&ovhDNSProviderConfig{}, true)
 	if err != nil {
 		t.Errorf("expected no error with ambient credentials and empty config, got %v", err)
 	}
 
 	// Security: even an invalid auth method with ambient=true must pass,
 	// confirming ambient mode skips all checks.
-	err = s.validate(&ovhDNSProviderConfig{
+	err = s.validateProviderConfig(&ovhDNSProviderConfig{
 		Endpoint:             "ovh-eu",
 		AuthenticationMethod: "invalid-method",
 	}, true)
@@ -402,7 +402,7 @@ func TestValidateEdgeCases(t *testing.T) {
 	s := &ovhDNSProviderSolver{}
 
 	// Security: empty authentication method must be rejected (falls into default case).
-	err := s.validate(&ovhDNSProviderConfig{
+	err := s.validateProviderConfig(&ovhDNSProviderConfig{
 		Endpoint:             "ovh-eu",
 		AuthenticationMethod: "",
 	}, false)
@@ -412,7 +412,7 @@ func TestValidateEdgeCases(t *testing.T) {
 
 	// Security: uppercase "Application" must be rejected. The auth method check
 	// is case-sensitive, preventing bypass via case variation.
-	err = s.validate(&ovhDNSProviderConfig{
+	err = s.validateProviderConfig(&ovhDNSProviderConfig{
 		Endpoint:             "ovh-eu",
 		AuthenticationMethod: "Application",
 	}, false)
@@ -422,7 +422,7 @@ func TestValidateEdgeCases(t *testing.T) {
 
 	// Security: whitespace-padded auth method must be rejected. No trimming
 	// means " application " is not the same as "application".
-	err = s.validate(&ovhDNSProviderConfig{
+	err = s.validateProviderConfig(&ovhDNSProviderConfig{
 		Endpoint:             "ovh-eu",
 		AuthenticationMethod: " application ",
 	}, false)
@@ -432,7 +432,7 @@ func TestValidateEdgeCases(t *testing.T) {
 
 	// Security: ApplicationKeyRef with Key set but Name empty must be rejected.
 	// Having only a Key without a secret Name is insufficient to retrieve credentials.
-	err = s.validate(&ovhDNSProviderConfig{
+	err = s.validateProviderConfig(&ovhDNSProviderConfig{
 		Endpoint:             "ovh-eu",
 		AuthenticationMethod: "application",
 		ApplicationKeyRef:    corev1.SecretKeySelector{Key: "some-key"},
