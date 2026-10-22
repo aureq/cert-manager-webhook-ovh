@@ -1,17 +1,9 @@
 package main
 
 import (
-	"context"
-	"encoding/json"
-	"errors"
-	"fmt"
 	"os"
-	"strconv"
-	"strings"
 
 	corev1 "k8s.io/api/core/v1"
-	extapi "k8s.io/apiextensions-apiserver/pkg/apis/apiextensions/v1"
-	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/client-go/kubernetes"
 	"k8s.io/client-go/rest"
 	"k8s.io/klog/v2"
@@ -20,7 +12,6 @@ import (
 	"github.com/cert-manager/cert-manager/pkg/acme/webhook/cmd"
 	"github.com/cert-manager/cert-manager/pkg/issuer/acme/dns/util"
 	logf "github.com/cert-manager/cert-manager/pkg/logs"
-	"github.com/ovh/go-ovh/ovh"
 )
 
 var (
@@ -98,167 +89,25 @@ func (s *ovhDNSProviderSolver) Name() string {
 	return "ovh"
 }
 
-func (s *ovhDNSProviderSolver) validateProviderConfig(cfg *ovhDNSProviderConfig, allowAmbientCredentials bool) error {
-	log.Info("Validating provider config...")
-
-	var err error
-
-	if allowAmbientCredentials {
-		// When allowAmbientCredentials is true, OVH client can load missing config
-		// values from the environment variables and the ovh.conf files.
-		log.Info("Ambient credentials allowed, skipping config validation.")
-		return nil
-	}
-	if cfg.Endpoint == "" {
-		err = errors.New("no endpoint provided in OVH config")
-		log.Error(err, "No endpoint provided in OVH config")
-		return err
-	}
-	switch cfg.AuthenticationMethod {
-	case "application":
-		if cfg.ApplicationKeyRef.Name == "" {
-			err = errors.New("no application key provided in OVH config")
-			log.Error(err, "No application key provided in OVH config")
-			return err
-		}
-		if cfg.ApplicationSecretRef.Name == "" {
-			err = errors.New("no application secret provided in OVH config")
-			log.Error(err, "No application secret provided in OVH config")
-			return err
-		}
-		if cfg.ApplicationConsumerKeyRef.Name == "" {
-			err = errors.New("no application consumer key provided in OVH config")
-			log.Error(err, "No application consumer key provided in OVH config")
-			return err
-		}
-	case "oauth2":
-		if cfg.Oauth2ClientIDRef.Name == "" {
-			err = errors.New("no oauth2 client ID provided in OVH config")
-			log.Error(err, "No oauth2 client ID provided in OVH config")
-			return err
-		}
-		if cfg.Oauth2ClientSecretRef.Name == "" {
-			err = errors.New("no oauth2 client secret provided in OVH config")
-			log.Error(err, "No oauth2 client secret provided in OVH config")
-			return err
-		}
-	default:
-		err = errors.New("invalid value for authentication method, allowed values: 'application' and 'oauth2'")
-		log.Error(err, "Invalid value for authentication method, allowed values: 'application' and 'oauth2'", "ovhAuthenticationMethod", cfg.AuthenticationMethod)
-		return err
-	}
-	log.Info("Provider config: passed.")
-	return nil
-}
-
-// ovhClientApplication creates an OVH client using Application credentials.
-// These credentials consist of an Application Key, Application Secret, and
-// Consumer Key, which are used to authenticate API requests.
-func (s *ovhDNSProviderSolver) ovhClientApplication(ch *v1alpha1.ChallengeRequest, cfg *ovhDNSProviderConfig) (*ovh.Client, error) {
-	applicationKey, err := s.secret(cfg.ApplicationKeyRef, ch.ResourceNamespace)
-	if err != nil {
-		log.Error(err, "Error retrieving application key from secret", "namespace", ch.ResourceNamespace, "secret", cfg.ApplicationKeyRef.Name, "key", cfg.ApplicationKeyRef.Key)
-		return nil, err
-	}
-
-	applicationSecret, err := s.secret(cfg.ApplicationSecretRef, ch.ResourceNamespace)
-	if err != nil {
-		log.Error(err, "Error retrieving application secret from secret", "namespace", ch.ResourceNamespace, "secret", cfg.ApplicationSecretRef.Name, "key", cfg.ApplicationSecretRef.Key)
-		return nil, err
-	}
-
-	applicationConsumerKey, err := s.secret(cfg.ApplicationConsumerKeyRef, ch.ResourceNamespace)
-	if err != nil {
-		log.Error(err, "Error retrieving application consumer key from secret", "namespace", ch.ResourceNamespace, "secret", cfg.ApplicationConsumerKeyRef.Name, "key", cfg.ApplicationConsumerKeyRef.Key)
-		return nil, err
-	}
-
-	return ovh.NewClient(cfg.Endpoint, applicationKey, applicationSecret, applicationConsumerKey)
-}
-
-// ovhClientOAuth2 creates an OVH client using OAuth2 credentials.
-// These credentials consist of a Client ID and Client Secret, which are used
-// to authenticate API requests.
-func (s *ovhDNSProviderSolver) ovhClientOAuth2(ch *v1alpha1.ChallengeRequest, cfg *ovhDNSProviderConfig) (*ovh.Client, error) {
-	oauth2ClientID, err := s.secret(cfg.Oauth2ClientIDRef, ch.ResourceNamespace)
-	if err != nil {
-		log.Error(err, "Error retrieving OAuth2 client ID from secret", "namespace", ch.ResourceNamespace, "secret", cfg.Oauth2ClientIDRef.Name, "key", cfg.Oauth2ClientIDRef.Key)
-		return nil, err
-	}
-
-	oauth2ClientSecret, err := s.secret(cfg.Oauth2ClientSecretRef, ch.ResourceNamespace)
-	if err != nil {
-		log.Error(err, "Error retrieving OAuth2 client secret from secret", "namespace", ch.ResourceNamespace, "secret", cfg.Oauth2ClientSecretRef.Name, "key", cfg.Oauth2ClientSecretRef.Key)
-		return nil, err
-	}
-
-	return ovh.NewOAuth2Client(cfg.Endpoint, oauth2ClientID, oauth2ClientSecret)
-}
-
-// ovhClient creates and returns an OVH client based on the provided configuration.
-func (s *ovhDNSProviderSolver) ovhClient(ch *v1alpha1.ChallengeRequest) (*ovh.Client, error) {
-	log.Info("Starting challenge request...")
-	cfg, err := loadConfig(ch.Config)
-	if err != nil {
-		return nil, err
-	}
-
-	log.Info("Resource namespace", "namespace", ch.ResourceNamespace)
-
-	err = s.validateProviderConfig(&cfg, ch.AllowAmbientCredentials)
-	if err != nil {
-		log.Error(err, "Failed to validate OVH config")
-		return nil, err
-	}
-
-	switch cfg.AuthenticationMethod {
-	case "application":
-		return s.ovhClientApplication(ch, &cfg)
-	case "oauth2":
-		return s.ovhClientOAuth2(ch, &cfg)
-	default:
-		return nil, fmt.Errorf("invalid value for authentication method, allowed values: application, oauth2'")
-	}
-}
-
-func (s *ovhDNSProviderSolver) secret(ref corev1.SecretKeySelector, namespace string) (string, error) {
-	var err error
-	if ref.Name == "" {
-		err = errors.New("no secret name specified in secret key selector")
-		log.Error(err, "No secret name specified in secret key selector")
-		return "", err
-	}
-
-	secret, err := s.client.CoreV1().Secrets(namespace).Get(context.TODO(), ref.Name, metav1.GetOptions{})
-	if err != nil {
-		log.Error(err, "Error retrieving secret", "namespace", namespace, "secret", ref.Name)
-		return "", err
-	}
-
-	bytes, ok := secret.Data[ref.Key]
-	if !ok {
-		err = fmt.Errorf("key not found %q in secret '%s/%s'", ref.Key, namespace, ref.Name)
-		log.Error(err, "Key not found in secret", "namespace", namespace, "secret", ref.Name, "key", ref.Key)
-		return "", err
-	}
-	return strings.TrimSuffix(string(bytes), "\n"), nil
-}
-
 // Present is responsible for actually presenting the DNS record with the
 // DNS provider.
 // This method should tolerate being called multiple times with the same value.
 // cert-manager itself will later perform a self check to ensure that the
 // solver has correctly configured the DNS provider.
 func (s *ovhDNSProviderSolver) Present(ch *v1alpha1.ChallengeRequest) error {
+	log.V(logf.TraceLevel).Info("Entering Present() function")
 	ovhClient, err := s.ovhClient(ch)
 	if err != nil {
-		log.Error(err, "Failed to create OVH client")
+		log.V(logf.ErrorLevel).Error(err, "Failed to create OVH client")
 		return err
 	}
 	domain := util.UnFqdn(ch.ResolvedZone)
 	subDomain := getSubDomain(domain, ch.ResolvedFQDN)
 	target := ch.Key
-	return addTXTRecord(ovhClient, domain, subDomain, target)
+	log.V(logf.DebugLevel).Info("Prepared present parameters", "domain", domain, "subDomain", subDomain, "target", target)
+	err = addTXTRecord(ovhClient, domain, subDomain, target)
+	log.V(logf.TraceLevel).Info("Exiting Present() function")
+	return err
 }
 
 // CleanUp should delete the relevant TXT record from the DNS provider console.
@@ -268,15 +117,23 @@ func (s *ovhDNSProviderSolver) Present(ch *v1alpha1.ChallengeRequest) error {
 // This is in order to facilitate multiple DNS validations for the same domain
 // concurrently.
 func (s *ovhDNSProviderSolver) CleanUp(ch *v1alpha1.ChallengeRequest) error {
+	log.V(logf.TraceLevel).Info("Entering CleanUp() function")
+
 	ovhClient, err := s.ovhClient(ch)
 	if err != nil {
-		log.Error(err, "Failed to create OVH client")
+		log.V(logf.ErrorLevel).Error(err, "Failed to create OVH client")
 		return err
 	}
+
 	domain := util.UnFqdn(ch.ResolvedZone)
 	subDomain := getSubDomain(domain, ch.ResolvedFQDN)
 	target := ch.Key
-	return removeTXTRecord(ovhClient, domain, subDomain, target)
+
+	log.V(logf.DebugLevel).Info("Prepared cleanup parameters", "domain", domain, "subDomain", subDomain, "target", target)
+
+	err = removeTXTRecord(ovhClient, domain, subDomain, target)
+	log.V(logf.TraceLevel).Info("Exiting CleanUp() function")
+	return err
 }
 
 // Initialize will be called when the webhook first starts.
@@ -289,175 +146,15 @@ func (s *ovhDNSProviderSolver) CleanUp(ch *v1alpha1.ChallengeRequest) error {
 // The stopCh can be used to handle early termination of the webhook, in cases
 // where a SIGTERM or similar signal is sent to the webhook process.
 func (s *ovhDNSProviderSolver) Initialize(kubeClientConfig *rest.Config, stopCh <-chan struct{}) error {
+	log.V(logf.TraceLevel).Info("Entering Initialize() function")
+
 	client, err := kubernetes.NewForConfig(kubeClientConfig)
 	if err != nil {
-		log.Error(err, "Failed to create Kubernetes clientset")
+		log.V(logf.ErrorLevel).Error(err, "Failed to create Kubernetes clientset")
 		return err
 	}
 
 	s.client = client
-	return nil
-}
-
-// loadConfig is a small helper function that decodes JSON configuration into
-// the typed config struct.
-func loadConfig(cfgJSON *extapi.JSON) (ovhDNSProviderConfig, error) {
-	cfg := ovhDNSProviderConfig{}
-	// handle the 'base case' where no configuration has been provided
-	if cfgJSON == nil {
-		return cfg, nil
-	}
-	if err := json.Unmarshal(cfgJSON.Raw, &cfg); err != nil {
-		log.Error(err, "Failed to decode OVH config")
-		return cfg, fmt.Errorf("error decoding OVH config: %v", err)
-	}
-
-	return cfg, nil
-}
-
-// getSubDomain extracts the subdomain from the fully qualified domain name (FQDN)
-// by removing the main domain part. If the main domain is not found in the FQDN,
-// it returns the FQDN without the trailing dot.
-func getSubDomain(domain, fqdn string) string {
-	// Ensure both domain and fqdn are in unfqdn format for comparison
-	domain = util.UnFqdn(domain)
-	fqdn = util.UnFqdn(fqdn)
-
-	// Check if fqdn ends with the domain
-	if strings.HasSuffix(fqdn, "."+domain) {
-		// Remove the domain part and the dot before it
-		return strings.TrimSuffix(fqdn, "."+domain)
-	}
-
-	// If the fqdn equals the domain exactly, return empty string
-	if fqdn == domain {
-		return ""
-	}
-
-	return fqdn
-}
-
-// addTXTRecord adds a TXT record to the OVH DNS zone for the specified domain and subdomain.
-func addTXTRecord(ovhClient *ovh.Client, domain, subDomain, target string) error {
-	err := validateZone(ovhClient, domain)
-	if err != nil {
-		log.Error(err, "Failed to validate DNS zone", "domain", domain, "subdomain", subDomain)
-		return err
-	}
-
-	_, err = createRecord(ovhClient, domain, "TXT", subDomain, target)
-	if err != nil {
-		log.Error(err, "Failed to create TXT record", "domain", domain, "subdomain", subDomain)
-		return err
-	}
-	return refreshRecords(ovhClient, domain)
-}
-
-func removeTXTRecord(ovhClient *ovh.Client, domain, subDomain, target string) error {
-	ids, err := listRecords(ovhClient, domain, "TXT", subDomain)
-	if err != nil {
-		log.Error(err, "Failed to list TXT records", "domain", domain, "subdomain", subDomain)
-		return err
-	}
-
-	for _, id := range ids {
-		record, err := getRecord(ovhClient, domain, id)
-		if err != nil {
-			log.Error(err, "Failed to get TXT record", "domain", domain, "subdomain", subDomain, "recordID", id)
-			return err
-		}
-		// Remove surrounded quotes as OVH seems to implicitly add them for a TXT record
-		if strings.Trim(record.Target, "\"") != target {
-			log.V(logf.WarnLevel).Info("Skipping deletion of TXT record as target does not match", "domain", domain, "subdomain", subDomain, "recordID", id, "recordTarget", record.Target, "expectedTarget", target)
-			continue
-		}
-		err = deleteRecord(ovhClient, domain, id)
-		if err != nil {
-			log.Error(err, "Failed to delete TXT record", "domain", domain, "subdomain", subDomain, "recordID", id)
-			return err
-		}
-	}
-
-	return refreshRecords(ovhClient, domain)
-}
-
-// validateZone checks if the DNS zone for the given domain is deployed in OVH.
-func validateZone(ovhClient *ovh.Client, domain string) error {
-	url := "/domain/zone/" + domain + "/status"
-	zoneStatus := ovhZoneStatus{}
-
-	err := ovhClient.Get(url, &zoneStatus)
-	if err != nil {
-		log.Error(err, "Failed to get DNS zone status", "domain", domain)
-		return fmt.Errorf("OVH API call failed: GET %s - %v", url, err)
-	}
-	if !zoneStatus.IsDeployed {
-		log.Error(nil, "DNS zone not deployed", "domain", domain)
-		return fmt.Errorf("DNS zone not deployed for domain %s", domain)
-	}
-
-	return nil
-}
-
-// listRecords retrieves the IDs of DNS records for the specified domain, field type, and subdomain.
-func listRecords(ovhClient *ovh.Client, domain, fieldType, subDomain string) ([]int64, error) {
-	url := "/domain/zone/" + domain + "/record?fieldType=" + fieldType + "&subDomain=" + subDomain
-	ids := []int64{}
-	err := ovhClient.Get(url, &ids)
-	if err != nil {
-		log.Error(err, "Failed to list DNS records", "domain", domain, "fieldType", fieldType, "subDomain", subDomain, "url", url)
-		return nil, fmt.Errorf("OVH API call failed: GET %s - %v", url, err)
-	}
-	return ids, nil
-}
-
-// getRecord retrieves the details of a DNS record for the specified domain and record ID.
-func getRecord(ovhClient *ovh.Client, domain string, id int64) (*ovhZoneRecord, error) {
-	url := "/domain/zone/" + domain + "/record/" + strconv.FormatInt(id, 10)
-	record := ovhZoneRecord{}
-	err := ovhClient.Get(url, &record)
-	if err != nil {
-		log.Error(err, "Failed to get DNS record", "domain", domain, "recordID", id, "url", url)
-		return nil, fmt.Errorf("OVH API call failed: GET %s - %v", url, err)
-	}
-	return &record, nil
-}
-
-func deleteRecord(ovhClient *ovh.Client, domain string, id int64) error {
-	url := "/domain/zone/" + domain + "/record/" + strconv.FormatInt(id, 10)
-	err := ovhClient.Delete(url, nil)
-	if err != nil {
-		log.Error(err, "Failed to delete DNS record", "domain", domain, "recordID", id, "url", url)
-		return fmt.Errorf("OVH API call failed: DELETE %s - %v", url, err)
-	}
-	return nil
-}
-
-func createRecord(ovhClient *ovh.Client, domain, fieldType, subDomain, target string) (*ovhZoneRecord, error) {
-	url := "/domain/zone/" + domain + "/record"
-	params := ovhZoneRecord{
-		FieldType: fieldType,
-		SubDomain: subDomain,
-		Target:    target,
-		TTL:       60,
-	}
-	record := ovhZoneRecord{}
-	err := ovhClient.Post(url, &params, &record)
-	if err != nil {
-		log.Error(err, "Failed to create DNS record", "domain", domain, "subDomain", subDomain, "url", url)
-		return nil, fmt.Errorf("OVH API call failed: POST %s - %v", url, err)
-	}
-
-	return &record, nil
-}
-
-func refreshRecords(ovhClient *ovh.Client, domain string) error {
-	url := "/domain/zone/" + domain + "/refresh"
-	err := ovhClient.Post(url, nil, nil)
-	if err != nil {
-		log.Error(err, "Failed to refresh DNS records", "domain", domain, "url", url)
-		return fmt.Errorf("OVH API call failed: POST %s - %v", url, err)
-	}
-
+	log.V(logf.TraceLevel).Info("Exiting Initialize() function")
 	return nil
 }

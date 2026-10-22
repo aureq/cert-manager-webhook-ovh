@@ -1,5 +1,21 @@
 # Changelog
 
+## 0.9.19 (unreleased)
+
+### Noteworthy changes
+
+- 🌿 Break down code into separate files so it's easier to manage
+- 🌿 Give every log call an explicit verbosity level so it works with `loggingVerbosity`
+- 🌿 Add trace enter/exit logs to each function
+- 🌱 The ambient-credentials notice, which skips config validation, is now logged as a warning.
+- 🌱 Move the OVH client builders and DNS zone/record helpers to `ovh.go`
+- 🌱 Move the Kubernetes secret lookup plus config decoding to `k8s.go`
+
+### Fixes
+
+- 🐛 fix spelling of "authentication" in error message for invalid authentication method
+- 🐛 Quote both allowed values (`application`, `oauth2`) in the invalid authentication method error returned by `ovhClient`
+
 ## 0.9.18
 
 ### Noteworthy changes
