@@ -1,6 +1,6 @@
 # Changelog
 
-## 0.9.19 (unreleased)
+## 0.9.19
 
 ### Noteworthy changes
 
@@ -10,7 +10,9 @@
 - 🌱 The ambient-credentials notice, which skips config validation, is now logged as a warning
 - 🌱 Move the OVH client builders and DNS zone/record helpers to `ovh.go`
 - 🌱 Move the Kubernetes secret lookup plus config decoding to `k8s.go`
+- 🔥 Comment out every logging as it appears to be broken upstream
 - 📝 Point the `pod.loggingVerbosity` docs at the cert-manager `pkg/logs` verbosity constants, alongside the upstream Kubernetes logging conventions link
+- 📝 Regenerate the chart `README.md` and `values.schema.json` so the `pod.loggingVerbosity` description includes the cert-manager `pkg/logs` constants link
 - ⚙️ Optimize `Dockerfile` for local development
 
 ### Fixes
