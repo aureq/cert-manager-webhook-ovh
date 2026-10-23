@@ -7,11 +7,18 @@ RUN apk update && \
 WORKDIR /go/src/app
 ENV GO111MODULE=on
 
+# Download dependencies only
 COPY go.mod go.sum .
 RUN go mod download
 
-COPY . .
-RUN CGO_ENABLED=0 go build -trimpath -o /go/bin/app -ldflags '-s -w -extldflags "-static"' .
+# Copy and build the webhook example.go file separately to build dependencies for caching
+COPY assets/example.go example.go
+RUN CGO_ENABLED=0 go build -trimpath -o /go/bin/app -ldflags '-s -w -extldflags "-static"' . && \
+    rm example.go /go/bin/app
+
+# Copy and build the main source code
+COPY src src
+RUN CGO_ENABLED=0 go build -trimpath -o /go/bin/app -ldflags '-s -w -extldflags "-static"' ./src/
 
 FROM alpine:3.24
 

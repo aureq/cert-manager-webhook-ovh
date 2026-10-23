@@ -86,7 +86,7 @@ tests: go-tests helm-unittests helm-lint
 prepare: helm-schema helm-docs
 
 local-build:
-	CGO_ENABLED=0 $(GO) build -trimpath -o cert-manager-webhook-ovh .
+	CGO_ENABLED=0 $(GO) build -trimpath -o cert-manager-webhook-ovh ./src/
 
 build:
 	@test -z "$$HTTP_PROXY" -a -z "$$HTTPS_PROXY" || docker buildx build \
