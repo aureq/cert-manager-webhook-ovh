@@ -88,7 +88,7 @@ Return the proper image name
 */}}
 {{- define "cert-manager-webhook-ovh.image" -}}
     {{- $registryName := default "ghcr.io" .Values.image.registry -}}
-    {{- $repositoryName := default "authelia/authelia" .Values.image.repository -}}
+    {{- $repositoryName := default "aureq/cert-manager-webhook-ovh" .Values.image.repository -}}
     {{- $tag := .Values.image.tag | default .Chart.AppVersion  | toString -}}
     {{- if hasPrefix "sha256:" $tag }}
     {{- printf "%s/%s@%s" $registryName $repositoryName $tag -}}
