@@ -1,5 +1,15 @@
 # Changelog
 
+## 0.9.20 (unreleased)
+
+### Noteworthy changes
+
+- 🌱 Move the Go sources into a `src/` directory
+- ⚙️ Pre-build Go dependencies in a separate `Dockerfile` layer from `assets/example.go`, so changes under `src/` don't recompile every dependency
+- ⚙️ Point the `Dockerfile` build and the `local-build` Makefile target at `./src/`
+
+### Dependencies
+
 ## 0.9.19
 
 ### Noteworthy changes
