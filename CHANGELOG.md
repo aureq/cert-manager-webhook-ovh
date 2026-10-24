@@ -8,6 +8,10 @@
 - ⚙️ Pre-build Go dependencies in a separate `Dockerfile` layer from `assets/example.go`, so changes under `src/` don't recompile every dependency
 - ⚙️ Point the `Dockerfile` build and the `local-build` Makefile target at `./src/`
 
+### Fixes
+
+- 🐛 Fix the default image repository fallback in the `cert-manager-webhook-ovh.image` helper
+
 ### Dependencies
 
 ## 0.9.19
