@@ -16,6 +16,10 @@
 
 ### Dependencies
 
+- ⏩ upgrade the `go` directive in `go.mod` to Go 1.27.3
+- ⏩ upgrade github.com/cert-manager/cert-manager to v1.21.3
+- ⏩ prune stale `go.sum` checksums for superseded `golang.org/x/*` module versions
+
 ## 0.9.19
 
 ### Noteworthy changes
