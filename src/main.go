@@ -95,18 +95,21 @@ func (s *ovhDNSProviderSolver) Name() string {
 // cert-manager itself will later perform a self check to ensure that the
 // solver has correctly configured the DNS provider.
 func (s *ovhDNSProviderSolver) Present(ch *v1alpha1.ChallengeRequest) error {
-	// log.V(logf.TraceLevel).Info("Entering Present() function")
+	log.V(logf.DebugLevel).Info("Entering Present() function")
 	ovhClient, err := s.ovhClient(ch)
 	if err != nil {
-		// log.V(logf.ErrorLevel).Error(err, "Failed to create OVH client")
+		log.V(logf.ErrorLevel).Error(err, "Failed to create OVH client")
 		return err
 	}
 	domain := util.UnFqdn(ch.ResolvedZone)
 	subDomain := getSubDomain(domain, ch.ResolvedFQDN)
 	target := ch.Key
-	// log.V(logf.DebugLevel).Info("Prepared present parameters", "domain", domain, "subDomain", subDomain, "target", target)
+
+	log.V(logf.DebugLevel).Info("Prepared present parameters", "domain", domain, "subDomain", subDomain, "target", target)
+
 	err = addTXTRecord(ovhClient, domain, subDomain, target)
-	// log.V(logf.TraceLevel).Info("Exiting Present() function")
+
+	log.V(logf.DebugLevel).Info("Exiting Present() function")
 	return err
 }
 
@@ -117,11 +120,11 @@ func (s *ovhDNSProviderSolver) Present(ch *v1alpha1.ChallengeRequest) error {
 // This is in order to facilitate multiple DNS validations for the same domain
 // concurrently.
 func (s *ovhDNSProviderSolver) CleanUp(ch *v1alpha1.ChallengeRequest) error {
-	// log.V(logf.TraceLevel).Info("Entering CleanUp() function")
+	log.V(logf.DebugLevel).Info("Entering CleanUp() function")
 
 	ovhClient, err := s.ovhClient(ch)
 	if err != nil {
-		// log.V(logf.ErrorLevel).Error(err, "Failed to create OVH client")
+		log.V(logf.ErrorLevel).Error(err, "Failed to create OVH client")
 		return err
 	}
 
@@ -129,10 +132,10 @@ func (s *ovhDNSProviderSolver) CleanUp(ch *v1alpha1.ChallengeRequest) error {
 	subDomain := getSubDomain(domain, ch.ResolvedFQDN)
 	target := ch.Key
 
-	// log.V(logf.DebugLevel).Info("Prepared cleanup parameters", "domain", domain, "subDomain", subDomain, "target", target)
+	log.V(logf.DebugLevel).Info("Prepared cleanup parameters", "domain", domain, "subDomain", subDomain, "target", target)
 
 	err = removeTXTRecord(ovhClient, domain, subDomain, target)
-	// log.V(logf.TraceLevel).Info("Exiting CleanUp() function")
+	log.V(logf.DebugLevel).Info("Exiting CleanUp() function")
 	return err
 }
 
@@ -146,15 +149,15 @@ func (s *ovhDNSProviderSolver) CleanUp(ch *v1alpha1.ChallengeRequest) error {
 // The stopCh can be used to handle early termination of the webhook, in cases
 // where a SIGTERM or similar signal is sent to the webhook process.
 func (s *ovhDNSProviderSolver) Initialize(kubeClientConfig *rest.Config, stopCh <-chan struct{}) error {
-	// log.V(logf.ErrorLevel).Info("Entering Initialize() function - V().info")
+	log.V(logf.DebugLevel).Info("Entering Initialize() function")
 
 	client, err := kubernetes.NewForConfig(kubeClientConfig)
 	if err != nil {
-		// log.V(logf.ErrorLevel).Error(err, "Failed to create Kubernetes clientset")
+		log.V(logf.ErrorLevel).Error(err, "Failed to create Kubernetes clientset")
 		return err
 	}
 
 	s.client = client
-	// log.V(logf.TraceLevel).Info("Exiting Initialize() function")
+	log.V(logf.DebugLevel).Info("Exiting Initialize() function")
 	return nil
 }

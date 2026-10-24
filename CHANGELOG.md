@@ -4,6 +4,8 @@
 
 ### Noteworthy changes
 
+- 🌿 Re-enable the log calls that were commented out in 0.9.19
+- 🌱 Log function enter/exit messages at debug level instead of trace level
 - 🌱 Move the Go sources into a `src/` directory
 - ⚙️ Pre-build Go dependencies in a separate `Dockerfile` layer from `assets/example.go`, so changes under `src/` don't recompile every dependency
 - ⚙️ Point the `Dockerfile` build and the `local-build` Makefile target at `./src/`
