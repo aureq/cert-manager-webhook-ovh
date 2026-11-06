@@ -570,8 +570,11 @@ pod:
     # @schema
     # -- Pod Security Context.
     pod:
-      runAsUser: 1000
       runAsGroup: 1000
+      runAsNonRoot: true
+      runAsUser: 1000
+      seccompProfile:
+        type: RuntimeDefault
 
     # @schema
     # type: object
@@ -632,6 +635,9 @@ pod:
       readOnlyRootFilesystem: true
       allowPrivilegeEscalation: false
       privileged: false
+      capabilities:
+        add: ["NET_BIND_SERVICE"]
+        drop: ["ALL"]
 
   # @schema
   # type: integer

@@ -10,7 +10,7 @@
 
 # cert-manager-webhook-ovh
 
-![Version: 0.9.19](https://img.shields.io/badge/Version-0.9.19-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 0.9.19](https://img.shields.io/badge/AppVersion-0.9.19-informational?style=flat-square)
+![Version: 0.9.20](https://img.shields.io/badge/Version-0.9.20-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 0.9.20](https://img.shields.io/badge/AppVersion-0.9.20-informational?style=flat-square)
 
 ![OVH Webhook for Cert Manager](https://raw.githubusercontent.com/aureq/cert-manager-webhook-ovh/main/assets/images/cert-manager-webhook-ovh.svg "OVH Webhook for Cert Manager")
 
@@ -259,9 +259,9 @@ The documentation below is automatically generated from the `values.yaml` file.
 | pod.environment | object | `{}` | Use this option to add environment variables relevant to your deployment. These fields will be passed on to the container when Chart is deployed. |
 | pod.loggingFormat | string | `""` | Set the logging format for the webhook. Accepted values are  `''` (unspecified, defaults to `text`), `text` or `json`. If not specified, the `--logging-format` argument is not passed and will default to `text`. |
 | pod.loggingVerbosity | string | `""` | Set the logging verbosity level for the webhook (and internal dependencies). Accepted values are integers from `0` to `5`, with `0` being the least verbose and `5` being the most verbose. If not specified, verbose level defaults to `1`. Levels are: `0` (error), `1` (warn, default), `2` (info), `3` (extended info), `4` (debug), `5` (trace). See https://pkg.go.dev/github.com/cert-manager/cert-manager/pkg/logs#pkg-constants and https://github.com/kubernetes/community/blob/main/contributors/devel/sig-instrumentation/logging.md |
-| pod.securityContext | object | `{"container":{"allowPrivilegeEscalation":false,"privileged":false,"readOnlyRootFilesystem":true},"pod":{"runAsGroup":1000,"runAsUser":1000}}` | Define the security context for both the `Pod` and the `Container`. See the Kubernetes API [reference](https://kubernetes.io/docs/reference/generated/kubernetes-api/latest/#securitycontext-v1-core) and the Kubernetes [documentation](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/) for more information. |
-| pod.securityContext.pod | object | `{"runAsGroup":1000,"runAsUser":1000}` | Pod Security Context. |
-| pod.securityContext.container | object | `{"allowPrivilegeEscalation":false,"privileged":false,"readOnlyRootFilesystem":true}` | Container Security Context. |
+| pod.securityContext | object | `{"container":{"allowPrivilegeEscalation":false,"capabilities":{"add":["NET_BIND_SERVICE"],"drop":["ALL"]},"privileged":false,"readOnlyRootFilesystem":true},"pod":{"runAsGroup":1000,"runAsNonRoot":true,"runAsUser":1000,"seccompProfile":{"type":"RuntimeDefault"}}}` | Define the security context for both the `Pod` and the `Container`. See the Kubernetes API [reference](https://kubernetes.io/docs/reference/generated/kubernetes-api/latest/#securitycontext-v1-core) and the Kubernetes [documentation](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/) for more information. |
+| pod.securityContext.pod | object | `{"runAsGroup":1000,"runAsNonRoot":true,"runAsUser":1000,"seccompProfile":{"type":"RuntimeDefault"}}` | Pod Security Context. |
+| pod.securityContext.container | object | `{"allowPrivilegeEscalation":false,"capabilities":{"add":["NET_BIND_SERVICE"],"drop":["ALL"]},"privileged":false,"readOnlyRootFilesystem":true}` | Container Security Context. |
 | pod.port | int | `8443` | The port used by the webhook to receive incoming traffic from the service. It may be useful to change it if the hostNetwork mode is activated to use an available port. |
 | pod.hostNetwork | bool | `false` | Specifies if the webhook should be started in `hostNetwork` mode. Required for use in some managed Kubernetes clusters (such as AWS EKS) with custom CNI (such as Calico), because control-plane managed by AWS cannot communicate with pods' IP CIDR and admission webhooks are not working. |
 | pod.priorityClassName | string | `""` | The optional priority class to be used for the cert-manager-webhook-ovh pod. |
