@@ -7,6 +7,7 @@
 - 🌿 Re-enable the log calls that were commented out in 0.9.19
 - 🌱 Log function enter/exit messages at debug level instead of trace level
 - 🌱 Move the Go sources into a `src/` directory
+- 🌱 Improve running pod under restricted pod security standards. [#75](https://github.com/aureq/cert-manager-webhook-ovh/pull/95) by [@perobertson](https://github.com/perobertson).
 - ⚙️ Pre-build Go dependencies in a separate `Dockerfile` layer from `assets/example.go`, so changes under `src/` don't recompile every dependency
 - ⚙️ Point the `Dockerfile` build and the `local-build` Makefile target at `./src/`
 
