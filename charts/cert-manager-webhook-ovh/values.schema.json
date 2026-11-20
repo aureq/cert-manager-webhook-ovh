@@ -805,7 +805,10 @@
                         "type": "string"
                       }
                     },
-                    "required": [],
+                    "required": [
+                      "name",
+                      "value"
+                    ],
                     "type": "object"
                   },
                   "type": "array"
