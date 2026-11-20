@@ -13,11 +13,17 @@
 ### Fixes
 
 - 🐛 Fix the default image repository fallback in the `cert-manager-webhook-ovh.image` helper
+- 🐛 Require `name` and `value` in each `pod.securityContext.pod.sysctls` item in `values.schema.json`, to match the schema annotations in `values.yaml`
 
 ### Dependencies
 
-- ⏩ upgrade the `go` directive in `go.mod` to Go 1.27.3
+- ⏩ upgrade the `go` directive in `go.mod` to Go 1.27.4
 - ⏩ upgrade github.com/cert-manager/cert-manager to v1.21.3
+- ⏩ upgrade github.com/ovh/go-ovh to v1.10.0
+- ⏩ upgrade k8s.io/api to v0.37.2
+- ⏩ upgrade k8s.io/apimachinery to v0.37.2
+- ⏩ upgrade k8s.io/client-go to v0.37.2
+- ⏩ upgrade indirect dependency k8s.io/streaming to v0.37.2
 - ⏩ prune stale `go.sum` checksums for superseded `golang.org/x/*` module versions
 
 ## 0.9.19
