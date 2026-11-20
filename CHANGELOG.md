@@ -13,6 +13,7 @@
 ### Fixes
 
 - 🐛 Fix the default image repository fallback in the `cert-manager-webhook-ovh.image` helper
+- 🐛 Fix running pod under restricted pod security standards
 
 ### Dependencies
 
