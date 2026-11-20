@@ -25,6 +25,8 @@
 - ⏩ upgrade k8s.io/apimachinery to v0.37.2
 - ⏩ upgrade k8s.io/client-go to v0.37.2
 - ⏩ upgrade indirect dependency k8s.io/streaming to v0.37.2
+- ⏩ upgrade indirect dependencies go.opentelemetry.io/otel, go.opentelemetry.io/otel/metric, go.opentelemetry.io/otel/sdk and go.opentelemetry.io/otel/trace to v1.47.0, and add go.opentelemetry.io/otel/log v1.47.0
+- ⏩ upgrade indirect dependencies golang.org/x/crypto to v0.59.0, golang.org/x/net to v0.63.0, golang.org/x/sync to v0.25.0, golang.org/x/sys to v0.50.0, golang.org/x/term to v0.48.0 and golang.org/x/text to v0.44.0
 - ⏩ prune stale `go.sum` checksums for superseded `golang.org/x/*` module versions
 
 ## 0.9.19
