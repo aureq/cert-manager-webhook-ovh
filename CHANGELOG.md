@@ -1,5 +1,15 @@
 # Changelog
 
+## 0.9.21
+
+### Noteworthy changes
+
+- ⚙️ Pin the `azure/setup-helm`, `docker/*`, `actions/upload-artifact` and `actions/download-artifact` actions in the release workflow to full commit SHAs
+
+### Dependencies
+
+- ⏩ upgrade azure/setup-helm to v5.1.0 in the release workflow
+
 ## 0.9.20
 
 ### Noteworthy changes
