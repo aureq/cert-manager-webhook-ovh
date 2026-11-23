@@ -22,7 +22,7 @@ jobs:
           fetch-depth: 0
 
       - name: Set up Helm
-        uses: azure/setup-helm@v5.0.0
+        uses: azure/setup-helm@2f5e7bc67f1f9972ab16657bb795f36d8f04de0e # v5.1.0
 
       - name: Install Golang unit tests dependencies
         run: |
