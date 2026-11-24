@@ -81,7 +81,7 @@ clean:
 	@chmod -R u+w $(LOCALBIN) $(OUT) 2>/dev/null || true
 	@rm -rf $(LOCALBIN) $(OUT)
 
-tests: go-tests helm-unittests helm-lint
+tests: prepare go-tests helm-unittests helm-lint
 
 prepare: helm-schema helm-docs
 
