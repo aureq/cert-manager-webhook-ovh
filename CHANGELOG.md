@@ -2,9 +2,15 @@
 
 ## 0.9.21 (unreleased)
 
-### Noteworthy changes
+⭐ If you are using this project, please consider supporting it by starring the repository. It helps me a lot to keep maintaining and improving this project. Thank you!
+
+### Improvements
 
 - ⚙️ Pin the `azure/setup-helm`, `docker/*`, `actions/upload-artifact` and `actions/download-artifact` actions in the release workflow to full commit SHAs
+
+### Noteworthy changes
+
+- ⚙️ Run the `prepare` target first in `make tests`, so the chart `values.schema.json` and `README.md` are regenerated before the tests and lint run
 
 ### Dependencies
 
