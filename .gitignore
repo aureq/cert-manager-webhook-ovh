@@ -47,3 +47,6 @@ charts/cert-manager-webhook-ovh/.debug
 
 # IDE
 .vscode/settings.json
+
+# Golang Unit tests
+apiserver.local.config/*
