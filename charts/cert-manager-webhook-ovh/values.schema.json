@@ -905,6 +905,17 @@
       "title": "rbac",
       "type": "object"
     },
+    "resolverApiErrorDelay": {
+      "default": "10s",
+      "description": "The time the webhook waits before it returns an OVH API error to cert-manager.\nCert-manager doesn't implement exponential back-offs, so this delay slows down the\nretries from cert-manager when an OVH API call fails. This prevents a storm of\nwebhook requests, logs floods and elevated CPU usage.\nUse a whole number or a Go duration without spaces, for example `30`, `90s` or `1m30s`.\nA number without a unit defaults to seconds. The minimum is `1s`.\nA useful value should be between `5s` and `5m` (for very large setups).",
+      "minimum": 1,
+      "required": [],
+      "title": "resolverApiErrorDelay",
+      "type": [
+        "integer",
+        "string"
+      ]
+    },
     "service": {
       "additionalProperties": false,
       "description": "Service configuration for the webhook deployment.",

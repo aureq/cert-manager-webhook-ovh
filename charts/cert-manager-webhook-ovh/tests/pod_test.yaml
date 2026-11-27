@@ -61,6 +61,8 @@ tests:
           value:
             - name: GROUP_NAME
               value: acme.helm.unittest.example
+            - name: RESOLVER_API_ERROR_DELAY
+              value: 10s
             - name: HTTPS_PROXY
               value: http://proxy.example.net:3129
             - name: HTTP_PROXY
@@ -401,3 +403,47 @@ tests:
       - equal:
           path: metadata.labels["helm.sh/chart"]
           value: cert-manager-webhook-ovh-1.0.1
+
+---
+suite: Testing `root.resolverApiErrorDelay` option in `deployment.yaml`
+templates:
+  - deployment.yaml
+values:
+  - values/valid/values-full.yaml
+tests:
+  - it: Validate a missing `resolverApiErrorDelay` defaults to 10s
+    set:
+      resolverApiErrorDelay: null
+    asserts:
+      - contains:
+          path: spec.template.spec.containers[0].env
+          content:
+            name: RESOLVER_API_ERROR_DELAY
+            value: 10s
+  - it: Validate a whole number `resolverApiErrorDelay` is a number of seconds (no maximum)
+    set:
+      resolverApiErrorDelay: 100000000
+    asserts:
+      - contains:
+          path: spec.template.spec.containers[0].env
+          content:
+            name: RESOLVER_API_ERROR_DELAY
+            value: 100000000s
+  - it: Validate a string of digits `resolverApiErrorDelay` is a number of seconds
+    set:
+      resolverApiErrorDelay: '45'
+    asserts:
+      - contains:
+          path: spec.template.spec.containers[0].env
+          content:
+            name: RESOLVER_API_ERROR_DELAY
+            value: 45s
+  - it: Validate a Go duration `resolverApiErrorDelay` with combined units
+    set:
+      resolverApiErrorDelay: 1m30s
+    asserts:
+      - contains:
+          path: spec.template.spec.containers[0].env
+          content:
+            name: RESOLVER_API_ERROR_DELAY
+            value: 1m30s

@@ -104,6 +104,17 @@ the template will `fail` with a clear error message indicating the reason of the
   {{- fail "Invalid configuration: Missing value for required field 'groupName'." -}}
 {{- end -}}
 
+{{- /* 📄 validate `resolverApiErrorDelay`.
+
+The code below checks that `resolverApiErrorDelay` is a valid Go duration and at least 1s.
+If the validation fails, the template will `fail` with a clear error message indicating the reason of the failure.
+*/ -}}
+{{- $resolverApiErrorDelay := include "cert-manager-webhook-ovh.resolverApiErrorDelay" . -}}
+{{- $start := now -}}
+{{- if (dateModify $resolverApiErrorDelay $start).Before (dateModify "1s" $start) -}}
+  {{- fail (printf "Invalid value for 'resolverApiErrorDelay': '%s' is not a Go duration of at least 1s, such as '10s' or '1m30s'." $resolverApiErrorDelay) -}}
+{{- end -}}
+
 {{- /* 📄 validate any labels returned by the `cert-manager-webhook-ovh.labels` template.
 
 The code below checks that all labels returned by `cert-manager-webhook-ovh` meet the following requirements:

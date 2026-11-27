@@ -1,16 +1,24 @@
 # Changelog
 
-## 0.9.21 (unreleased)
+## 0.9.21-alpha.0 (unreleased)
 
 ⭐ If you are using this project, please consider supporting it by starring the repository. It helps me a lot to keep maintaining and improving this project. Thank you!
 
-### Improvements
+### Breaking changes and important notes
 
-- ⚙️ Pin the `azure/setup-helm`, `docker/*`, `actions/upload-artifact` and `actions/download-artifact` actions in the release workflow to full commit SHAs
+⚠️ The webhook now waits 10 seconds by default before it returns an OVH API error back to cert-manager. This prevents request storms, log floods and high CPU usage when the OVH API is failing or credentials are invalid. Use the `resolverApiErrorDelay` chart value to change this delay. The delay minimum is `1s`.
 
 ### Noteworthy changes
 
+- 🌿 Wait before `Present()` and `CleanUp()` return an OVH API error, to slow down cert-manager retries and prevent request storms, log floods and high CPU usage (for example with invalid OVH credentials)
+- 🌿 Add the `RESOLVER_API_ERROR_DELAY` environment variable to set this delay as a number of seconds or a Go duration such as `1m30s` (default `10s`, minimum `1s`)
+- 🌿 Add the `resolverApiErrorDelay` chart value (default `10s`) and pass it to the webhook as `RESOLVER_API_ERROR_DELAY`
+- 🌿 Validate `resolverApiErrorDelay` in `values.schema.json` and `validator.yaml`, and reject decimal numbers, invalid Go durations and values less than `1s`
+- 🌱 Add Go unit tests for the `RESOLVER_API_ERROR_DELAY` parser and for the delay in `Present()` and `CleanUp()` against a fake OVH API
+- 🌱 Add Helm unit tests for the rendering and validation of `resolverApiErrorDelay`
+- 📝 Document `resolverApiErrorDelay` in the chart `README.md`
 - ⚙️ Run the `prepare` target first in `make tests`, so the chart `values.schema.json` and `README.md` are regenerated before the tests and lint run
+- ⚙️ Pin the `azure/setup-helm`, `docker/*`, `actions/upload-artifact` and `actions/download-artifact` actions in the release workflow to full commit SHAs
 
 ### Dependencies
 

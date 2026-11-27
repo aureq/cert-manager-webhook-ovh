@@ -1,7 +1,10 @@
 package main
 
 import (
+	"fmt"
 	"os"
+	"strconv"
+	"time"
 
 	corev1 "k8s.io/api/core/v1"
 	"k8s.io/client-go/kubernetes"
@@ -19,12 +22,24 @@ var (
 	GroupName = os.Getenv("GROUP_NAME")
 )
 
+const (
+	// defaultResolverAPIErrorDelay applies when RESOLVER_API_ERROR_DELAY is
+	// not set.
+	defaultResolverAPIErrorDelay = 10 * time.Second
+	// minResolverAPIErrorDelay is the smallest value that
+	// RESOLVER_API_ERROR_DELAY accepts.
+	minResolverAPIErrorDelay = 1 * time.Second
+)
+
 // ovhDNSProviderSolver implements the provider-specific logic needed to
 // 'present' an ACME challenge TXT record for your own DNS provider.
 // To do so, it must implement the `github.com/jetstack/cert-manager/pkg/acme/webhook.Solver`
 // interface.
 type ovhDNSProviderSolver struct {
 	client kubernetes.Interface
+	// resolverAPIErrorDelay is the time to wait before an OVH API error goes
+	// back to cert-manager.
+	resolverAPIErrorDelay time.Duration
 }
 
 // ovhDNSProviderConfig is a structure that is used to decode into when
@@ -69,14 +84,52 @@ func main() {
 		klog.Fatal("'GROUP_NAME' environment variable must be specified")
 	}
 
+	resolverAPIErrorDelay, err := parseResolverAPIErrorDelay(os.Getenv("RESOLVER_API_ERROR_DELAY"))
+	if err != nil {
+		klog.Fatalf("'RESOLVER_API_ERROR_DELAY' environment variable is invalid: %v", err)
+	}
+
 	// This will register our ovh DNS provider with the webhook serving
 	// library, making it available as an API under the provided GroupName.
 	// You can register multiple DNS provider implementations with a single
 	// webhook, where the Name() method will be used to disambiguate between
 	// the different implementations.
 	cmd.RunWebhookServer(GroupName,
-		&ovhDNSProviderSolver{},
+		&ovhDNSProviderSolver{resolverAPIErrorDelay: resolverAPIErrorDelay},
 	)
+}
+
+// parseResolverAPIErrorDelay converts the value of RESOLVER_API_ERROR_DELAY to
+// a duration. An empty value returns the default delay. A number without a unit
+// is then expressed in seconds. Other values use the Go duration format, for
+// example "1m30s". The delay must be at least 1 second.
+func parseResolverAPIErrorDelay(value string) (time.Duration, error) {
+	if value == "" {
+		return defaultResolverAPIErrorDelay, nil
+	}
+
+	duration := value
+	if _, err := strconv.ParseFloat(value, 64); err == nil {
+		duration += "s"
+	}
+
+	delay, err := time.ParseDuration(duration)
+	if err != nil {
+		return 0, fmt.Errorf("invalid delay %q, use a number of seconds or a duration such as '10s', '1m30s' or '1h5m'", value)
+	}
+	if delay < minResolverAPIErrorDelay {
+		return 0, fmt.Errorf("delay %q is less than the minimum of %s", value, minResolverAPIErrorDelay)
+	}
+
+	return delay, nil
+}
+
+// waitAfterResolverAPIError pauses before the webhook returns an OVH API error
+// to cert-manager. Invalid OVH credentials make each request fail at once. The
+// pause slows down the retries from cert-manager.
+func (s *ovhDNSProviderSolver) waitAfterResolverAPIError(domain string, subDomain string) {
+	log.V(logf.InfoLevel).Info("OVH API call failed, waiting before returning the error", "domain", domain, "subDomain", subDomain, "delay", s.resolverAPIErrorDelay.String())
+	time.Sleep(s.resolverAPIErrorDelay)
 }
 
 // Name is used as the name for this DNS solver when referencing it on the ACME
@@ -108,6 +161,9 @@ func (s *ovhDNSProviderSolver) Present(ch *v1alpha1.ChallengeRequest) error {
 	log.V(logf.DebugLevel).Info("Prepared present parameters", "domain", domain, "subDomain", subDomain, "target", target)
 
 	err = addTXTRecord(ovhClient, domain, subDomain, target)
+	if err != nil {
+		s.waitAfterResolverAPIError(domain, subDomain)
+	}
 
 	log.V(logf.DebugLevel).Info("Exiting Present() function")
 	return err
@@ -135,6 +191,9 @@ func (s *ovhDNSProviderSolver) CleanUp(ch *v1alpha1.ChallengeRequest) error {
 	log.V(logf.DebugLevel).Info("Prepared cleanup parameters", "domain", domain, "subDomain", subDomain, "target", target)
 
 	err = removeTXTRecord(ovhClient, domain, subDomain, target)
+	if err != nil {
+		s.waitAfterResolverAPIError(domain, subDomain)
+	}
 	log.V(logf.DebugLevel).Info("Exiting CleanUp() function")
 	return err
 }

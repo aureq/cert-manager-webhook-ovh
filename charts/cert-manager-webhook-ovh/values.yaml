@@ -30,6 +30,20 @@
 groupName: acme.mycompany.example
 
 # @schema
+# type: [integer, string]
+# minimum: 1
+# default: 10s
+# @schema
+# -- The time the webhook waits before it returns an OVH API error to cert-manager.
+# Cert-manager doesn't implement exponential back-offs, so this delay slows down the
+# retries from cert-manager when an OVH API call fails. This prevents a storm of
+# webhook requests, logs floods and elevated CPU usage.
+# Use a whole number or a Go duration without spaces, for example `30`, `90s` or `1m30s`.
+# A number without a unit defaults to seconds. The minimum is `1s`.
+# A useful value should be between `5s` and `5m` (for very large setups).
+resolverApiErrorDelay: 10s
+
+# @schema
 # required: true
 # type: object
 # @schema

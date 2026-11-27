@@ -98,6 +98,23 @@ Return the proper image name
 {{- end -}}
 
 {{/*
+Returns the value of `resolverApiErrorDelay` as a Go duration, for example "10s" or "1m30s".
+A missing or empty value gives "10s". A whole number, or a string of digits, is a number of seconds.
+Helm reads the numbers in a values file as float64. `int64` stops a large number such as 100000000
+from being printed as "1e+08".
+This function doesn't perform data validation.
+*/}}
+{{- define "cert-manager-webhook-ovh.resolverApiErrorDelay" -}}
+  {{- $delay := .Values.resolverApiErrorDelay | default "10s" -}}
+  {{- if not (kindIs "string" $delay) -}}
+    {{- $delay = printf "%ds" (int64 $delay) -}}
+  {{- else if regexMatch "^[0-9]+$" $delay -}}
+    {{- $delay = printf "%ss" $delay -}}
+  {{- end -}}
+  {{- $delay -}}
+{{- end -}}
+
+{{/*
 Returns true if externalAccountBinding is enabled.
 This function doesn't perform data validation.
 */}}

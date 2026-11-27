@@ -57,6 +57,8 @@ spec:
           env:
             - name: GROUP_NAME
               value: {{ .Values.groupName | quote }}
+            - name: RESOLVER_API_ERROR_DELAY
+              value: {{ include "cert-manager-webhook-ovh.resolverApiErrorDelay" . | quote }}
             {{- range $key, $val := .Values.pod.environment }}
             - name: {{ $key }}
               value: {{ $val | quote }}

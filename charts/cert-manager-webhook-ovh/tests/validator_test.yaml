@@ -249,3 +249,40 @@ tests:
   - it: Validate correct rendering in `validator.yaml` 1/x
     asserts:
       - notFailedTemplate: {}
+
+---
+suite: Testing `root.resolverApiErrorDelay` option in `validator.yaml`
+templates:
+  - validator.yaml
+values:
+  - values/valid/values-full.yaml
+tests:
+  - it: Accept the minimum `resolverApiErrorDelay` of 1s
+    set:
+      resolverApiErrorDelay: 1s
+    asserts:
+      - notFailedTemplate: {}
+  - it: Reject a `resolverApiErrorDelay` less than 1s
+    set:
+      resolverApiErrorDelay: 999ms
+    asserts:
+      - failedTemplate:
+          errorMessage: "Invalid value for 'resolverApiErrorDelay': '999ms' is not a Go duration of at least 1s, such as '10s' or '1m30s'."
+  - it: Reject a `resolverApiErrorDelay` that is not a valid Go duration
+    set:
+      resolverApiErrorDelay: 1m 30s
+    asserts:
+      - failedTemplate:
+          errorMessage: "Invalid value for 'resolverApiErrorDelay': '1m 30s' is not a Go duration of at least 1s, such as '10s' or '1m30s'."
+  - it: Reject a whole number `resolverApiErrorDelay` less than 1
+    set:
+      resolverApiErrorDelay: 0
+    asserts:
+      - failedTemplate:
+          errorPattern: "at '/resolverApiErrorDelay': minimum: got 0, want 1"
+  - it: Reject a decimal number `resolverApiErrorDelay`
+    set:
+      resolverApiErrorDelay: 1.5
+    asserts:
+      - failedTemplate:
+          errorPattern: "at '/resolverApiErrorDelay': got number, want integer or string"

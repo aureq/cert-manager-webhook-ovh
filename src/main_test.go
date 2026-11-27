@@ -2,9 +2,14 @@ package main
 
 import (
 	"encoding/json"
+	"fmt"
+	"net/http"
+	"net/http/httptest"
 	"strings"
 	"testing"
+	"time"
 
+	"github.com/cert-manager/cert-manager/pkg/acme/webhook/apis/acme/v1alpha1"
 	// acmetest "github.com/cert-manager/cert-manager/test/acme"
 	corev1 "k8s.io/api/core/v1"
 	extapi "k8s.io/apiextensions-apiserver/pkg/apis/apiextensions/v1"
@@ -674,4 +679,159 @@ func TestConfigJSONFieldNames(t *testing.T) {
 			t.Errorf("expected endpoint 'ovh-eu', got %q", cfg.Endpoint)
 		}
 	})
+}
+
+// `TestParseResolverAPIErrorDelay` verifies how the webhook reads
+// RESOLVER_API_ERROR_DELAY. An empty value gives the default of 10 seconds. A
+// number without a unit is expressed in seconds. Values less than 1 second and
+// invalid values are rejected.
+func TestParseResolverAPIErrorDelay(t *testing.T) {
+	tests := []struct {
+		name    string
+		value   string
+		want    time.Duration
+		wantErr bool
+	}{
+		{name: "empty value gives the default", value: "", want: 10 * time.Second},
+		{name: "number without unit is seconds", value: "10", want: 10 * time.Second},
+		{name: "minimum without unit", value: "1", want: time.Second},
+		{name: "decimal number without unit is seconds", value: "1.5", want: 1500 * time.Millisecond},
+		{name: "seconds", value: "30s", want: 30 * time.Second},
+		{name: "minimum with unit", value: "1s", want: time.Second},
+		{name: "minimum in milliseconds", value: "1000ms", want: time.Second},
+		{name: "minutes", value: "2m", want: 2 * time.Minute},
+		{name: "hours", value: "1h", want: time.Hour},
+		{name: "combined units", value: "1m30s", want: 90 * time.Second},
+		{name: "large value without unit has no maximum", value: "86400", want: 24 * time.Hour},
+		{name: "zero is less than the minimum", value: "0", wantErr: true},
+		{name: "zero seconds is less than the minimum", value: "0s", wantErr: true},
+		{name: "decimal less than the minimum", value: "0.5", wantErr: true},
+		{name: "milliseconds less than the minimum", value: "999ms", wantErr: true},
+		{name: "negative number", value: "-5", wantErr: true},
+		{name: "negative duration", value: "-5s", wantErr: true},
+		{name: "unknown unit", value: "10x", wantErr: true},
+		{name: "unit without number", value: "s", wantErr: true},
+		{name: "text", value: "ten seconds", wantErr: true},
+		{name: "surrounding spaces", value: " 10s ", wantErr: true},
+		{name: "space between units is not a Go duration", value: "1m 30s", wantErr: true},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			got, err := parseResolverAPIErrorDelay(tt.value)
+			if tt.wantErr {
+				if err == nil {
+					t.Fatalf("expected error for %q, got delay %s", tt.value, got)
+				}
+				return
+			}
+			if err != nil {
+				t.Fatalf("unexpected error for %q: %v", tt.value, err)
+			}
+			if got != tt.want {
+				t.Errorf("parseResolverAPIErrorDelay(%q) = %s, want %s", tt.value, got, tt.want)
+			}
+		})
+	}
+}
+
+// `fakeOVHAPI` starts an HTTP server that acts as the OVH API for the example.com zone.
+// When `fail` is true, each authenticated call returns an HTTP 403 error to simulate
+// invalid credentials.
+func fakeOVHAPI(t *testing.T, fail bool) *httptest.Server {
+	t.Helper()
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("Content-Type", "application/json")
+		route := r.Method + " " + r.URL.Path
+		switch {
+		case route == "GET /auth/time":
+			fmt.Fprint(w, time.Now().Unix())
+		case fail:
+			w.WriteHeader(http.StatusForbidden)
+			fmt.Fprint(w, `{"errorCode":"INVALID_CREDENTIAL","httpCode":"403 Forbidden","message":"This credential is not valid"}`)
+		case route == "GET /domain/zone/example.com/status":
+			fmt.Fprint(w, `{"isDeployed":true}`)
+		case route == "POST /domain/zone/example.com/record":
+			fmt.Fprint(w, `{"id":1,"fieldType":"TXT","subDomain":"_acme-challenge","target":"challenge-key","ttl":60}`)
+		case route == "GET /domain/zone/example.com/record":
+			fmt.Fprint(w, `[1]`)
+		case route == "GET /domain/zone/example.com/record/1":
+			fmt.Fprint(w, `{"id":1,"fieldType":"TXT","subDomain":"_acme-challenge","target":"\"challenge-key\"","ttl":60}`)
+		case route == "DELETE /domain/zone/example.com/record/1", route == "POST /domain/zone/example.com/refresh":
+			fmt.Fprint(w, `null`)
+		default:
+			w.WriteHeader(http.StatusNotFound)
+			fmt.Fprintf(w, `{"message":"unexpected call %s"}`, route)
+		}
+	}))
+	t.Cleanup(server.Close)
+	return server
+}
+
+// `TestResolverAPIErrorDelay` verifies that Present() and CleanUp() wait for the
+// configured delay before they return an OVH API error. The delay slows down
+// the retries from cert-manager when the OVH credentials are invalid. When the
+// OVH API calls succeed, both functions must return without the delay.
+func TestResolverAPIErrorDelay(t *testing.T) {
+	const delay = time.Second
+
+	tests := []struct {
+		name     string
+		call     func(*ovhDNSProviderSolver, *v1alpha1.ChallengeRequest) error
+		apiFails bool
+	}{
+		{name: "Present waits after an OVH API error", call: (*ovhDNSProviderSolver).Present, apiFails: true},
+		{name: "CleanUp waits after an OVH API error", call: (*ovhDNSProviderSolver).CleanUp, apiFails: true},
+		{name: "Present returns at once on success", call: (*ovhDNSProviderSolver).Present, apiFails: false},
+		{name: "CleanUp returns at once on success", call: (*ovhDNSProviderSolver).CleanUp, apiFails: false},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			server := fakeOVHAPI(t, tt.apiFails)
+			s := solverWithSecrets(makeSecret("default", "ovh-credentials", map[string][]byte{
+				"applicationKey":         []byte("app-key"),
+				"applicationSecret":      []byte("app-secret"),
+				"applicationConsumerKey": []byte("consumer-key"),
+			}))
+			s.resolverAPIErrorDelay = delay
+
+			ch := &v1alpha1.ChallengeRequest{
+				ResourceNamespace: "default",
+				ResolvedZone:      "example.com.",
+				ResolvedFQDN:      "_acme-challenge.example.com.",
+				Key:               "challenge-key",
+				Config: jsonRaw(fmt.Sprintf(`{
+					"endpoint": %q,
+					"authenticationMethod": "application",
+					"applicationKeyRef": {"name": "ovh-credentials", "key": "applicationKey"},
+					"applicationSecretRef": {"name": "ovh-credentials", "key": "applicationSecret"},
+					"applicationConsumerKeyRef": {"name": "ovh-credentials", "key": "applicationConsumerKey"}
+				}`, server.URL)),
+			}
+
+			start := time.Now()
+			err := tt.call(s, ch)
+			elapsed := time.Since(start)
+
+			if tt.apiFails {
+				if err == nil {
+					t.Fatal("expected an OVH API error, got nil")
+				}
+				if !strings.Contains(err.Error(), "This credential is not valid") {
+					t.Errorf("expected the OVH API error to be returned unchanged, got %q", err.Error())
+				}
+				if elapsed < delay {
+					t.Errorf("expected the error after at least %s, got it after %s", delay, elapsed)
+				}
+				return
+			}
+			if err != nil {
+				t.Fatalf("unexpected error: %v", err)
+			}
+			if elapsed >= delay {
+				t.Errorf("expected no delay on success, took %s", elapsed)
+			}
+		})
+	}
 }
