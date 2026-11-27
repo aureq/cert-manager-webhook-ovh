@@ -1,5 +1,22 @@
 # Changelog
 
+## 0.9.21-alpha.1 (unreleased)
+
+⭐ If you are using this project, please consider supporting it by starring the repository. It helps me a lot to keep maintaining and improving this project. Thank you!
+
+### Noteworthy changes
+
+- ⚙️ Add the release tag and its immutability status to the comment of each pinned action in all workflows
+
+### Fixes
+
+- 🐛 Correct the `docker/metadata-action` version comment in the release workflow from `v6.5.0` to `v6.2.0`, the tag of the pinned commit
+
+### Dependencies
+
+- ⏩ upgrade step-security/harden-runner to v2.23.0 in the release and tests workflows
+- ⏩ upgrade actions/checkout to v7.0.1 in the release and tests workflows
+
 ## 0.9.21-alpha.0
 
 ⭐ If you are using this project, please consider supporting it by starring the repository. It helps me a lot to keep maintaining and improving this project. Thank you!
